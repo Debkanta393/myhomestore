@@ -12,7 +12,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="w-full bg-[#FAF8F5] text-[#333333]">
+    <div className="w-full bg-[#F5F0ED] text-[#8A6A5A]">
       {/* HERO SECTION */}
       <section
         className="relative h-[85vh] flex items-center justify-center text-white"
@@ -22,7 +22,7 @@ export default function HomePage() {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute inset-0 bg-[#333333]/55" />
+        <div className="absolute inset-0 bg-[#8A6A5A]/65" />
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -34,7 +34,7 @@ export default function HomePage() {
             Premium Tiles & Flooring <br /> For Modern Australian Homes
           </h1>
 
-          <p className="mt-6 text-lg text-[#D9DEE2]">
+          <p className="mt-6 text-lg text-[#D6CEC6]">
             Shop tiles, flooring, cladding & renovation materials with expert
             guidance, transparent pricing and nationwide delivery.
           </p>
@@ -42,7 +42,7 @@ export default function HomePage() {
           <div className="mt-8 flex justify-center gap-4">
             <Button
               size="lg"
-              className="rounded-2xl bg-[#5C7F71] hover:bg-[#4f6f63] text-white"
+              className="rounded-2xl bg-[#8A6A5A] hover:bg-[#735646] text-white"
             >
               Shop Tiles
             </Button>
@@ -50,7 +50,7 @@ export default function HomePage() {
             <Button
               variant="outline"
               size="lg"
-              className="rounded-2xl border-[#D9DEE2] text-white hover:bg-white/10"
+              className="rounded-2xl border-[#D6CEC6] text-white hover:bg-white/10"
             >
               Order Samples
             </Button>
@@ -59,7 +59,7 @@ export default function HomePage() {
       </section>
 
       {/* TRUST BAR */}
-      <section className="bg-[#EEF1F3] py-10">
+      <section className="bg-[#D6CEC6] py-10">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 px-6 text-center">
           {[
             "Australian Owned",
@@ -71,7 +71,7 @@ export default function HomePage() {
               key={i}
               className="flex items-center justify-center gap-2 font-medium"
             >
-              <CheckCircle className="h-5 w-5 text-[#3A6F8F]" />
+              <CheckCircle className="h-5 w-5 text-[#8A6A5A]" />
               {item}
             </div>
           ))}
@@ -94,8 +94,8 @@ export default function HomePage() {
                 style={{
                   backgroundImage: `linear-gradient(
                     to top,
-                    rgba(51,51,51,0.7),
-                    rgba(51,51,51,0.15)
+                    rgba(138,106,90,0.75),
+                    rgba(138,106,90,0.15)
                   ), url(${cat.image})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
@@ -109,21 +109,21 @@ export default function HomePage() {
       </section>
 
       {/* VALUE PROPOSITION */}
-      <section className="bg-[#333333] text-white py-20">
+      <section className="bg-[#8A6A5A] text-white py-20">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
           {[Layers, Ruler, Truck].map((Icon, i) => (
             <Card
               key={i}
-              className="bg-[#3E3E3E] border-none rounded-2xl"
+              className="bg-[#FBF8F6] border-none rounded-2xl"
             >
-              <CardContent className="p-8">
-                <Icon className="h-8 w-8 mb-4 text-[#5C7F71]" />
+              <CardContent className="p-8 text-[#8A6A5A]">
+                <Icon className="h-8 w-8 mb-4 text-[#8A6A5A]" />
                 <h3 className="text-xl font-semibold mb-2">
                   {i === 0 && "Curated Collections"}
                   {i === 1 && "Built-in Measurement Calculator"}
                   {i === 2 && "Flexible Delivery & Pickup"}
                 </h3>
-                <p className="text-[#D9DEE2]">
+                <p className="text-[#6F5A4E]">
                   {i === 0 &&
                     "Carefully selected tiles and flooring from trusted local and international manufacturers."}
                   {i === 1 &&
@@ -144,7 +144,7 @@ export default function HomePage() {
             <h2 className="text-4xl font-bold">Featured Collections</h2>
             <Button
               variant="ghost"
-              className="text-[#3A6F8F] hover:text-[#2f5c77]"
+              className="text-[#8A6A5A] hover:text-[#735646]"
             >
               View All
             </Button>
@@ -152,18 +152,21 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[1, 2, 3].map((i) => (
-              <Card key={i} className="rounded-2xl overflow-hidden">
+              <Card
+                key={i}
+                className="rounded-2xl overflow-hidden bg-[#FBF8F6]"
+              >
                 <img src={`./images/luxury${i}.webp`} alt="" />
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold mb-2">
                     Luxury Stone Look Tiles
                   </h3>
-                  <p className="text-sm text-[#6B7280] mb-4">
+                  <p className="text-sm text-[#7A6A60] mb-4">
                     Timeless stone aesthetics with modern durability.
                   </p>
                   <Button
                     size="sm"
-                    className="bg-[#5C7F71] hover:bg-[#4f6f63] text-white"
+                    className="bg-[#8A6A5A] hover:bg-[#735646] text-white"
                   >
                     Explore
                   </Button>
@@ -175,15 +178,18 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-r from-[#3A6F8F] to-[#5C7F71] text-white py-20 text-center">
+      <section className="bg-gradient-to-r from-[#8A6A5A] to-[#B8B0A7] text-white py-20 text-center">
         <h2 className="text-4xl font-bold mb-4">
           Visit Our Showroom or Order Samples
         </h2>
-        <p className="text-[#EEF1F3] mb-8">
+        <p className="text-[#F5F0ED] mb-8">
           Experience quality firsthand or get samples delivered to your door.
         </p>
         <div className="flex justify-center gap-4">
-          <Button size="lg" className="rounded-2xl bg-white text-[#333333]">
+          <Button
+            size="lg"
+            className="rounded-2xl bg-white text-[#8A6A5A]"
+          >
             Book Showroom Visit
           </Button>
           <Button
@@ -197,7 +203,7 @@ export default function HomePage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-[#2B2B2B] text-[#D9DEE2] py-10 text-center">
+      <footer className="bg-[#8A6A5A] text-[#F5F0ED] py-10 text-center">
         <p>
           © {new Date().getFullYear()} My Home Store / Reno Studio. All rights
           reserved.
