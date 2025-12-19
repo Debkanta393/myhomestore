@@ -12,7 +12,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="w-full bg-[#F5F0ED] text-[#8A6A5A]">
+    <div className="w-full bg-[#F5F0ED] text-[#4A3A32]">
       {/* HERO SECTION */}
       <section
         className="relative h-[85vh] flex items-center justify-center text-white"
@@ -22,7 +22,7 @@ export default function HomePage() {
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute inset-0 bg-[#8A6A5A]/65" />
+        <div className="absolute inset-0 bg-[#4A3A32]/65" />
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -34,7 +34,7 @@ export default function HomePage() {
             Premium Tiles & Flooring <br /> For Modern Australian Homes
           </h1>
 
-          <p className="mt-6 text-lg text-[#D6CEC6]">
+          <p className="mt-6 text-lg text-[#E6DFDA]">
             Shop tiles, flooring, cladding & renovation materials with expert
             guidance, transparent pricing and nationwide delivery.
           </p>
@@ -50,7 +50,7 @@ export default function HomePage() {
             <Button
               variant="outline"
               size="lg"
-              className="rounded-2xl border-[#D6CEC6] text-white hover:bg-white/10"
+              className="rounded-2xl border-[#E6DFDA] text-white hover:bg-white/10"
             >
               Order Samples
             </Button>
@@ -59,7 +59,7 @@ export default function HomePage() {
       </section>
 
       {/* TRUST BAR */}
-      <section className="bg-[#D6CEC6] py-10">
+      <section className="bg-[#E6DFDA] py-10">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 px-6 text-center">
           {[
             "Australian Owned",
@@ -69,7 +69,7 @@ export default function HomePage() {
           ].map((item, i) => (
             <div
               key={i}
-              className="flex items-center justify-center gap-2 font-medium"
+              className="flex items-center justify-center gap-2 font-medium text-[#4A3A32]"
             >
               <CheckCircle className="h-5 w-5 text-[#8A6A5A]" />
               {item}
@@ -94,8 +94,8 @@ export default function HomePage() {
                 style={{
                   backgroundImage: `linear-gradient(
                     to top,
-                    rgba(138,106,90,0.75),
-                    rgba(138,106,90,0.15)
+                    rgba(74,58,50,0.75),
+                    rgba(74,58,50,0.15)
                   ), url(${cat.image})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
@@ -109,21 +109,21 @@ export default function HomePage() {
       </section>
 
       {/* VALUE PROPOSITION */}
-      <section className="bg-[#8A6A5A] text-white py-20">
+      <section className="bg-[#8A6A5A] py-20">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
           {[Layers, Ruler, Truck].map((Icon, i) => (
             <Card
               key={i}
-              className="bg-[#FBF8F6] border-none rounded-2xl"
+              className="bg-[#FBF8F6] border border-[#E6DFDA] rounded-2xl"
             >
-              <CardContent className="p-8 text-[#8A6A5A]">
+              <CardContent className="p-8">
                 <Icon className="h-8 w-8 mb-4 text-[#8A6A5A]" />
-                <h3 className="text-xl font-semibold mb-2">
+                <h3 className="text-xl font-semibold mb-2 text-[#4A3A32]">
                   {i === 0 && "Curated Collections"}
                   {i === 1 && "Built-in Measurement Calculator"}
                   {i === 2 && "Flexible Delivery & Pickup"}
                 </h3>
-                <p className="text-[#6F5A4E]">
+                <p className="text-[#6D5C52]">
                   {i === 0 &&
                     "Carefully selected tiles and flooring from trusted local and international manufacturers."}
                   {i === 1 &&
@@ -154,14 +154,14 @@ export default function HomePage() {
             {[1, 2, 3].map((i) => (
               <Card
                 key={i}
-                className="rounded-2xl overflow-hidden bg-[#FBF8F6]"
+                className="rounded-2xl overflow-hidden bg-[#FBF8F6] border border-[#E6DFDA]"
               >
                 <img src={`./images/luxury${i}.webp`} alt="" />
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold mb-2">
                     Luxury Stone Look Tiles
                   </h3>
-                  <p className="text-sm text-[#7A6A60] mb-4">
+                  <p className="text-sm text-[#6D5C52] mb-4">
                     Timeless stone aesthetics with modern durability.
                   </p>
                   <Button
@@ -203,7 +203,7 @@ export default function HomePage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-[#8A6A5A] text-[#F5F0ED] py-10 text-center">
+      <footer className="bg-[#4A3A32] text-[#F5F0ED] py-10 text-center">
         <p>
           © {new Date().getFullYear()} My Home Store / Reno Studio. All rights
           reserved.
