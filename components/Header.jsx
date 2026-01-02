@@ -2,7 +2,7 @@ import { Button } from "./ui/Button";
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-white border-b">
+    <header className="sticky top-0 z-50 bg-white">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <div className="text-xl font-bold">MyHomeStore</div>
         <nav className="hidden md:flex gap-6 text-sm font-medium">
