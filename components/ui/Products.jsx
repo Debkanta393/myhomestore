@@ -154,7 +154,7 @@ export default function Products() {
           key={item.id}
           variants={cardVariants}
           custom={navigateTo}
-          className="group relative rounded-3xl bg-white overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 ease-out hover:-translate-y-2 border border-gray-100"
+          className="group relative rounded-3xl bg-white overflow-hidden shadow-2xl hover:shadow-sm transition-all duration-500 ease-out hover:-translate-y-2 border border-gray-100"
         >
           {/* Image Container with Aspect Ratio */}
           <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
@@ -191,7 +191,7 @@ export default function Products() {
           {/* Product Info Section */}
           <div className="p-5 space-y-3">
             <div className="flex items-start justify-between gap-2">
-              <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
+              <h3 className="text-2xl font-semibold text-gray-900 line-clamp-2 transition-colors">
                 {item.heading}
               </h3>
             </div>

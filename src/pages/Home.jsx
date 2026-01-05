@@ -6,21 +6,28 @@ import Process from '../../components/ui/Process';
 import Testimonials from '../../components/ui/Testimonials';
 import Products from '../../components/ui/Products';
 // import CTA from '../../components/ui/Cta';
-import Category from '../../components/ui/Category';
+import Category from '../../components/ui/Gallery';
+import OverlapScrolling from '../../components/ui/OverlapScrolling';
 
-function App() {
+function Home() {
   return (
-    <div className="overflow-x-hidden">
-      <Hero />
-      <Features />
-      <Services />
-      {/* <Process /> */}
-      <Products/>
-      <Category />
-      <Testimonials />
-      {/* <CTA /> */}
+    <div>
+      <div className="overflow-x-hidden">
+        <Hero />
+        <Features />
+        <Services />
+        <Products/>
+      </div>
+      
+      {/* OverlapScrolling without overflow wrapper */}
+      <OverlapScrolling />
+      
+      <div className="overflow-x-hidden">
+        <Category />
+        <Testimonials />
+      </div>
     </div>
   );
 }
 
-export default App;
+export default Home;

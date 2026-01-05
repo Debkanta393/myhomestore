@@ -40,7 +40,7 @@ export default function Category() {
     >
       <div>
         <h2 className="text-center text-5xl text-white font-bold">
-          Image Gallary
+          Image Gallery
         </h2>
         <div className="flex text-white items-center gap-20 justify-center mt-20">
           <button
