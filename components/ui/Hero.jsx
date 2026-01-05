@@ -47,7 +47,7 @@ const Hero = () => {
         //   backgroundSize: "cover",
         //   backgroundRepeat: "no-repeat",
         // }}
-        className="min-h-[800px] rounded-[50px]  w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden"
+        className="min-h-[800px] rounded-[50px]  w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]"
       >
         <AnimatePresence mode="wait">
           <motion.img
@@ -57,7 +57,7 @@ const Hero = () => {
             className="absolute top-0 left-0 w-full h-full object-cover"
             initial={{ opacity: 0, scale: 1.05 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.90 }}
+            exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
           />
         </AnimatePresence>
