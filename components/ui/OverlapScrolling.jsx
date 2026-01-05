@@ -136,7 +136,7 @@ function StickyCard({ card, index, total }) {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
               viewport={{ once: true, amount: 0.3 }}
-              className="text-5xl md:text-6xl font-bold mb-6 text-center"
+              className="text-5xl md:text-6xl font-bold mb-6"
             >
               {card.title}
             </motion.h2>

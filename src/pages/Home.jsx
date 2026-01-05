@@ -6,8 +6,11 @@ import Process from '../../components/ui/Process';
 import Testimonials from '../../components/ui/Testimonials';
 import Products from '../../components/ui/Products';
 // import CTA from '../../components/ui/Cta';
-import Category from '../../components/ui/Gallery';
+import Gallery from '../../components/ui/Gallery';
 import OverlapScrolling from '../../components/ui/OverlapScrolling';
+import WhyChooseus from '../../components/ui/WhyChooseus';
+import Trust from '../../components/ui/Trust';
+import SeoFooterContent from '../../components/ui/Footer';
 
 function Home() {
   return (
@@ -17,14 +20,17 @@ function Home() {
         <Features />
         <Services />
         <Products/>
+        <WhyChooseus />
       </div>
       
       {/* OverlapScrolling without overflow wrapper */}
       <OverlapScrolling />
       
       <div className="overflow-x-hidden">
-        <Category />
+        <Trust />
+        <Gallery />
         <Testimonials />
+        {/* <SeoFooterContent /> */}
       </div>
     </div>
   );
