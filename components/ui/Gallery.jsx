@@ -39,13 +39,13 @@ export default function Category() {
       }}
     >
       <div>
-        <h2 className="text-center text-5xl text-white font-bold">
+        <h2 className="text-center text-4xl md:text-5xl text-white font-bold">
           Image Gallery
         </h2>
-        <div className="flex text-white items-center gap-20 justify-center mt-20">
+        <div className="flex text-white items-center gap-5 md:gap-20 justify-center mt-20">
           <button
             onClick={() => setCategoryType("inner")}
-            className="relative py-3 cursor-pointer px-20 rounded bg-black text-xl font-medium text-white overflow-hidden group"
+            className="relative py-3 cursor-pointer px-8 md:px-20 rounded bg-black text-lg sm:text-xl font-medium text-white overflow-hidden group"
           >
             Indoor
             {/* TOP line */}
@@ -60,7 +60,7 @@ export default function Category() {
 
           <button
             onClick={() => setCategoryType("outer")}
-            className="relative py-3 cursor-pointer px-20 rounded bg-black text-xl font-medium text-white overflow-hidden group"
+            className="relative py-3 cursor-pointer px-10 md:px-20 rounded bg-black text-lg sm:text-xl font-medium text-white overflow-hidden group"
           >
             Outdoor
             {/* TOP line */}
@@ -73,8 +73,8 @@ export default function Category() {
             <span className="absolute bottom-0 right-0 w-[2px] h-0 bg-white transition-all duration-300 delay-300 ease-out group-hover:h-full" />
           </button>
         </div>
-        <div className="flex items-center w-full mt-20">
-          <div className="overflow-hidden w-5/12 h-[500px] ">
+        <div className="flex md:flex-row flex-col items-center w-full mt-20 px-10">
+          <div className="overflow-hidden md:w-5/12 w-full h-[300px] md:h-[500px] mb-5">
             <motion.img
               key={categoryType}
               initial={{ opacity: 0, y: 50 }}
@@ -84,11 +84,11 @@ export default function Category() {
                 categoryType == "inner" ? innerCategory[0] : outerCategory[0]
               }
               alt=""
-              className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-700 hover:scale-110 rounded-t-lg"
             />
           </div>
 
-          <div className="grid grid-cols-3 w-7/12 overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-3 md:w-7/12 w-full overflow-hidden gap-5 md:gap-0">
             {(categoryType == "inner" ? innerCategory : outerCategory)
               .filter((item, i) => i != 0)
               .map((image, j) => (

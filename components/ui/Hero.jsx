@@ -42,11 +42,6 @@ const Hero = () => {
   return (
     <>
       <section
-        // style={{
-        //   backgroundImage: "url(./images/header.png)",
-        //   backgroundSize: "cover",
-        //   backgroundRepeat: "no-repeat",
-        // }}
         className="min-h-[800px] rounded-[50px]  w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]"
       >
         <AnimatePresence mode="wait">
@@ -63,24 +58,9 @@ const Hero = () => {
         </AnimatePresence>
         {/* Background Animation Circles */}
         <div className="absolute inset-0 overflow-hidden top-0 left-0 h-full w-full bg-black/30 rounded-[50px]">
-          {/* <motion.div
-          className="absolute -top-20 -left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"   
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute -bottom-20 -right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-        /> */}
         </div>
 
-        <div className="relative z-10 max-w-7xl px-5">
+        <div className="relative z-10 max-w-7xl px-3 md:px-5">
           <motion.p
             className="text-xl md:text-2xl mb-10 opacity-95"
             initial={{ opacity: 0, y: 30 }}
@@ -90,7 +70,7 @@ const Hero = () => {
             Premium Tiles & Stone Solutions in Australia
           </motion.p>
           <motion.h1
-            className="text-5xl md:text-6xl font-bold mb-6 leading-tight"
+            className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -150,14 +130,14 @@ const Hero = () => {
           </motion.div>
         </motion.div>
       </section>
-      <motion.div className="rounded-t-[50px] min-h-[400px] relative -top-[200px] -z-10 bg-[#998e8a] overflow-hidden flex justify-center items-center">
+      <motion.div className="rounded-t-[50px] py-20  relative -top-[120px] md:-top-[200px] -z-10 bg-[#998e8a] overflow-hidden flex justify-center items-center">
         <motion.img
           src="./images/abstract_image1.png"
           height={350}
           width={350}
           className="absolute -right-10 -bottom-10 opacity-35 rotate-6"
         />
-        <motion.div className="flex justify-between items-center w-10/12 mt-40">
+        <motion.div className="flex md:flex-row flex-col gap-10 justify-between items-center w-10/12 mt-32 md:mt-40">
           <motion.h2 className="text-4xl text-white font-medium leading-tight">
             Timeless Tiles for Modern Australian Spaces
           </motion.h2>

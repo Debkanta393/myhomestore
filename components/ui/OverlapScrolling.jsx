@@ -90,19 +90,16 @@ function StickyCard({ card, index, total }) {
     offset: ["start end", "start start"],
   });
 
-  // Slide up from bottom (100vh) to top (0vh)
-  const y = useTransform(scrollYProgress, [0, 1], ["100vh", "0vh"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["120vh", "0vh"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["40px", "-40px"]);
 
-  // Optional: Scale effect for previous cards
-  const scale = useTransform(scrollYProgress, [0, 1], [0.85, 1]);
-
-  // Determine if this is the last card
   const isLast = index === total - 1;
 
   return (
     <div
       ref={cardRef}
-      className={`h-screen ${!isLast ? "sticky top-0" : "relative"}`}
+      className={`h-screen ${!isLast ? "sticky top-0" : "relative"} mt-20 md:mt-0 my-auto flex justify-center items-center`}
       style={{ zIndex: index }}
     >
       <motion.div
@@ -110,33 +107,48 @@ function StickyCard({ card, index, total }) {
           y: index === 0 ? 0 : y,
           scale: index === 0 ? 1 : scale,
         }}
-        className={`h-full flex items-center justify-center`}
+        className="h-[90%] md:h-full flex items-center justify-center px-10"
       >
         <div
-          className={`relative text-white p-10 w-[80%] flex items-center justify-center bg-gradient-to-br ${card.gradient} rounded-2xl gap-20`}
+          className={`relative w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-20 p-5 md:p-16 rounded-[32px]
+          bg-gradient-to-br ${card.gradient} text-white
+          overflow-hidden`}
         >
-          {/* <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="mb-6"
-          >
-            <span className="text-white/30 text-9xl font-bold">0{card.id}</span>
+          {/* Noise overlay */}
+          {/* <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-[0.04] pointer-events-none" /> */}
+
+          {/* Floating image */}
+          {/* <motion.div style={{ y: imageY }} className="relative">
+            <img
+              src={card.image}
+              className="w-[500px] h-[520px] object-cover rounded-3xl"
+              alt=""
+            />
+
+            <div className="absolute top-0 -left-6 bg-black/70 backdrop-blur px-6 py-3 rounded-full text-sm tracking-widest uppercase">
+              Premium Range
+            </div>
           </motion.div> */}
 
-          <motion.img
-            src={card.image}
-            className="w-[600px] h-[500px] rounded-2xl"
-          />
+          <motion.div className="relative bg-image bg-white/30 rounded-3xl">
+            <img
+              src={card.image}
+              className="w-[96%] md:w-[550px] h-[250px] md:h-[500px] object-cover rounded-3xl relative top-5 left-5"
+              alt=""
+            />
+            <div className="absolute top-10 left-10 bg-black/70 backdrop-blur px-2 md:px-6 py-3 rounded-full text-sm tracking-widest uppercase">
+              Premium Range
+            </div>
+          </motion.div>
 
-          <motion.div>
+          {/* Content */}
+          <div className="flex flex-col justify-center">
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="text-5xl md:text-6xl font-bold mb-6"
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+              className="text-4xl md:text-6xl font-semibold leading-tight mb-3"
             >
               {card.title}
             </motion.h2>
@@ -144,53 +156,55 @@ function StickyCard({ card, index, total }) {
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="text-xl md:text-2xl text-white/90 mb-10"
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="text-xl text-white/80 max-w-xl mb-5"
             >
               {card.description}
             </motion.p>
 
+            {/* Features */}
             <motion.ul
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="list-disc list-inside text-white text-xl"
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              variants={{
+                show: { transition: { staggerChildren: 0.12 } },
+              }}
+              className="space-y-3 mb-6"
             >
-              {card.list.map((item, index) => (
+              {card.list.map((item, i) => (
                 <motion.li
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  key={index}
-                  className="mt-1"
+                  key={i}
+                  variants={{
+                    hidden: { opacity: 0, x: -20 },
+                    show: { opacity: 1, x: 0 },
+                  }}
+                  className="text-lg flex items-center gap-3"
                 >
+                  <span className="w-2 h-2 rounded-full bg-white"></span>
                   {item}
                 </motion.li>
               ))}
             </motion.ul>
 
+            {/* CTA */}
             <motion.button
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true, amount: 0.3 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="relative overflow-hidden py-3 px-12 bg-[#f5efed] text-black text-xl font-medium group cursor-pointer mt-20"
+              className="relative w-fit px-5 md:px-14 py-4 text-md md:text-lg font-medium rounded-full
+              bg-white text-black overflow-hidden group shadow-xl"
             >
-              <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
-                Get Started
+              <span className="relative z-10 group-hover:text-white transition-colors">
+                Explore Collection
               </span>
 
               <span
-                className="absolute inset-0 bg-black transform scale-x-0 origin-left 
-                   transition-transform duration-300 group-hover:scale-x-100"
-              ></span>
+                className="absolute inset-0 bg-black scale-x-0 origin-left
+                transition-transform duration-300 group-hover:scale-x-100"
+              />
             </motion.button>
-          </motion.div>
+          </div>
         </div>
       </motion.div>
     </div>

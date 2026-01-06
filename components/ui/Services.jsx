@@ -109,13 +109,13 @@ const Services = () => {
           Start Your Home Transformation Journey
         </motion.h2>
 
-        <div className="flex justify-baseline gap-20">
+        <div className="flex md:flex-row flex-col justify-center md:justify-baseline gap-20">
           {/* Tab Buttons */}
           <motion.div
-            className=""
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
+            className="mx-auto flex flex-col justify-center"
           >
             <button
               className={`w-60 px-10 py-8 font-semibold text-lg transition-all duration-300 mb-5 relative group overflow-hidden ${
@@ -164,7 +164,7 @@ const Services = () => {
               {services[activeTab].map((service, index) => (
                 <motion.div
                   key={index}
-                  className="relative bg-gradient-to-br from-gray-100 to-gray-200 flex flex-row-reverse items-center rounded-2xl overflow-hidden cursor-pointer group"
+                  className="relative bg-gradient-to-br from-gray-100 to-gray-200 flex md:flex-row-reverse flex-col items-center rounded-2xl overflow-hidden cursor-pointer group"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -176,9 +176,9 @@ const Services = () => {
                   <img
                     src={service.image}
                     alt=""
-                    className="w-1/2 h-full rounded-r-2xl"
+                    className="md:w-1/2 w-full h-full rounded-r-2xl"
                   />
-                  <div className="w-1/2 p-10">
+                  <div className="md:w-1/2 w-full p-10">
                     <h3 className="text-xl font-bold mb-3 text-gray-900">
                       {service.title}
                     </h3>

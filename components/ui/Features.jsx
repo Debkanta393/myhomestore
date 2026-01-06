@@ -36,7 +36,7 @@ const Features = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-5xl md:text-6xl font-semibold mb-6"
+          className="text-4xl md:text-6xl font-semibold mb-6"
         >
           Australia’s Trusted Tiles Supplier
         </motion.h2>

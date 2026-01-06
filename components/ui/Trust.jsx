@@ -3,11 +3,11 @@ import { MapPin, ShieldCheck, Leaf, DollarSign } from "lucide-react";
 
 export default function Trust() {
   return (
-    <section className="relative mt-32 px-6">
+    <section className="relative mt-20 px-6">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#FBF8F6] via-[#f5efed] to-[#D6CEC6] rounded-[3rem]" />
 
-      <div className="relative max-w-7xl mx-auto py-20 px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="relative max-w-7xl mx-auto py-20 px-5 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Left Content */}
         <div>
           <span className="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-gray-700 mb-6">
@@ -52,7 +52,7 @@ export default function Trust() {
           <img
             src="./images/flooring.webp"
             alt="Australian tile projects"
-            className="relative rounded-3xl shadow-2xl object-cover w-full h-[420px]"
+            className="relative rounded-3xl shadow-2xl object-cover w-full h-[300px] md:h-[420px]"
           />
 
           {/* Badge */}
