@@ -41,9 +41,7 @@ const Hero = () => {
   }, []);
   return (
     <>
-      <section
-        className="min-h-[800px] rounded-[50px]  w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]"
-      >
+      <section className="min-h-[800px] rounded-[50px]  w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]">
         <AnimatePresence mode="wait">
           <motion.img
             key={currentHeader}
@@ -57,8 +55,7 @@ const Hero = () => {
           />
         </AnimatePresence>
         {/* Background Animation Circles */}
-        <div className="absolute inset-0 overflow-hidden top-0 left-0 h-full w-full bg-black/30 rounded-[50px]">
-        </div>
+        <div className="absolute inset-0 overflow-hidden top-0 left-0 h-full w-full bg-black/30 rounded-[50px]"></div>
 
         <div className="relative z-10 max-w-7xl px-3 md:px-5">
           <motion.p
@@ -138,9 +135,22 @@ const Hero = () => {
           className="absolute -right-10 -bottom-10 opacity-35 rotate-6"
         />
         <motion.div className="flex md:flex-row flex-col gap-10 justify-between items-center w-10/12 mt-32 md:mt-40">
-          <motion.h2 className="text-4xl text-white font-medium leading-tight">
-            Timeless Tiles for Modern Australian Spaces
-          </motion.h2>
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="max-w-6xl"
+          >
+            <h2 className="text-4xl text-white font-medium leading-tight">
+              Timeless Tiles for Modern Australian Spaces
+            </h2>
+            <p className="text-white text-xl mt-5">
+              We provide high-quality tiles and professional installation
+              services for homes and commercial spaces. Trusted for durability,
+              modern designs, and flawless craftsmanship that transforms your
+              space.
+            </p>
+          </motion.div>
           <motion.button className="border-2 border-white text-white text-xl py-3 px-10 cursor-pointer">
             Request a quote
           </motion.button>

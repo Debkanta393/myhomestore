@@ -11,6 +11,7 @@ import OverlapScrolling from '../../components/ui/OverlapScrolling';
 import WhyChooseus from '../../components/ui/WhyChooseus';
 import Trust from '../../components/ui/Trust';
 import SeoFooterContent from '../../components/ui/Footer';
+import Brand from '../../components/ui/Brand';
 
 function Home() {
   return (
@@ -18,18 +19,19 @@ function Home() {
       <div className="overflow-x-hidden">
         <Hero />
         <Features />
-        <Services />
         <Products/>
+        <Services />
         <WhyChooseus />
       </div>
       
       {/* OverlapScrolling without overflow wrapper */}
-      <OverlapScrolling />
+      {/* <OverlapScrolling /> */}
       
       <div className="overflow-x-hidden">
         <Trust />
         <Gallery />
         <Testimonials />
+        <Brand />
         {/* <SeoFooterContent /> */}
       </div>
     </div>

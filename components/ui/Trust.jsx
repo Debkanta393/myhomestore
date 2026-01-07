@@ -5,7 +5,7 @@ export default function Trust() {
   return (
     <section className="relative mt-20 px-6">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#FBF8F6] via-[#f5efed] to-[#D6CEC6] rounded-[3rem]" />
+      <div className="absolute inset-0 rounded-[3rem]" />
 
       <div className="relative max-w-7xl mx-auto py-20 px-5 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Left Content */}
