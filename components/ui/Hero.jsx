@@ -41,7 +41,7 @@ const Hero = () => {
   }, []);
   return (
     <>
-      <section className="min-h-[800px] rounded-[50px]  w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]">
+      <section className="min-h-[750px] rounded-[50px]  w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]">
         <AnimatePresence mode="wait">
           <motion.img
             key={currentHeader}
@@ -152,7 +152,7 @@ const Hero = () => {
             </p>
           </motion.div>
           <motion.button className="border-2 border-white text-white text-xl py-3 px-10 cursor-pointer">
-            Request a quote
+            Request a quote 
           </motion.button>
         </motion.div>
       </motion.div>

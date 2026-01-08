@@ -74,10 +74,10 @@ export default function Brand() {
               OUR COMMITMENT
             </motion.span>
 
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#8A6A5A] leading-tight mb-6">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight mb-6">
               Built on Trust.
               <br />
-              <span className="text-[#998e8a]">Driven by Quality.</span>
+              <span >Driven by Quality.</span>
             </h2>
 
             {/* Decorative Line */}
@@ -89,7 +89,7 @@ export default function Brand() {
               className="h-1 bg-gradient-to-r from-[#8A6A5A] to-transparent rounded-full mb-8"
             />
 
-            <p className="text-lg md:text-xl text-[#998e8a] leading-relaxed font-light">
+            <p className="text-lg md:text-xl leading-relaxed font-light">
               We believe great brands are built with integrity, craftsmanship,
               and consistency. Every project we deliver reflects our commitment
               to quality, reliability, and long-lasting value.
