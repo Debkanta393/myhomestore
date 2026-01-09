@@ -14,128 +14,122 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function MainNav() {
   const mainNav = [
+    [],
     [
-      { label: "Shop By", key: "shopBy", hasSubmenu: true },
-      { label: "Hybrid", key: "hybrid", hasSubmenu: true },
+      { label: "Hybrid", key: "hybrid", hasSubmenu: false },
+      { label: "Engineered Oak", key: "engineered oak", hasSubmenu: false },
+      { label: "Timber", key: "timber", hasSubmenu: false },
+      { label: "European Timber", key: "european timber", hasSubmenu: false },
       { label: "Vinyl", key: "vinyl", hasSubmenu: false },
-      { label: "Timber", key: "timber", hasSubmenu: true },
-      { label: "Laminate", key: "laminate", hasSubmenu: true },
-      { label: "Bamboo", key: "bamboo", hasSubmenu: true },
+      { label: "Laminate", key: "laminate", hasSubmenu: false },
+      { label: "Bamboo", key: "bamboo", hasSubmenu: false },
+      { label: "Accessories", key: "accessories", hasSubmenu: false },
+      { label: "Shop by Brands", key: "floorShopByBrands", hasSubmenu: true },
+      { label: "Shop by Design", key: "shopByDesign", hasSubmenu: true },
     ],
     [
-      { label: "Toilet", key: "toilet", hasSubmenu: true },
-      { label: "Basins", key: "basins", hasSubmenu: true },
-      { label: "Vinyl", key: "vinyl", hasSubmenu: false },
-      { label: "Timber", key: "timber", hasSubmenu: true },
-      { label: "Laminate", key: "laminate", hasSubmenu: true },
-      { label: "Bamboo", key: "bamboo", hasSubmenu: true },
+      { label: "Wall Tiles", key: "wall tiles", hasSubmenu: false },
+      { label: "Floor Tiles", key: "floor tiles", hasSubmenu: false },
+      { label: "Mosaic Tiles", key: "mosaic tiles", hasSubmenu: false },
+      { label: "Feature Tiles", key: "feature tiles", hasSubmenu: false },
+      { label: "Outdoor Tiles", key: "outdoor tiles", hasSubmenu: false },
+      { label: "Pool Tiles", key: "pool tiles", hasSubmenu: false },
+      {
+        label: "Commercial Floor Tiles",
+        key: "commercial floor tiles",
+        hasSubmenu: false,
+      },
+      { label: "Porcelain Tiles", key: "porcelain tiles", hasSubmenu: false },
+      { label: "Accessories", key: "accessories", hasSubmenu: false },
+      { label: "Shop by Brands", key: "tilesShopByBrands", hasSubmenu: true },
     ],
     [
-      { label: "Shop By", key: "shopBy", hasSubmenu: true },
-      { label: "Hybrid", key: "hybrid", hasSubmenu: true },
-      { label: "Vinyl", key: "vinyl", hasSubmenu: false },
-      { label: "Timber", key: "timber", hasSubmenu: true },
-      { label: "Laminate", key: "laminate", hasSubmenu: true },
-      { label: "Bamboo", key: "bamboo", hasSubmenu: true },
+      { label: "Toilets", key: "toilets", hasSubmenu: false },
+      { label: "Basins", key: "basins", hasSubmenu: false },
+      { label: "Baths", key: "baths", hasSubmenu: false },
+      { label: "Vanities", key: "vanities", hasSubmenu: false },
+      { label: "Showers", key: "showers", hasSubmenu: false },
+      { label: "Shower Screens", key: "shower Screens", hasSubmenu: false },
+      { label: "Taps", key: "taps", hasSubmenu: false },
+      { label: "Mirrors", key: "mirrors", hasSubmenu: false },
+      { label: "Accessories", key: "accessories", hasSubmenu: false },
+      { label: "Brands", key: "brands", hasSubmenu: true },
     ],
     [
-      { label: "Shop By", key: "shopBy", hasSubmenu: true },
-      { label: "Hybrid", key: "hybrid", hasSubmenu: true },
-      { label: "Vinyl", key: "vinyl", hasSubmenu: false },
-      { label: "Timber", key: "timber", hasSubmenu: true },
-      { label: "Laminate", key: "laminate", hasSubmenu: true },
-      { label: "Bamboo", key: "bamboo", hasSubmenu: true },
+      { label: "Kitchen Sinks", key: "kitchen sinks", hasSubmenu: false },
+      { label: "Kitchen Tapware", key: "kitchen tapware", hasSubmenu: false },
+      { label: "Stone Benches", key: "stone benches", hasSubmenu: false },
+      { label: "Stone Benchtops", key: "stone benchtops", hasSubmenu: false },
+      { label: "Splashbacks", key: "splashbacks", hasSubmenu: false },
+      {
+        label: "Kitchen Appliances",
+        key: "kitchen appliances",
+        hasSubmenu: false,
+      },
+      { label: "Laundry Sinks", key: "laundry sinks", hasSubmenu: false },
+      { label: "Laundry Tapware", key: "laundry tapware", hasSubmenu: false },
+      { label: "Accessories", key: "accessories", hasSubmenu: false },
+      { label: "Brands", key: "brands", hasSubmenu: false },
     ],
     [
-      { label: "Shop By", key: "shopBy", hasSubmenu: true },
-      { label: "Hybrid", key: "hybrid", hasSubmenu: true },
-      { label: "Vinyl", key: "vinyl", hasSubmenu: false },
-      { label: "Timber", key: "timber", hasSubmenu: true },
-      { label: "Laminate", key: "laminate", hasSubmenu: true },
-      { label: "Bamboo", key: "bamboo", hasSubmenu: true },
+      { label: "Blinds", key: "blinds", hasSubmenu: true },
+      { label: "Curtains", key: "curtains", hasSubmenu: true },
+      { label: "Shutters", key: "shutters", hasSubmenu: true },
+      { label: "Outdoor", key: "outdoor", hasSubmenu: true },
     ],
-    // { label: "Carpet Tiles", key: "carpetTiles", hasSubmenu: true },
-    // { label: "Tiles", key: "tiles", hasSubmenu: true },
-    // { label: "Artificial Grass", key: "grass", hasSubmenu: true },
-    // { label: "Rugs", key: "rugs", hasSubmenu: true },
-    // { label: "Underfloor Heating", key: "heating", hasSubmenu: false },
+    [
+      { label: "Fencing", key: "fencing", hasSubmenu: false },
+      { label: "Cladding", key: "cladding", hasSubmenu: false },
+      { label: "Decking", key: "decking", hasSubmenu: false },
+      { label: "Bamboo Benchtops", key: "bamboo benchtops", hasSubmenu: false },
+      { label: "Skylight", key: "skylight", hasSubmenu: false },
+    ],
   ];
 
   const mainNavSub = {
-    shopBy: ["On Sale", "Material", "Area", "Attribute", "Brands", "Locations"],
-    hybrid: [
-      "Eclipse Online Flooring Store",
-      "Online Flooring Solutions",
-      "All Type Flooring",
-      "Australian Select Timbers",
-      "Claver Choice",
-      "Complete Floors",
-      "Decoline",
-      "Eco Flooring System",
-      "HTT",
-      "Inspire XL",
-      "Premium Floors",
-      "Signature Floors",
-      "Topdeck Flooring",
-      "Terra Mater Floors",
-      "Sunstar",
-    ],
-    vinyl: [
-      "Eclipse by Online Flooring Store",
-      "Artifloor",
-      "Australian Select Timbers",
+    floorShopByBrands: [
       "Clever Choice",
-      "Decoline",
-      "Desire",
-      "Eco Flooring Systems",
-      "Hurford Heritage",
-      "Interface",
-      "NFD",
-      "Premium Floors",
-      "Terra Mater Floors",
+      "Preference Floors",
+      "Herford Flooring",
+      "Signature Flooring",
+      "Terra Mater",
+      "Create Floors",
     ],
-    timber: ["Engineered Timber Flooring", "Solid Timber Flooring"],
-    laminate: [
-      "Eclipse by Online Flooring Store",
-      "All Type Flooring Vortex Eco Core",
-      "Australian Select Timbers",
-      "Clever Choice",
-      "Eco Flooring Systems",
-      "HTT",
-      "Premium Floors",
-      "Sunstar",
-      "Topdeack Flooring",
-      "Terra Mater Floors",
+    shopByDesign: ["Longboards", "Herringbone", "Chevron"],
+    tilesShopByBrands: [
+      "Elegance Collection",
+      "Masa Imports",
+      "DW Tiles",
+      "Designer Stone & Tiles",
     ],
-    bamboo: [
-      "Clever Choice Ultimate Bamboo",
-      "Eco Flooring Systems",
-      "Premium Flooring ARC",
+    brands: [
+      "Fienza",
+      "Bella Vista",
+      "Evia Bathware",
+      "Nero Bathware",
+      "Kuroma",
     ],
-    carpetTiles: ["Airlay", "NFD"],
-    tiles: [
-      "Floor Tiles",
-      "Outdoor Tiles",
-      "Wall Tiles",
-      "Antique Tides",
-      "Brickart",
-      "Crayons",
-      "Fragment Brick",
-      "Laser Line",
-      "Limestone",
-      "Penny Rounds",
-      "Pitture",
-      "Soho",
-      "Stario",
-      "Stonalix",
-      "Tech Legno",
-      "Tundra",
+    blinds: [
+      "Roller Blinds",
+      "Vertical Blinds",
+      "Roman Blinds",
+      "Venetian Blinds",
+      "Panel Slide Doors",
     ],
-    grass: ["SYNLawn Cool Plus", "SYNLawn Pet Turf System", "Exquisite Turf"],
-    rugs: ["Bayliss"],
+    curtains: ["Sheer Curtains", "Lockout Curtains"],
+    shutters: ["Timber Shutters", "PVC Shutters", "Aluminium Shutters"],
+    outdoor: ["Outdoor Blinds", "Outdoor Shutters", "Roller Shutters"],
   };
 
-  const tabs = ["Flooring", "Tiles", "Bathroom", "Kitchen", "Other"];
+  const tabs = [
+    "All Categories",
+    "Flooring",
+    "Tiles",
+    "Bathroom",
+    "Kitchen & Laundry",
+    "Window Coverings",
+    "Other Home Improvements",
+  ];
 
   const [mainHovered, setMainHovered] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -151,7 +145,7 @@ export default function MainNav() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
 
   return (
     <div>
@@ -164,7 +158,7 @@ export default function MainNav() {
             : "0 0 0 rgba(138, 106, 90, 0)",
         }}
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-10/12 mx-auto px-6">
           <div className="flex justify-between items-center py-4 md:py-6">
             {/* Logo */}
             <Link to="/" className="flex items-center group">
@@ -257,39 +251,135 @@ export default function MainNav() {
         </div>
 
         {/* Tabs section */}
-        <div className="max-w-7xl mx-auto px-6 my-1">
-          <div className="flex justify-evenly items-center gap-6">
+        {/* Tabs section */}
+        <div className="max-w-10/12 mx-auto px-6 my-1">
+          <div className="flex justify-evenly items-center gap-2">
             {tabs.map((tab, index) => (
-              <motion.button
+              <motion.li
                 key={index}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.15 }}
-                whileHover={{ y: -4, scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-                className={`
-          hidden lg:block relative overflow-hidden group cursor-pointer
-          px-10 py-3
-          rounded-lg
-           text-sm font-bold tracking-wide uppercase
-          shadow-[0_8px_24px_rgba(138,106,90,0.3),0_2px_8px_rgba(138,106,90,0.15)]
-          border-2 border-[#B8B0A7]/20
-          transition-all duration-500 ease-out
-          hover:shadow-[0_12px_40px_rgba(138,106,90,0.45),0_4px_16px_rgba(138,106,90,0.25)]
-          hover:border-[#D6CEC6]/40
-          backdrop-blur-sm ${
-            activeTab == index
-              ? "bg-gradient-to-br from-[#998e8a] via-[#8A6A5A] to-[#8A6A5A] text-white"
-              : "bg-white text-[#8A6A5A] border-[#8A6A5A]"
-          }
-                `}
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveTab(index)}
+                onMouseEnter={() => setActiveTab(index)}
+                className={`
+           text-center list-none
+          hidden lg:block relative overflow-hidden group cursor-pointer
+          py-4
+          rounded-t-2xl
+          text-sm font-bold tracking-wide uppercase
+          transition-all duration-500 ease-out
+          backdrop-blur-sm text-nowrap
+          ${index == tabs.length-1 ? 'w-[17%]':'w-[13%]'}
+          ${
+            activeTab === index
+              ? `
+                bg-gradient-to-br from-[#998e8a] via-[#8A6A5A] to-[#8A6A5A] 
+                text-white
+                shadow-[0_-4px_20px_rgba(138,106,90,0.3),0_-2px_10px_rgba(138,106,90,0.2)]
+                border-2 border-[#8A6A5A]
+                border-b-0
+                translate-y-[2px]
+              `
+              : `
+                bg-white/80 
+                text-[#8A6A5A] 
+                border-2 border-[#D6CEC6]/50
+                border-b-0
+                hover:bg-[#f5efed]/60
+                hover:border-[#B8B0A7]/60
+                shadow-[0_-2px_12px_rgba(138,106,90,0.1)]
+                hover:shadow-[0_-4px_16px_rgba(138,106,90,0.2)]
+              `
+          }
+        `}
               >
-                {/* Button text with subtle glow */}
-                <span className="relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
+                {/* Active Tab Indicator - Top accent line */}
+                {activeTab === index && (
+                  <motion.span
+                    layoutId="activeTabIndicator"
+                    className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#D6CEC6] via-[#f5efed] to-[#D6CEC6] rounded-t-2xl"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+
+                {/* Gradient overlay for active tab */}
+                {/* {activeTab === index && (
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="absolute inset-0 bg-gradient-to-b from-white/15 via-transparent to-transparent rounded-t-2xl"
+                  />
+                )} */}
+
+                {/* Shimmer effect on hover for inactive tabs */}
+                {/* {activeTab !== index && (
+                  <motion.span
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full"
+                    whileHover={{
+                      translateX: "200%",
+                      transition: { duration: 0.6, ease: "easeInOut" },
+                    }}
+                  />
+                )} */}
+
+                {/* Inner glow for active state */}
+                {/* {activeTab === index && (
+                  <span className="absolute inset-[2px] rounded-t-2xl bg-gradient-to-br from-white/10 to-transparent" />
+                )} */}
+
+                {/* Button text */}
+                <span
+                  className={`relative z-10 ${
+                    activeTab === index
+                      ? "drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
+                      : "drop-shadow-[0_1px_2px_rgba(138,106,90,0.2)]"
+                  }`}
+                >
                   {tab}
                 </span>
-              </motion.button>
+
+                {/* Bottom connecting line for active tab */}
+                {/* {activeTab === index && (
+                  <motion.span
+                    layoutId="tabConnector"
+                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-br from-[#998e8a] via-[#8A6A5A] to-[#8A6A5A]"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )} */}
+
+                {/* Side accent lines for active tab */}
+                {/* {activeTab === index && (
+                  <>
+                    <span className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-white/30 rounded-tl-xl" />
+                    <span className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-white/30 rounded-tr-xl" />
+                  </>
+                )} */}
+
+                {/* Hover glow for inactive tabs */}
+                {/* {activeTab !== index && (
+                  <span className="absolute inset-0 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span className="absolute inset-0 rounded-t-2xl bg-gradient-to-b from-[#8A6A5A]/5 to-transparent" />
+                  </span>
+                )} */}
+
+                {/* Pulse animation for active tab */}
+                {/* {activeTab === index && (
+                  <motion.span
+                    animate={{
+                      opacity: [0.3, 0.6, 0.3],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="absolute inset-0 rounded-t-2xl bg-gradient-to-tr from-white/5 via-transparent to-white/10"
+                  />
+                )} */}
+              </motion.li>
             ))}
           </div>
         </div>
@@ -346,7 +436,7 @@ export default function MainNav() {
                           <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#D6CEC6]/30 rotate-45"></div>
 
                           <div className="gap-3 relative z-10">
-                            {mainNavSub[item.key].map((subItem, subIndex) => (
+                            {mainNavSub[item.key].map((subI, subIndex) => (
                               <motion.div
                                 key={subIndex}
                                 initial={{ opacity: 0, y: 10 }}
