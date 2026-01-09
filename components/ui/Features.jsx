@@ -58,9 +58,10 @@ const Features = () => {
 
   return (
     <section
-      className="relative pb-28 bg-gradient-to-b from-[#FBF8F6] to-[#EDE6E1]"
+      className="relative p-28 bg-[#EDE6E1] mt-[300px]"
     >
-      <div className="max-w-[80%] mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+      <h2 className="max-w-[80%] text-4xl font-bold mx-auto pl-5">Shop by categories</h2>
+      <div className="max-w-[80%] mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mt-10">
         {collections.map((collection, index) => (
           <motion.div
             initial={{ opacity: 0, x: 50, y: 50 }}

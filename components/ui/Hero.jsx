@@ -40,8 +40,8 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <>
-      <section className="min-h-[750px] rounded-[50px]  w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]">
+    <section className="relative">
+      <div className="min-h-[600px] rounded-[50px]  w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]">
         <AnimatePresence mode="wait">
           <motion.img
             key={currentHeader}
@@ -126,8 +126,10 @@ const Hero = () => {
             ↓
           </motion.div>
         </motion.div>
-      </section>
-      <motion.div className="rounded-t-[50px] py-20  relative -top-[120px] md:-top-[200px] -z-10 bg-[#998e8a] overflow-hidden flex justify-center items-center">
+      </div>
+
+
+      <motion.div className="rounded-t-[50px] py-20  absolute -bottom-[300px] -z-10 bg-[#998e8a] flex justify-center items-center w-full">
         <motion.img
           src="./images/abstract_image1.png"
           height={350}
@@ -156,7 +158,7 @@ const Hero = () => {
           </motion.button>
         </motion.div>
       </motion.div>
-    </>
+    </section>
   );
 };
 

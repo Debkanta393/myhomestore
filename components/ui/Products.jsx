@@ -214,9 +214,9 @@ export default function Products() {
                   </div>
 
                   {/* Add to Cart Button */}
-                  <button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md active:scale-95">
+                  {/* <button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md active:scale-95">
                     Add to Cart
-                  </button>
+                  </button> */}
                 </div>
               </motion.div>
             ))}
