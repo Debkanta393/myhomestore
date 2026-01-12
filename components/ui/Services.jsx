@@ -99,9 +99,9 @@ const Services = () => {
         backgroundRepeat: "no-repeat",
     }}>
         {/* <div className="absolute inset-0 overflow-hidden top-0 left-0 h-full w-full bg-black/30"></div> */}
-      <div className="w-9/12 mx-auto">
+      <div className="w-11/12 md:w-9/12 mx-auto">
         <motion.h2
-          className="section-title text-white"
+          className="text-3xl md:text-5xl text-center  text-white mb-16"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
@@ -118,7 +118,7 @@ const Services = () => {
             className="mx-auto flex flex-col justify-center"
           >
             <button
-              className={`w-60 px-10 py-8 font-semibold text-lg transition-all duration-300 mb-5 relative group overflow-hidden ${
+              className={`w-60 px-10 py-5 sm:py-8 font-semibold text-lg transition-all duration-300 mb-5 relative group overflow-hidden ${
                 activeTab === "homeowner"
                   ? "bg-gray-200 text-black shadow-lg"
                   : "border-2 border-white text-white"
@@ -134,7 +134,7 @@ const Services = () => {
               ></span>
             </button>
             <button
-              className={`w-60 px-10 py-8 font-semibold text-lg transition-all duration-300 mb-5 relative group overflow-hidden ${
+              className={`w-60 px-10 py-5 sm:py-8 font-semibold text-lg transition-all duration-300 mb-5 relative group overflow-hidden ${
                 activeTab === "investor"
                   ? "bg-gray-200 text-black shadow-lg"
                   : "border-2 border-white text-white"

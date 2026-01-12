@@ -14,7 +14,17 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function MainNav() {
   const mainNav = [
-    [],
+    [
+      { label: "Flooring", key: "flooring", hasSubmenu: false },
+      { label: "Tiles", key: "tiles", hasSubmenu: false },
+      { label: "Bathroom", key: "bathroom", hasSubmenu: false },
+      {
+        label: "Kitchen & Laundry",
+        key: "kitchen & laundry",
+        hasSubmenu: false,
+      },
+      { label: "Other", key: "other", hasSubmenu: false },
+    ],
     [
       { label: "Hybrid", key: "hybrid", hasSubmenu: false },
       { label: "Engineered Oak", key: "engineered oak", hasSubmenu: false },
@@ -72,17 +82,15 @@ export default function MainNav() {
       { label: "Brands", key: "brands", hasSubmenu: false },
     ],
     [
-      { label: "Blinds", key: "blinds", hasSubmenu: true },
-      { label: "Curtains", key: "curtains", hasSubmenu: true },
-      { label: "Shutters", key: "shutters", hasSubmenu: true },
-      { label: "Outdoor", key: "outdoor", hasSubmenu: true },
-    ],
-    [
       { label: "Fencing", key: "fencing", hasSubmenu: false },
       { label: "Cladding", key: "cladding", hasSubmenu: false },
       { label: "Decking", key: "decking", hasSubmenu: false },
       { label: "Bamboo Benchtops", key: "bamboo benchtops", hasSubmenu: false },
       { label: "Skylight", key: "skylight", hasSubmenu: false },
+      { label: "Blinds", key: "blinds", hasSubmenu: true },
+      { label: "Curtains", key: "curtains", hasSubmenu: true },
+      { label: "Shutters", key: "shutters", hasSubmenu: true },
+      { label: "Outdoor", key: "outdoor", hasSubmenu: true },
     ],
   ];
 
@@ -127,7 +135,6 @@ export default function MainNav() {
     "Tiles",
     "Bathroom",
     "Kitchen & Laundry",
-    "Window Coverings",
     "Other Home Improvements",
   ];
 
@@ -158,7 +165,7 @@ export default function MainNav() {
             : "0 0 0 rgba(138, 106, 90, 0)",
         }}
       >
-        <div className="max-w-10/12 mx-auto px-6">
+        <div className="w-11/12 sm:max-w-10/12 mx-auto sm:px-6">
           <div className="flex justify-between items-center py-4 md:py-6">
             {/* Logo */}
             <Link to="/" className="flex items-center group">
@@ -253,7 +260,7 @@ export default function MainNav() {
         {/* Tabs section */}
         {/* Tabs section */}
         <div className="max-w-10/12 mx-auto px-6 my-1">
-          <div className="flex justify-evenly items-center gap-2">
+          <div className="flex justify-evenly xl:items-center gap-2">
             {tabs.map((tab, index) => (
               <motion.li
                 key={index}
@@ -266,13 +273,14 @@ export default function MainNav() {
                 onMouseEnter={() => setActiveTab(index)}
                 className={`
            text-center list-none
-          hidden lg:block relative overflow-hidden group cursor-pointer
-          py-4
+          hidden lg:flex justify-center relative overflow-hidden group cursor-pointer
+          py-5 xl:p-3 lg:p-2
           rounded-t-2xl
-          text-sm font-bold tracking-wide uppercase
+          text-[12px] xl:text-sm font-bold tracking-wide uppercase
           transition-all duration-500 ease-out
-          backdrop-blur-sm text-nowrap
-          ${index == tabs.length-1 ? 'w-[17%]':'w-[13%]'}
+          backdrop-blur-sm
+          w-[17%]
+          
           ${
             activeTab === index
               ? `
@@ -305,34 +313,9 @@ export default function MainNav() {
                   />
                 )}
 
-                {/* Gradient overlay for active tab */}
-                {/* {activeTab === index && (
-                  <motion.span
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="absolute inset-0 bg-gradient-to-b from-white/15 via-transparent to-transparent rounded-t-2xl"
-                  />
-                )} */}
-
-                {/* Shimmer effect on hover for inactive tabs */}
-                {/* {activeTab !== index && (
-                  <motion.span
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full"
-                    whileHover={{
-                      translateX: "200%",
-                      transition: { duration: 0.6, ease: "easeInOut" },
-                    }}
-                  />
-                )} */}
-
-                {/* Inner glow for active state */}
-                {/* {activeTab === index && (
-                  <span className="absolute inset-[2px] rounded-t-2xl bg-gradient-to-br from-white/10 to-transparent" />
-                )} */}
-
                 {/* Button text */}
                 <span
-                  className={`relative z-10 ${
+                  className={`relative z-10 my-auto ${
                     activeTab === index
                       ? "drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
                       : "drop-shadow-[0_1px_2px_rgba(138,106,90,0.2)]"
@@ -340,45 +323,6 @@ export default function MainNav() {
                 >
                   {tab}
                 </span>
-
-                {/* Bottom connecting line for active tab */}
-                {/* {activeTab === index && (
-                  <motion.span
-                    layoutId="tabConnector"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-br from-[#998e8a] via-[#8A6A5A] to-[#8A6A5A]"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )} */}
-
-                {/* Side accent lines for active tab */}
-                {/* {activeTab === index && (
-                  <>
-                    <span className="absolute top-2 left-2 w-6 h-6 border-t-2 border-l-2 border-white/30 rounded-tl-xl" />
-                    <span className="absolute top-2 right-2 w-6 h-6 border-t-2 border-r-2 border-white/30 rounded-tr-xl" />
-                  </>
-                )} */}
-
-                {/* Hover glow for inactive tabs */}
-                {/* {activeTab !== index && (
-                  <span className="absolute inset-0 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <span className="absolute inset-0 rounded-t-2xl bg-gradient-to-b from-[#8A6A5A]/5 to-transparent" />
-                  </span>
-                )} */}
-
-                {/* Pulse animation for active tab */}
-                {/* {activeTab === index && (
-                  <motion.span
-                    animate={{
-                      opacity: [0.3, 0.6, 0.3],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="absolute inset-0 rounded-t-2xl bg-gradient-to-tr from-white/5 via-transparent to-white/10"
-                  />
-                )} */}
               </motion.li>
             ))}
           </div>
@@ -386,79 +330,80 @@ export default function MainNav() {
 
         {/* Main Navigation - Desktop */}
         <div className="hidden lg:block border-t border-[#D6CEC6]/30 bg-[#f5efed]/30 backdrop-blur-sm">
-          <div className="max-w-7xl mx-auto px-6">
-            <nav className="flex items-center justify-center gap-8 py-4">
-              {mainNav[activeTab].map((item, index) => (
-                <div
-                  key={index}
-                  className="relative group"
-                  onMouseEnter={() => setMainHovered(item.key)}
-                  onMouseLeave={() => setMainHovered(null)}
-                >
-                  <Link
-                    to={`/${item.key}`}
-                    className="flex items-center gap-1 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 font-medium text-md whitespace-nowrap"
-                  >
-                    {item.label}
-                    {item.hasSubmenu && (
-                      <motion.div
-                        animate={{
-                          rotate: mainHovered === item.key ? 180 : 0,
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <ChevronDown size={14} />
-                      </motion.div>
-                    )}
-                  </Link>
-
-                  {/* Bottom indicator line */}
-                  <motion.div
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#8A6A5A] rounded-full"
-                    initial={{ scaleX: 0 }}
-                    whileHover={{ scaleX: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-
-                  {/* Mega Menu */}
-                  <AnimatePresence>
-                    {mainHovered === item.key &&
-                      item.hasSubmenu &&
-                      mainNavSub[item.key] && (
+          <div className="max-w-10/12 mx-auto px-6">
+            <nav className="flex items-center xl:justify-center gap-4 xl:gap-8 py-4 overflow-x-scroll">
+              {activeTab !=null &&
+                mainNav[activeTab].map((item, index) => (
+                  <div
+                    key={index}
+                    className="relative group"
+                    onMouseEnter={() => setMainHovered(item.key)}
+                    onMouseLeave={() => setMainHovered(null)}
+                   >
+                    <Link
+                      to={`/${item.key}`}
+                      className="flex items-center gap-1 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 font-medium text-md whitespace-nowrap"
+                    >
+                      {item.label}
+                      {item.hasSubmenu && (
                         <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 10 }}
-                          transition={{ duration: 0.2 }}
-                          className="absolute top-full  mt-4 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 min-w-[300px] border border-[#D6CEC6]/30"
+                          animate={{
+                            rotate: mainHovered === item.key ? 180 : 0,
+                          }}
+                          transition={{ duration: 0.3 }}
                         >
-                          {/* Arrow indicator */}
-                          <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#D6CEC6]/30 rotate-45"></div>
-
-                          <div className="gap-3 relative z-10">
-                            {mainNavSub[item.key].map((subI, subIndex) => (
-                              <motion.div
-                                key={subIndex}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: subIndex * 0.03 }}
-                                className="hover:bg-[#f5efed] cursor-pointer text-[#8A6A5A] rounded-lg px-4 py-2.5 text-md font-medium transition-all duration-200 hover:translate-x-1"
-                              >
-                                <Link
-                                  to={`/${item.key}/${subItem
-                                    .toLowerCase()
-                                    .replace(/\s+/g, "-")}`}
-                                >
-                                  {subItem}
-                                </Link>
-                              </motion.div>
-                            ))}
-                          </div>
+                          <ChevronDown size={14} />
                         </motion.div>
                       )}
-                  </AnimatePresence>
-                </div>
-              ))}
+                    </Link>
+
+                    {/* Bottom indicator line */}
+                    <motion.div
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#8A6A5A] rounded-full"
+                      initial={{ scaleX: 0 }}
+                      whileHover={{ scaleX: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+
+                    {/* Mega Menu */}
+                    <AnimatePresence>
+                      {mainHovered === item.key &&
+                        item.hasSubmenu &&
+                        mainNavSub[item.key] && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute top-full  mt-4 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 min-w-[300px] border border-[#D6CEC6]/30"
+                          >
+                            {/* Arrow indicator */}
+                            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#D6CEC6]/30 rotate-45"></div>
+
+                            <div className="gap-3 relative z-10">
+                              {mainNavSub[item.key].map((subItem, subIndex) => (
+                                <motion.div
+                                  key={subIndex}
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: subIndex * 0.03 }}
+                                  className="hover:bg-[#f5efed] cursor-pointer text-[#8A6A5A] rounded-lg px-4 py-2.5 text-md font-medium transition-all duration-200 hover:translate-x-1"
+                                >
+                                  <Link
+                                    to={`/${item.key}/${subItem
+                                      .toLowerCase()
+                                      .replace(/\s+/g, "-")}`}
+                                  >
+                                    {subItem}
+                                  </Link>
+                                </motion.div>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                    </AnimatePresence>
+                  </div>
+                ))}
             </nav>
           </div>
         </div>
@@ -472,9 +417,9 @@ export default function MainNav() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden bg-white border-t border-[#D6CEC6]/30 overflow-hidden"
+            className="lg:hidden bg-white border-t border-[#D6CEC6]/30"
           >
-            <div className="max-w-7xl mx-auto px-6 py-6 space-y-4">
+            <div className="max-w-7xl mx-auto px-6 py-6">
               {/* Mobile Search */}
               <div className="relative mb-6">
                 <input
@@ -490,20 +435,95 @@ export default function MainNav() {
               </div>
 
               {/* Mobile Navigation */}
-              {mainNav.map((item, index) => (
+              {tabs.map((tab, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
                 >
-                  <Link
-                    to={`/${item.key}`}
-                    className="block py-3 px-4 text-[#8A6A5A] hover:bg-[#f5efed] rounded-lg font-medium transition-colors duration-200"
-                    onClick={() => setMobileMenuOpen(false)}
+                  {/* TAB HEADER */}
+                  <li
+                    className="list-none flex justify-between items-center font-semibold text-lg text-[#8A6A5A] cursor-pointer border-b border-[#8A6A5A]/50 py-3"
+                    onClick={() =>
+                      setActiveTab(index == activeTab ? null : index)
+                    }
                   >
-                    {item.label}
-                  </Link>
+                    {tab}
+                    {activeTab === index ? <ChevronUp /> : <ChevronDown />}
+                  </li>
+
+                  {/* Showing only active tab */}
+                  {activeTab === index && (
+                    <nav className="flex flex-col gap-2 py-4 max-h-[70vh] overflow-y-auto">
+                      {mainNav[index].map((item, mainIndex) => (
+                        <div
+                          key={mainIndex}
+                          className="relative ml-6"
+                          onClick={() =>
+                            setMainHovered(
+                              mainHovered === item.key ? null : item.key
+                            )
+                          }
+                        >
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.25 }}
+                            className="flex justify-between items-center"
+                          >
+                            <Link
+                              to={`/${item.key}`}
+                              className="text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 font-medium text-md"
+                            >
+                              {item.label}
+                            </Link>
+
+                            {item.hasSubmenu && (
+                              <motion.div
+                                animate={{
+                                  rotate: mainHovered === item.key ? 180 : 0,
+                                }}
+                                transition={{ duration: 0.3 }}
+                              >
+                                <ChevronDown size={25} color="#8A6A5A" />
+                              </motion.div>
+                            )}
+                          </motion.div>
+
+                          {/* Submenu */}
+                          <AnimatePresence>
+                            {mainHovered === item.key &&
+                              item.hasSubmenu &&
+                              mainNavSub[item.key] && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  transition={{ duration: 0.25 }}
+                                  className="relative mt-3 ml-4"
+                                >
+                                  {mainNavSub[item.key].map(
+                                    (subItem, subIndex) => (
+                                      <Link
+                                        key={subIndex}
+                                        to={`/${item.key}/${subItem
+                                          .toLowerCase()
+                                          .replace(/\s+/g, "-")}`}
+                                        className="block px-4 py-2 text-[#8A6A5A] text-md hover:bg-[#f5efed] rounded-lg font-semibold"
+                                      >
+                                        {subItem}
+                                      </Link>
+                                    )
+                                  )}
+                                </motion.div>
+                              )}
+                          </AnimatePresence>
+                        </div>
+                      ))}
+                    </nav>
+                  )}
                 </motion.div>
               ))}
 

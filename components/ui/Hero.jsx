@@ -41,7 +41,7 @@ const Hero = () => {
   }, []);
   return (
     <section className="relative">
-      <div className="min-h-[600px] rounded-[50px]  w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]">
+      <div className="min-h-[600px] rounded-[50px] w-11/12 sm:w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]">
         <AnimatePresence mode="wait">
           <motion.img
             key={currentHeader}
@@ -59,7 +59,7 @@ const Hero = () => {
 
         <div className="relative z-10 max-w-7xl px-3 md:px-5">
           <motion.p
-            className="text-xl md:text-2xl mb-10 opacity-95"
+            className="text-xl md:text-2xl mb-5 lg:mb-10 opacity-95"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -67,7 +67,7 @@ const Hero = () => {
             Premium Tiles & Stone Solutions in Australia
           </motion.p>
           <motion.h1
-            className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
+            className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -129,24 +129,24 @@ const Hero = () => {
       </div>
 
 
-      <motion.div className="rounded-t-[50px] py-20  absolute -bottom-[300px] -z-10 bg-[#998e8a] flex justify-center items-center w-full">
+      <motion.div className="rounded-t-[50px] py-20  absolute -bottom-[500px] sm:-bottom-[380px] lg:-bottom-[300px] -z-10 bg-[#998e8a] flex justify-center items-center w-full">
         <motion.img
           src="./images/abstract_image1.png"
           height={350}
           width={350}
           className="absolute -right-10 -bottom-10 opacity-35 rotate-6"
         />
-        <motion.div className="flex md:flex-row flex-col gap-10 justify-between items-center w-10/12 mt-32 md:mt-40">
+        <motion.div className="flex md:flex-row flex-col gap-10 justify-between items-center w-10/12 mt-20 md:mt-40">
           <motion.div
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
             className="max-w-6xl"
           >
-            <h2 className="text-4xl text-white font-medium leading-tight">
+            <h2 className="text-3xl  sm:text-4xl text-white font-medium leading-tight">
               Timeless Tiles for Modern Australian Spaces
             </h2>
-            <p className="text-white text-xl mt-5">
+            <p className="text-white text-lg sm:text-xl mt-5">
               We provide high-quality tiles and professional installation
               services for homes and commercial spaces. Trusted for durability,
               modern designs, and flawless craftsmanship that transforms your
