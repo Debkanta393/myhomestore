@@ -23,10 +23,7 @@ export function Header() {
   };
 
   const [hovered, setHovered] = useState(null);
-  const [mainHovered, setMainHovered] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
 
   // Handle scroll for sticky header
   useEffect(() => {
@@ -41,7 +38,7 @@ export function Header() {
     <header className="bg-white w-full sticky top-0 z-50">
       {/* Top Navigation Bar */}
       <div>
-        <div className="bg-[#f5efed] w-full border-b border-[#D6CEC6]/30 relative">
+        <div className="bg-[#f5efed] w-full border-b border-[#D6CEC6]/30 relative z-40 overflow-visible">
           <div className="max-w-7xl mx-auto px-6">
             <nav className="flex justify-between items-center py-3">
               {/* Left Navigation */}
@@ -74,7 +71,7 @@ export function Header() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute top-full left-0 mt-2 bg-white backdrop-blur-md shadow-[0_8px_30px_rgba(138,106,90,0.15)] rounded-xl p-2 min-w-[200px] border border-[#D6CEC6]/30"
+                          className="absolute top-full left-0 mt-1 bg-white backdrop-blur-md shadow-[0_8px_30px_rgba(138,106,90,0.15)] rounded-xl p-2 min-w-[200px] border border-[#D6CEC6]/30 z-50"
                         >
                           {topNavSubList[item.key].map((list, index) => (
                             <motion.li

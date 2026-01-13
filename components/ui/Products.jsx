@@ -8,7 +8,7 @@ const products = [
     image: "./images/luxury1.webp",
     heading: "Product1",
     desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Electronics",
+    category: "Hybrid",
     brand: "Sony",
     price: 100,
     rating: 4.5,
@@ -25,7 +25,7 @@ const products = [
     image: "./images/luxury2.webp",
     heading: "Product2",
     desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Fashion",
+    category: "Engineered Oak",
     brand: "Nike",
     price: 250,
     rating: 4.0,
@@ -42,7 +42,7 @@ const products = [
     image: "./images/luxury3.webp",
     heading: "Product3",
     desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Home",
+    category: "Australian Timber",
     brand: "IKEA",
     price: 150,
     rating: 5.0,
@@ -59,7 +59,7 @@ const products = [
     image: "./images/luxury1.webp",
     heading: "Product4",
     desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Electronics",
+    category: "European Timber",
     brand: "Samsung",
     price: 80,
     rating: 3.5,
@@ -76,7 +76,7 @@ const products = [
     image: "./images/luxury2.webp",
     heading: "Product5",
     desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Fashion",
+    category: "Laminate",
     brand: "Adidas",
     price: 300,
     rating: 4.8,
@@ -93,7 +93,7 @@ const products = [
     image: "./images/luxury3.webp",
     heading: "Product6",
     desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Home",
+    category: "Hydro Laminate",
     brand: "West Elm",
     price: 200,
     rating: 4.2,
@@ -110,7 +110,7 @@ const products = [
     image: "./images/luxury2.webp",
     heading: "Product7",
     desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Sports",
+    category: "Vinyl",
     brand: "Puma",
     price: 120,
     rating: 4.6,
@@ -127,7 +127,24 @@ const products = [
     image: "./images/luxury3.webp",
     heading: "Product8",
     desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Sports",
+    category: "Bamboo",
+    brand: "Nike",
+    price: 90,
+    rating: 3.8,
+    inStock: true,
+    color: "Black",
+    size: "S",
+    material: "Nylon",
+    isNew: true,
+    onSale: true,
+    tags: ["New Arrival"],
+  },
+  {
+    id: 9,
+    image: "./images/luxury3.webp",
+    heading: "Product8",
+    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+    category: "Hybrid Shield",
     brand: "Nike",
     price: 90,
     rating: 3.8,
@@ -171,10 +188,10 @@ export default function Products() {
     category: true,
     brand: true,
     price: true,
-    rating: true,
+    rating: false,
     color: false,
     size: false,
-    material: false,
+    design: false,
     availability: true,
     special: true,
     tags: false,
@@ -402,6 +419,61 @@ export default function Products() {
       )}
 
       <div className="space-y-4">
+        {/* Price Range */}
+        <div className="border-b border-gray-200 pb-4">
+          <button
+            onClick={() => toggleSection("price")}
+            className="flex items-center justify-between w-full text-left"
+          >
+            <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+              Price Range
+            </h4>
+            <ChevronDown
+              className={`w-4 h-4 transition-transform ${
+                expandedSections.price ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+          {expandedSections.price && (
+            <div className="space-y-3 mt-3">
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <label className="text-xs text-gray-500 mb-1 block">Min</label>
+                  <input
+                    type="number"
+                    value={filters.priceRange[0]}
+                    onChange={(e) => handlePriceChange(0, e.target.value)}
+                    className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                    min="0"
+                    max={filters.priceRange[1]}
+                  />
+                </div>
+                <span className="text-gray-400 mt-5">-</span>
+                <div className="flex-1">
+                  <label className="text-xs text-gray-500 mb-1 block">Max</label>
+                  <input
+                    type="number"
+                    value={filters.priceRange[1]}
+                    onChange={(e) => handlePriceChange(1, e.target.value)}
+                    className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                    min={filters.priceRange[0]}
+                    max="500"
+                  />
+                </div>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="500"
+                value={filters.priceRange[1]}
+                onChange={(e) => handlePriceChange(1, e.target.value)}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              />
+            </div>
+          )}
+        </div>
+
+
         {/* Category Filter */}
         <div className="border-b border-gray-200 pb-4">
           <button
@@ -472,62 +544,9 @@ export default function Products() {
           )}
         </div>
 
-        {/* Price Range */}
-        <div className="border-b border-gray-200 pb-4">
-          <button
-            onClick={() => toggleSection("price")}
-            className="flex items-center justify-between w-full text-left"
-          >
-            <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
-              Price Range
-            </h4>
-            <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.price ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-          {expandedSections.price && (
-            <div className="space-y-3 mt-3">
-              <div className="flex items-center gap-3">
-                <div className="flex-1">
-                  <label className="text-xs text-gray-500 mb-1 block">Min</label>
-                  <input
-                    type="number"
-                    value={filters.priceRange[0]}
-                    onChange={(e) => handlePriceChange(0, e.target.value)}
-                    className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
-                    min="0"
-                    max={filters.priceRange[1]}
-                  />
-                </div>
-                <span className="text-gray-400 mt-5">-</span>
-                <div className="flex-1">
-                  <label className="text-xs text-gray-500 mb-1 block">Max</label>
-                  <input
-                    type="number"
-                    value={filters.priceRange[1]}
-                    onChange={(e) => handlePriceChange(1, e.target.value)}
-                    className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
-                    min={filters.priceRange[0]}
-                    max="500"
-                  />
-                </div>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="500"
-                value={filters.priceRange[1]}
-                onChange={(e) => handlePriceChange(1, e.target.value)}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-              />
-            </div>
-          )}
-        </div>
-
+        
         {/* Color Filter */}
-        <div className="border-b border-gray-200 pb-4">
+        {/* <div className="border-b border-gray-200 pb-4">
           <button
             onClick={() => toggleSection("color")}
             className="flex items-center justify-between w-full text-left"
@@ -555,7 +574,7 @@ export default function Products() {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
 
         {/* Size Filter */}
         <div className="border-b border-gray-200 pb-4">
@@ -572,7 +591,7 @@ export default function Products() {
           </button>
           {expandedSections.size && (
             <div className="flex flex-wrap gap-2 mt-3">
-              {sizes.map((size) => (
+              {["6mm", "7mm", "8mm", "9mm", "10mm", "11mm", "12mm"].map((size) => (
                 <button
                   key={size}
                   onClick={() => toggleArrayFilter("sizes", size)}
@@ -589,14 +608,14 @@ export default function Products() {
           )}
         </div>
 
-        {/* Material Filter */}
+        {/* Design Filter */}
         <div className="border-b border-gray-200 pb-4">
           <button
             onClick={() => toggleSection("material")}
             className="flex items-center justify-between w-full text-left"
           >
             <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
-              Material
+              Design
             </h4>
             <ChevronDown
               className={`w-4 h-4 transition-transform ${
@@ -606,7 +625,7 @@ export default function Products() {
           </button>
           {expandedSections.material && (
             <div className="space-y-2 mt-3">
-              {materials.map((material) => (
+              {["Long boards", "Herringbone", "Chevron"].map((material) => (
                 <label key={material} className="flex items-center gap-3 cursor-pointer group">
                   <input
                     type="checkbox"

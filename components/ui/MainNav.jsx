@@ -28,14 +28,15 @@ export default function MainNav() {
     [
       { label: "Hybrid", key: "hybrid", hasSubmenu: false },
       { label: "Engineered Oak", key: "engineered oak", hasSubmenu: false },
-      { label: "Timber", key: "timber", hasSubmenu: false },
+      { label: "Australian Timber", key: "australian timber", hasSubmenu: false },
       { label: "European Timber", key: "european timber", hasSubmenu: false },
-      { label: "Vinyl", key: "vinyl", hasSubmenu: false },
       { label: "Laminate", key: "laminate", hasSubmenu: false },
+      { label: "Hydro Laminate", key: "hydro laminate", hasSubmenu: false },
+      { label: "Vinyl", key: "vinyl", hasSubmenu: false },
       { label: "Bamboo", key: "bamboo", hasSubmenu: false },
-      { label: "Accessories", key: "accessories", hasSubmenu: false },
-      { label: "Shop by Brands", key: "floorShopByBrands", hasSubmenu: true },
-      { label: "Shop by Design", key: "shopByDesign", hasSubmenu: true },
+      { label: "Hybrid Shield", key: "hybrid shield", hasSubmenu: false },
+      // { label: "Shop by Brands", key: "floorShopByBrands", hasSubmenu: true },
+      // { label: "Shop by Design", key: "shopByDesign", hasSubmenu: true },
     ],
     [
       { label: "Wall Tiles", key: "wall tiles", hasSubmenu: false },
@@ -143,6 +144,8 @@ export default function MainNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  console.log("Nav sub menu", mainNavSub[mainHovered]);
+
   // Handle scroll for sticky header
   useEffect(() => {
     const handleScroll = () => {
@@ -158,7 +161,7 @@ export default function MainNav() {
     <div>
       {/* Main Header - Sticky */}
       <motion.div
-        className="sticky top-0 z-50 bg-white transition-all duration-300"
+        className="sticky top-0 z-30 bg-white transition-all duration-300"
         animate={{
           boxShadow: isScrolled
             ? "0 4px 20px rgba(138, 106, 90, 0.1)"
@@ -331,7 +334,7 @@ export default function MainNav() {
         {/* Main Navigation - Desktop */}
         <div className="hidden lg:block border-t border-[#D6CEC6]/30 bg-[#f5efed]/30 backdrop-blur-sm">
           <div className="max-w-10/12 mx-auto px-6">
-            <nav className="flex items-center xl:justify-center gap-4 xl:gap-8 py-4 overflow-x-scroll">
+            <nav className="flex items-center xl:justify-center gap-4 xl:gap-8 py-4">
               {activeTab !=null &&
                 mainNav[activeTab].map((item, index) => (
                   <div
@@ -369,19 +372,19 @@ export default function MainNav() {
                     <AnimatePresence>
                       {mainHovered === item.key &&
                         item.hasSubmenu &&
-                        mainNavSub[item.key] && (
+                        mainNavSub[mainHovered] && (
                           <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 10 }}
                             transition={{ duration: 0.2 }}
-                            className="absolute top-full  mt-4 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 min-w-[300px] border border-[#D6CEC6]/30"
+                            className="absolute top-full  mt-4 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 min-w-[300px] border border-[#D6CEC6]/50" 
                           >
                             {/* Arrow indicator */}
                             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#D6CEC6]/30 rotate-45"></div>
 
                             <div className="gap-3 relative z-10">
-                              {mainNavSub[item.key].map((subItem, subIndex) => (
+                              {mainNavSub[mainHovered].map((subItem, subIndex) => (
                                 <motion.div
                                   key={subIndex}
                                   initial={{ opacity: 0, y: 10 }}
