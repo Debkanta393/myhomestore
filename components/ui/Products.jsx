@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, HeartIcon, X, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useSelector } from "react-redux";
+import { category, brand } from "../../data/data";
 
 const products = [
   {
@@ -167,6 +169,7 @@ export default function Products() {
   const [navigateTo, setNavigateTo] = useState("right");
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [sortBy, setSortBy] = useState("featured");
+  const selectedTab=useSelector((state)=> state.activeTab.tabSelected).toLowerCase()
 
   // Expanded Filter States
   const [filters, setFilters] = useState({
@@ -380,6 +383,7 @@ export default function Products() {
     Green: "bg-green-600",
   };
 
+
   // Filter Sidebar Component
   const FilterSidebar = ({ isMobile = false }) => (
     <div
@@ -491,8 +495,8 @@ export default function Products() {
           </button>
           {expandedSections.category && (
             <div className="space-y-2 mt-3">
-              {categories.map((category) => (
-                <label key={category} className="flex items-center gap-3 cursor-pointer group">
+              {category[selectedTab]?.map((category, index) => (
+                <div key={index} className="flex items-center gap-3 cursor-pointer group">
                   <input
                     type="checkbox"
                     checked={filters.categories.includes(category)}
@@ -505,7 +509,7 @@ export default function Products() {
                   <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
                     {products.filter((p) => p.category === category).length}
                   </span>
-                </label>
+                </div>
               ))}
             </div>
           )}
@@ -526,7 +530,7 @@ export default function Products() {
           </button>
           {expandedSections.brand && (
             <div className="space-y-2 mt-3">
-              {brands.map((brand) => (
+              {brand[selectedTab]?.map((brand) => (
                 <label key={brand} className="flex items-center gap-3 cursor-pointer group">
                   <input
                     type="checkbox"

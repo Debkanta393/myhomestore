@@ -4,23 +4,10 @@ import { ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import MainNav from "./ui/MainNav";
+import {topNavItems, topNavSubList} from "../data/data"
 
 export function Header() {
-  const topNavItems = [
-    { label: "Ideas & Advice", path: "/ideas-advice", key: "ideas" },
-    { label: "About", path: "/about", key: "about" },
-  ];
-
-  const topNavSubList = {
-    ideas: ["Blog", "FAQ", "Floor Finder", "Comparison Guide"],
-    about: [
-      "Why Shop With Us",
-      "Meet the Team",
-      "Community",
-      "Reviews",
-      "Delivery & Returns",
-    ],
-  };
+  
 
   const [hovered, setHovered] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -125,11 +112,14 @@ export function Header() {
           className="w-full bg-gradient-to-r from-[#998e8a] to-[#8A6A5A] overflow-hidden"
         >
           <div className="py-4 px-6">
-            <p className="text-center text-white text-base md:text-lg font-medium">
+            <p className="text-center text-white text-base md:text-lg font-medium hidden lg:block">
               🎄 Merry Christmas! We'll be taking a break on the 20th December
               and resuming on 8th January. Online orders and enquiries can still
               be made during this period.
             </p>
+            <marquee behavior="smooth" direction="rtl" className="block lg:hidden text-white text-base md:text-lg font-medium">🎄 Merry Christmas! We'll be taking a break on the 20th December
+              and resuming on 8th January. Online orders and enquiries can still
+              be made during this period.</marquee>
           </div>
         </motion.div>
       </div>

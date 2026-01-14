@@ -32,13 +32,13 @@ export default function BrandPage() {
     {
       id: 2,
       name: "Wall Mixers",
-      image: "./images/category/indoor2.jpg",
+      image: "./images/category/indoor2.avif",
       count: 32,
     },
     {
       id: 3,
       name: "Shower Sets",
-      image: "./images/category/indoor3.jpg",
+      image: "./images/category/indoor3.webp",
       count: 28,
     },
     {
@@ -969,7 +969,7 @@ export default function BrandPage() {
       </section>
 
       {/* Warranty Section */}
-      <section className="py-20 px-4 bg-[#f5efed]">
+      <section className="py-20 px-4 ">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -977,7 +977,7 @@ export default function BrandPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="text-black/80 font-semibold text-sm uppercase tracking-widest mb-4 block border border-black w-fit py-1 px-4 rounded-4xl mx-auto">
+            <span className="text-[#8A6A5A] font-semibold text-sm uppercase tracking-widest mb-4 block border border-[#8A6A5A] w-fit py-1 px-4 rounded-4xl mx-auto">
               Peace of Mind
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
@@ -1003,7 +1003,7 @@ export default function BrandPage() {
                 key={i}
                 variants={itemVariants}
                 whileHover={{ scale: 1.05, y: -10 }}
-                className="backdrop-blur-md bg-black/30 rounded-3xl p-8 text-center transition-all"
+                className="backdrop-blur-md bg-gradient-to-br from-black/80 to-black/30 rounded-3xl p-8 text-center transition-all"
               >
                 <feature.icon size={48} className="text-white mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-white mb-3">
@@ -1021,7 +1021,7 @@ export default function BrandPage() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="backdrop-blur-md bg-black/30 rounded-3xl p-10 max-w-4xl mx-auto"
+            className="backdrop-blur-md bg-gradient-to-br from-black/80 to-black/30 rounded-3xl p-10 max-w-4xl mx-auto"
           >
             <h3 className="text-3xl font-extrabold text-white mb-8 text-center">
               Product Warranty Coverage

@@ -11,140 +11,16 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { setTabSelected } from "../../slice/slice";
+import { useDispatch } from "react-redux";
+import { tabs, mainNav, mainNavSub } from "../../data/data";
 
 export default function MainNav() {
-  const mainNav = [
-    [
-      { label: "Flooring", key: "flooring", hasSubmenu: false },
-      { label: "Tiles", key: "tiles", hasSubmenu: false },
-      { label: "Bathroom", key: "bathroom", hasSubmenu: false },
-      {
-        label: "Kitchen & Laundry",
-        key: "kitchen & laundry",
-        hasSubmenu: false,
-      },
-      { label: "Other", key: "other", hasSubmenu: false },
-    ],
-    [
-      { label: "Hybrid", key: "hybrid", hasSubmenu: false },
-      { label: "Engineered Oak", key: "engineered oak", hasSubmenu: false },
-      { label: "Australian Timber", key: "australian timber", hasSubmenu: false },
-      { label: "European Timber", key: "european timber", hasSubmenu: false },
-      { label: "Laminate", key: "laminate", hasSubmenu: false },
-      { label: "Hydro Laminate", key: "hydro laminate", hasSubmenu: false },
-      { label: "Vinyl", key: "vinyl", hasSubmenu: false },
-      { label: "Bamboo", key: "bamboo", hasSubmenu: false },
-      { label: "Hybrid Shield", key: "hybrid shield", hasSubmenu: false },
-      // { label: "Shop by Brands", key: "floorShopByBrands", hasSubmenu: true },
-      // { label: "Shop by Design", key: "shopByDesign", hasSubmenu: true },
-    ],
-    [
-      { label: "Wall Tiles", key: "wall tiles", hasSubmenu: false },
-      { label: "Floor Tiles", key: "floor tiles", hasSubmenu: false },
-      { label: "Mosaic Tiles", key: "mosaic tiles", hasSubmenu: false },
-      { label: "Feature Tiles", key: "feature tiles", hasSubmenu: false },
-      { label: "Outdoor Tiles", key: "outdoor tiles", hasSubmenu: false },
-      { label: "Pool Tiles", key: "pool tiles", hasSubmenu: false },
-      {
-        label: "Commercial Floor Tiles",
-        key: "commercial floor tiles",
-        hasSubmenu: false,
-      },
-      { label: "Porcelain Tiles", key: "porcelain tiles", hasSubmenu: false },
-      { label: "Accessories", key: "accessories", hasSubmenu: false },
-      { label: "Shop by Brands", key: "tilesShopByBrands", hasSubmenu: true },
-    ],
-    [
-      { label: "Toilets", key: "toilets", hasSubmenu: false },
-      { label: "Basins", key: "basins", hasSubmenu: false },
-      { label: "Baths", key: "baths", hasSubmenu: false },
-      { label: "Vanities", key: "vanities", hasSubmenu: false },
-      { label: "Showers", key: "showers", hasSubmenu: false },
-      { label: "Shower Screens", key: "shower Screens", hasSubmenu: false },
-      { label: "Taps", key: "taps", hasSubmenu: false },
-      { label: "Mirrors", key: "mirrors", hasSubmenu: false },
-      { label: "Accessories", key: "accessories", hasSubmenu: false },
-      { label: "Brands", key: "brands", hasSubmenu: true },
-    ],
-    [
-      { label: "Kitchen Sinks", key: "kitchen sinks", hasSubmenu: false },
-      { label: "Kitchen Tapware", key: "kitchen tapware", hasSubmenu: false },
-      { label: "Stone Benches", key: "stone benches", hasSubmenu: false },
-      { label: "Stone Benchtops", key: "stone benchtops", hasSubmenu: false },
-      { label: "Splashbacks", key: "splashbacks", hasSubmenu: false },
-      {
-        label: "Kitchen Appliances",
-        key: "kitchen appliances",
-        hasSubmenu: false,
-      },
-      { label: "Laundry Sinks", key: "laundry sinks", hasSubmenu: false },
-      { label: "Laundry Tapware", key: "laundry tapware", hasSubmenu: false },
-      { label: "Accessories", key: "accessories", hasSubmenu: false },
-      { label: "Brands", key: "brands", hasSubmenu: false },
-    ],
-    [
-      { label: "Fencing", key: "fencing", hasSubmenu: false },
-      { label: "Cladding", key: "cladding", hasSubmenu: false },
-      { label: "Decking", key: "decking", hasSubmenu: false },
-      { label: "Bamboo Benchtops", key: "bamboo benchtops", hasSubmenu: false },
-      { label: "Skylight", key: "skylight", hasSubmenu: false },
-      { label: "Blinds", key: "blinds", hasSubmenu: true },
-      { label: "Curtains", key: "curtains", hasSubmenu: true },
-      { label: "Shutters", key: "shutters", hasSubmenu: true },
-      { label: "Outdoor", key: "outdoor", hasSubmenu: true },
-    ],
-  ];
-
-  const mainNavSub = {
-    floorShopByBrands: [
-      "Clever Choice",
-      "Preference Floors",
-      "Herford Flooring",
-      "Signature Flooring",
-      "Terra Mater",
-      "Create Floors",
-    ],
-    shopByDesign: ["Longboards", "Herringbone", "Chevron"],
-    tilesShopByBrands: [
-      "Elegance Collection",
-      "Masa Imports",
-      "DW Tiles",
-      "Designer Stone & Tiles",
-    ],
-    brands: [
-      "Fienza",
-      "Bella Vista",
-      "Evia Bathware",
-      "Nero Bathware",
-      "Kuroma",
-    ],
-    blinds: [
-      "Roller Blinds",
-      "Vertical Blinds",
-      "Roman Blinds",
-      "Venetian Blinds",
-      "Panel Slide Doors",
-    ],
-    curtains: ["Sheer Curtains", "Lockout Curtains"],
-    shutters: ["Timber Shutters", "PVC Shutters", "Aluminium Shutters"],
-    outdoor: ["Outdoor Blinds", "Outdoor Shutters", "Roller Shutters"],
-  };
-
-  const tabs = [
-    "All Categories",
-    "Flooring",
-    "Tiles",
-    "Bathroom",
-    "Kitchen & Laundry",
-    "Other Home Improvements",
-  ];
-
   const [mainHovered, setMainHovered] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
-  console.log("Nav sub menu", mainNavSub[mainHovered]);
+  const dispath = useDispatch();
 
   // Handle scroll for sticky header
   useEffect(() => {
@@ -272,8 +148,12 @@ export default function MainNav() {
                 transition={{ duration: 0.4, delay: index * 0.15 }}
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setActiveTab(index)}
-                onMouseEnter={() => setActiveTab(index)}
+                onClick={() => {
+                  setActiveTab(index), dispath(setTabSelected(tab));
+                }}
+                onMouseEnter={() => {
+                  setActiveTab(index), dispath(setTabSelected(tab));
+                }}
                 className={`
            text-center list-none
           hidden lg:flex justify-center relative overflow-hidden group cursor-pointer
@@ -335,14 +215,14 @@ export default function MainNav() {
         <div className="hidden lg:block border-t border-[#D6CEC6]/30 bg-[#f5efed]/30 backdrop-blur-sm">
           <div className="max-w-10/12 mx-auto px-6">
             <nav className="flex items-center xl:justify-center gap-4 xl:gap-8 py-4">
-              {activeTab !=null &&
+              {activeTab != null &&
                 mainNav[activeTab].map((item, index) => (
                   <div
                     key={index}
                     className="relative group"
                     onMouseEnter={() => setMainHovered(item.key)}
                     onMouseLeave={() => setMainHovered(null)}
-                   >
+                  >
                     <Link
                       to={`/${item.key}`}
                       className="flex items-center gap-1 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 font-medium text-md whitespace-nowrap"
@@ -378,29 +258,31 @@ export default function MainNav() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 10 }}
                             transition={{ duration: 0.2 }}
-                            className="absolute top-full  mt-4 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 min-w-[300px] border border-[#D6CEC6]/50" 
+                            className="absolute top-full  mt-4 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 min-w-[300px] border border-[#D6CEC6]/50"
                           >
                             {/* Arrow indicator */}
                             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#D6CEC6]/30 rotate-45"></div>
 
                             <div className="gap-3 relative z-10">
-                              {mainNavSub[mainHovered].map((subItem, subIndex) => (
-                                <motion.div
-                                  key={subIndex}
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ delay: subIndex * 0.03 }}
-                                  className="hover:bg-[#f5efed] cursor-pointer text-[#8A6A5A] rounded-lg px-4 py-2.5 text-md font-medium transition-all duration-200 hover:translate-x-1"
-                                >
-                                  <Link
-                                    to={`/${item.key}/${subItem
-                                      .toLowerCase()
-                                      .replace(/\s+/g, "-")}`}
+                              {mainNavSub[mainHovered].map(
+                                (subItem, subIndex) => (
+                                  <motion.div
+                                    key={subIndex}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: subIndex * 0.03 }}
+                                    className="hover:bg-[#f5efed] cursor-pointer text-[#8A6A5A] rounded-lg px-4 py-2.5 text-md font-medium transition-all duration-200 hover:translate-x-1"
                                   >
-                                    {subItem}
-                                  </Link>
-                                </motion.div>
-                              ))}
+                                    <Link
+                                      to={`/${item.key}/${subItem
+                                        .toLowerCase()
+                                        .replace(/\s+/g, "-")}`}
+                                    >
+                                      {subItem}
+                                    </Link>
+                                  </motion.div>
+                                )
+                              )}
                             </div>
                           </motion.div>
                         )}
