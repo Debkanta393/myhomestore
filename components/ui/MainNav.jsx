@@ -44,7 +44,7 @@ export default function MainNav() {
             : "0 0 0 rgba(138, 106, 90, 0)",
         }}
       >
-        <div className="w-11/12 sm:max-w-10/12 mx-auto sm:px-6">
+        <div className="w-11/12 sm:max-w-10/12 mx-auto">
           <div className="flex justify-between items-center py-4 md:py-6">
             {/* Logo */}
             <Link to="/" className="flex items-center group">
@@ -138,7 +138,7 @@ export default function MainNav() {
 
         {/* Tabs section */}
         {/* Tabs section */}
-        <div className="max-w-10/12 mx-auto px-6 my-1">
+        <div className="max-w-10/12 mx-auto my-1">
           <div className="flex justify-evenly xl:items-center gap-2">
             {tabs.map((tab, index) => (
               <motion.li

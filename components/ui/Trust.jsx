@@ -10,15 +10,15 @@ export default function Trust() {
       <div className="relative max-w-7xl mx-auto py-20 px-5 md:px-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Left Content */}
         <div>
-          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-gray-700 mb-6">
+          <span className="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-gray-700 mb-3">
             <MapPin size={16} /> Australia Wide Supply
           </span>
 
-          <h2 className="text-4xl md:text-5xl font-bold leading-tight">
+          <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
             Trusted by Australian Homes & Businesses
           </h2>
 
-          <p className="text-lg text-gray-700 mt-6 leading-relaxed max-w-xl">
+          <p className="text-lg text-gray-700 mt-3 leading-relaxed max-w-xl">
             We proudly supply tiles to homeowners, builders, designers, and
             contractors across Australia. Our commitment to quality,
             consistency, and service has made us a trusted tile supplier
@@ -26,7 +26,7 @@ export default function Trust() {
           </p>
 
           {/* Trust Points */}
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <TrustItem
               icon={ShieldCheck}
               text="Suitable for Australian climates"

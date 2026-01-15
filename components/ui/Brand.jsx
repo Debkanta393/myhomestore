@@ -52,7 +52,7 @@ export default function Brand() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-9/12 mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
           {/* TEXT SECTION */}
           <motion.div
@@ -143,7 +143,7 @@ export default function Brand() {
                       scale: 1.05,
                       transition: { duration: 0.3 },
                     }}
-                    className="group relative aspect-square bg-white/80 backdrop-blur-sm p-6 md:p-7 rounded-2xl shadow-[0_8px_30px_rgba(138,106,90,0.08)] hover:shadow-[0_20px_50px_rgba(138,106,90,0.15)] transition-all duration-500 border border-[#D6CEC6]/30 overflow-hidden"
+                    className="group relative aspect-square bg-white/80 backdrop-blur-sm p-3 md:p-6 rounded-2xl shadow-[0_8px_30px_rgba(138,106,90,0.08)] hover:shadow-[0_20px_50px_rgba(138,106,90,0.15)] transition-all duration-500 border border-[#D6CEC6]/30 overflow-hidden"
                   >
                     {/* Gradient overlay on hover */}
                     <div className="absolute inset-0 bg-gradient-to-br from-[#D6CEC6]/0 to-[#B8B0A7]/0 group-hover:from-[#D6CEC6]/20 group-hover:to-[#B8B0A7]/10 transition-all duration-500" />
@@ -168,7 +168,7 @@ export default function Brand() {
                   scale: 1.06,
                   transition: { duration: 0.3 },
                 }}
-                className="group relative aspect-square bg-gradient-to-br from-[#8A6A5A] to-[#998e8a] p-8 md:p-9 rounded-3xl shadow-[0_12px_40px_rgba(138,106,90,0.2)] hover:shadow-[0_25px_60px_rgba(138,106,90,0.3)] transition-all duration-500 overflow-hidden"
+                className="group relative aspect-square bg-gradient-to-br from-[#8A6A5A] to-[#998e8a] p-3 md:p-9 rounded-3xl shadow-[0_12px_40px_rgba(138,106,90,0.2)] hover:shadow-[0_25px_60px_rgba(138,106,90,0.3)] transition-all duration-500 overflow-hidden"
               >
                 {/* Animated gradient overlay */}
                 <motion.div
@@ -214,7 +214,7 @@ export default function Brand() {
                       scale: 1.05,
                       transition: { duration: 0.3 },
                     }}
-                    className="group relative aspect-square bg-white/80 backdrop-blur-sm p-6 md:p-7 rounded-2xl shadow-[0_8px_30px_rgba(138,106,90,0.08)] hover:shadow-[0_20px_50px_rgba(138,106,90,0.15)] transition-all duration-500 border border-[#D6CEC6]/30 overflow-hidden"
+                    className="group relative aspect-square bg-white/80 backdrop-blur-sm p-3 md:p-7 rounded-2xl shadow-[0_8px_30px_rgba(138,106,90,0.08)] hover:shadow-[0_20px_50px_rgba(138,106,90,0.15)] transition-all duration-500 border border-[#D6CEC6]/30 overflow-hidden"
                   >
                     {/* Gradient overlay on hover */}
                     <div className="absolute inset-0 bg-gradient-to-br from-[#D6CEC6]/0 to-[#B8B0A7]/0 group-hover:from-[#D6CEC6]/20 group-hover:to-[#B8B0A7]/10 transition-all duration-500" />

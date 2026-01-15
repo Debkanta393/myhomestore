@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight, HeartIcon, X, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useSelector } from "react-redux";
@@ -169,7 +169,30 @@ export default function Products() {
   const [navigateTo, setNavigateTo] = useState("right");
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [sortBy, setSortBy] = useState("featured");
-  const selectedTab=useSelector((state)=> state.activeTab.tabSelected).toLowerCase()
+  const selectedTab = useSelector((state) => state.activeTab.tabSelected).toLowerCase()
+  const [itemsPerPage, setItemsPerPage]=useState(8)
+
+
+  // Window width
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(()=>{
+    if(width> 1200){
+      setItemsPerPage(8)
+    }
+    else if(width> 1000 && width <1200){
+      setItemsPerPage(6)
+    }
+  }, [width])
+
+  console.log("Window width", width)
 
   // Expanded Filter States
   const [filters, setFilters] = useState({
@@ -259,11 +282,11 @@ export default function Products() {
     }
   });
 
-  const totalPages = Math.ceil(sortedProducts.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
 
   const visibleProducts = sortedProducts.slice(
-    page * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE + ITEMS_PER_PAGE
+    page * itemsPerPage,
+    page * itemsPerPage + itemsPerPage
   );
 
   const next = () => {
@@ -387,9 +410,8 @@ export default function Products() {
   // Filter Sidebar Component
   const FilterSidebar = ({ isMobile = false }) => (
     <div
-      className={`bg-white rounded-2xl shadow-lg ${
-        isMobile ? "h-full overflow-y-auto p-6" : "sticky top-24 h-fit max-h-[calc(100vh-180px)] overflow-y-auto p-6"
-      }`}
+      className={`bg-white rounded-2xl shadow-lg ${isMobile ? "h-full overflow-y-auto p-6" : "sticky top-24 h-fit lg:max-h-[1360px] xl:max-h-[850px] overflow-y-auto p-6"
+        }`}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
@@ -433,9 +455,8 @@ export default function Products() {
               Price Range
             </h4>
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.price ? "rotate-180" : ""
-              }`}
+              className={`w-4 h-4 transition-transform ${expandedSections.price ? "rotate-180" : ""
+                }`}
             />
           </button>
           {expandedSections.price && (
@@ -488,9 +509,8 @@ export default function Products() {
               Category
             </h4>
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.category ? "rotate-180" : ""
-              }`}
+              className={`w-4 h-4 transition-transform ${expandedSections.category ? "rotate-180" : ""
+                }`}
             />
           </button>
           {expandedSections.category && (
@@ -523,9 +543,8 @@ export default function Products() {
           >
             <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Brand</h4>
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.brand ? "rotate-180" : ""
-              }`}
+              className={`w-4 h-4 transition-transform ${expandedSections.brand ? "rotate-180" : ""
+                }`}
             />
           </button>
           {expandedSections.brand && (
@@ -548,7 +567,7 @@ export default function Products() {
           )}
         </div>
 
-        
+
         {/* Color Filter */}
         {/* <div className="border-b border-gray-200 pb-4">
           <button
@@ -588,9 +607,8 @@ export default function Products() {
           >
             <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Size</h4>
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.size ? "rotate-180" : ""
-              }`}
+              className={`w-4 h-4 transition-transform ${expandedSections.size ? "rotate-180" : ""
+                }`}
             />
           </button>
           {expandedSections.size && (
@@ -599,11 +617,10 @@ export default function Products() {
                 <button
                   key={size}
                   onClick={() => toggleArrayFilter("sizes", size)}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all ${
-                    filters.sizes.includes(size)
+                  className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all ${filters.sizes.includes(size)
                       ? "bg-blue-600 text-white border-blue-600"
                       : "bg-white text-gray-700 border-gray-300 hover:border-blue-600"
-                  }`}
+                    }`}
                 >
                   {size}
                 </button>
@@ -622,9 +639,8 @@ export default function Products() {
               Design
             </h4>
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.material ? "rotate-180" : ""
-              }`}
+              className={`w-4 h-4 transition-transform ${expandedSections.material ? "rotate-180" : ""
+                }`}
             />
           </button>
           {expandedSections.material && (
@@ -656,9 +672,8 @@ export default function Products() {
               Rating
             </h4>
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.rating ? "rotate-180" : ""
-              }`}
+              className={`w-4 h-4 transition-transform ${expandedSections.rating ? "rotate-180" : ""
+                }`}
             />
           </button>
           {expandedSections.rating && (
@@ -699,9 +714,8 @@ export default function Products() {
               Special Offers
             </h4>
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.special ? "rotate-180" : ""
-              }`}
+              className={`w-4 h-4 transition-transform ${expandedSections.special ? "rotate-180" : ""
+                }`}
             />
           </button>
           {expandedSections.special && (
@@ -760,9 +774,8 @@ export default function Products() {
           >
             <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Tags</h4>
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.tags ? "rotate-180" : ""
-              }`}
+              className={`w-4 h-4 transition-transform ${expandedSections.tags ? "rotate-180" : ""
+                }`}
             />
           </button>
           {expandedSections.tags && (
@@ -771,11 +784,10 @@ export default function Products() {
                 <button
                   key={tag}
                   onClick={() => toggleArrayFilter("tags", tag)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all ${
-                    filters.tags.includes(tag)
+                  className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all ${filters.tags.includes(tag)
                       ? "bg-blue-600 text-white"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                    }`}
                 >
                   {tag}
                 </button>
@@ -788,10 +800,10 @@ export default function Products() {
   );
 
   return (
-    <div className="w-full mt-28 px-4 md:px-8">
+    <div className="w-full mt-28">
       <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center">Featured Products</h2>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-10/12 mx-auto">
         {/* Mobile Filter & Sort Bar */}
         <div className="lg:hidden mb-6 flex items-center justify-between gap-4">
           <button
@@ -893,7 +905,7 @@ export default function Products() {
                     initial="hidden"
                     animate="show"
                     exit="exit"
-                    className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5"
+                    className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-5"
                   >
                     {visibleProducts.map((item) => (
                       <motion.div
@@ -903,7 +915,7 @@ export default function Products() {
                         className="group relative rounded-2xl bg-white overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ease-out hover:-translate-y-1 border border-gray-100"
                       >
                         {/* Compact Image Container */}
-                        <div className="relative aspect-[4/4] overflow-hidden bg-gray-50">
+                        <div className="relative aspect-[5/4] overflow-hidden bg-gray-50">
                           <img
                             src={item.image}
                             alt={item.heading}
@@ -944,7 +956,7 @@ export default function Products() {
                         </div>
 
                         {/* Compact Product Info */}
-                        <div className="p-3 space-y-2">
+                        <div className="p-5 space-y-2">
                           <div className="flex items-start justify-between gap-2">
                             <h3 className="text-xl font-semibold text-gray-900 line-clamp-1">
                               {item.heading}

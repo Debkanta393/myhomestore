@@ -294,6 +294,23 @@ export default function BrandPage() {
       onSale: true,
       tags: ["Budget Friendly"],
     },
+    {
+      id: 5,
+      image: "./images/luxury1.webp",
+      heading: "Industrial Concrete",
+      desc: "Urban style with exceptional resistance",
+      category: "Industrial",
+      brand: "Urban Floor",
+      price: 80,
+      rating: 4.2,
+      inStock: true,
+      color: "Concrete Grey",
+      size: "S",
+      material: "SPC Core",
+      isNew: false,
+      onSale: true,
+      tags: ["Budget Friendly"],
+    }
   ];
 
   // Special offers
@@ -397,13 +414,6 @@ export default function BrandPage() {
           backgroundPosition: "bottom",
         }}
       >
-        {/* Background pattern */}
-        {/* <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
-            backgroundSize: "50px 50px"
-          }}></div>
-        </div> */}
 
         {/* Background overlay */}
         <div className="absolute top-0 left-0 w-full h-full bg-black/50"></div>
@@ -448,10 +458,17 @@ export default function BrandPage() {
               transition={{ delay: 0.7, duration: 0.8 }}
               className="flex gap-4 justify-center flex-wrap"
             >
-              <button className="bg-white text-[#8A6A5A] px-10 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-2xl hover:shadow-3xl hover:scale-105">
-                Shop Collection
+              <button className="relative overflow-hidden py-3 px-12 bg-[#f5efed] text-black text-xl font-medium group cursor-pointer">
+                <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
+                  Shop Collection
+                </span>
+
+                <span
+                  className="absolute inset-0 bg-black transform scale-x-0 origin-left 
+                   transition-transform duration-300 group-hover:scale-x-100"
+                ></span>
               </button>
-              <button className="bg-transparent border-2 border-white text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition-all backdrop-blur-sm">
+              <button className="bg-transparent border-2 border-white text-white px-10 py-4 font-bold text-lg hover:bg-white/10 transition-all backdrop-blur-sm">
                 Learn More
               </button>
             </motion.div>
@@ -472,7 +489,7 @@ export default function BrandPage() {
 
       {/* Brand Story Section */}
       <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-10/12 mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -483,7 +500,7 @@ export default function BrandPage() {
               Our Story
             </span>
             <h2 className="text-4xl md:text-5xl font-bold mb-8">Brand Story</h2>
-            <div className="max-w-4xl mx-auto space-y-6 text-lg text-gray-700 leading-relaxed">
+            <div className="mx-auto space-y-6 text-lg text-gray-700 leading-relaxed">
               <p>
                 At Fienza, we pride ourselves on supplying products of the
                 highest standard. Our commitment to excellence has made us a
@@ -595,7 +612,7 @@ export default function BrandPage() {
 
       {/* Popular Collections Section */}
       <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-10/12 mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -618,7 +635,7 @@ export default function BrandPage() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             {collections.map((collection, index) => (
               <motion.div
@@ -629,7 +646,7 @@ export default function BrandPage() {
               >
                 <div
                   className={`relative overflow-hidden h-80`}
-                 >
+                >
                   <img
                     src={collection.image}
                     alt={collection.name}
@@ -697,11 +714,10 @@ export default function BrandPage() {
                 variants={itemVariants}
                 whileHover={{ scale: 1.1, y: -10 }}
                 onClick={() => setSelectedColor(color.name)}
-                className={`cursor-pointer group ${
-                  selectedColor === color.name
+                className={`cursor-pointer group ${selectedColor === color.name
                     ? "ring-4 ring-[#8A6A5A] ring-offset-4"
                     : ""
-                } rounded-3xl`}
+                  } rounded-3xl`}
               >
                 <div className="backdrop-blur-sm bg-white/80 border border-gray-200/50 rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all">
                   <div
@@ -723,7 +739,7 @@ export default function BrandPage() {
 
       {/* New Arrivals Section */}
       <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-10/12 mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -773,11 +789,10 @@ export default function BrandPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-8 py-3 rounded-full font-semibold whitespace-nowrap transition-all ${
-                  selectedCategory === cat
+                className={`px-8 py-3 rounded-full font-semibold whitespace-nowrap transition-all ${selectedCategory === cat
                     ? "bg-gradient-to-r from-[#8A6A5A] to-[#735644] text-white shadow-lg"
                     : "bg-white border-2 border-gray-300 text-gray-700 hover:border-[#8A6A5A]"
-                }`}
+                  }`}
               >
                 {cat}
               </motion.button>
@@ -785,98 +800,98 @@ export default function BrandPage() {
           </motion.div>
 
           {/* Products Grid */}
-          <div className="max-w-7xl mx-auto">
-                      <AnimatePresence mode="wait">
-            
-                        <motion.div
-                          variants={containerVariants}
-                          initial="hidden"
-                          animate="show"
-                          exit="exit"
-                          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5"
-                        >
-                          {products.map((item) => (
-                            <motion.div
-                              key={item.id}
-                              variants={cardVariants}
-                              className="group relative rounded-2xl bg-white overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ease-out hover:-translate-y-1 border border-gray-100"
-                            >
-                              {/* Compact Image Container */}
-                              <div className="relative aspect-[4/4] overflow-hidden bg-gray-50">
-                                <img
-                                  src={item.image}
-                                  alt={item.heading}
-                                  loading="lazy"
-                                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            
-                                {/* Compact Wishlist Button */}
-                                <button
-                                  aria-label="Add to wishlist"
-                                  className="absolute top-2 right-2 z-20 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm hover:bg-white hover:scale-110 transition-all duration-300"
-                                >
-                                  <Heart className="w-4 h-4 text-gray-700 hover:text-red-500" />
-                                </button>
-            
-                                {/* Badges */}
-                                <div className="absolute top-2 left-2 z-20 flex flex-col gap-1">
-                                  {item.isNew && (
-                                    <span className="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide bg-[#998e8a] text-white rounded-md shadow-sm">
-                                      New
-                                    </span>
-                                  )}
-                                  {item.onSale && (
-                                    <span className="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide bg-white text-black rounded-md shadow-sm">
-                                      Sale
-                                    </span>
-                                  )}
-                                </div>
-            
-                                {!item.inStock && (
-                                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
-                                    <span className="bg-white text-gray-900 px-3 py-1 rounded-lg font-semibold text-xs">
-                                      Out of Stock
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-            
-                              {/* Compact Product Info */}
-                              <div className="p-3 space-y-2">
-                                <div className="flex items-start justify-between gap-2">
-                                  <h3 className="text-xl font-semibold text-gray-900 line-clamp-1">
-                                    {item.heading}
-                                  </h3>
-                                </div>
-            
-                                <p className="text-xs text-gray-500 line-clamp-1">
-                                  {item.brand}
-                                </p>
-            
-                                {/* Compact Rating */}
-                                <div className="flex items-center gap-1">
-                                  <span className="text-yellow-400 text-xs">★</span>
-                                  <span className="text-xs font-medium text-gray-700">
-                                    {item.rating}
-                                  </span>
-                                </div>
-            
-                                {/* Compact Price */}
-                                <div className="flex items-baseline gap-2">
-                                  <span className="text-lg font-bold text-gray-900">
-                                    ${item.price}
-                                  </span>
-                                  <span className="text-xs text-gray-400 line-through">
-                                    ${item.price * 2}
-                                  </span>
-                                </div>
-                              </div>
-                            </motion.div>
-                          ))}
-                        </motion.div>
-          </AnimatePresence>
+          <div className="max-w-full">
+            <AnimatePresence mode="wait">
+
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                exit="exit"
+                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4 md:gap-5"
+              >
+                {products.map((item) => (
+                  <motion.div
+                    key={item.id}
+                    variants={cardVariants}
+                    className="group relative rounded-2xl bg-white overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ease-out hover:-translate-y-1 border border-gray-100"
+                  >
+                    {/* Compact Image Container */}
+                    <div className="relative aspect-[4/4] overflow-hidden bg-gray-50">
+                      <img
+                        src={item.image}
+                        alt={item.heading}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                      {/* Compact Wishlist Button */}
+                      <button
+                        aria-label="Add to wishlist"
+                        className="absolute top-2 right-2 z-20 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm hover:bg-white hover:scale-110 transition-all duration-300"
+                      >
+                        <Heart className="w-4 h-4 text-gray-700 hover:text-red-500" />
+                      </button>
+
+                      {/* Badges */}
+                      <div className="absolute top-2 left-2 z-20 flex flex-col gap-1">
+                        {item.isNew && (
+                          <span className="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide bg-[#998e8a] text-white rounded-md shadow-sm">
+                            New
+                          </span>
+                        )}
+                        {item.onSale && (
+                          <span className="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide bg-white text-black rounded-md shadow-sm">
+                            Sale
+                          </span>
+                        )}
+                      </div>
+
+                      {!item.inStock && (
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
+                          <span className="bg-white text-gray-900 px-3 py-1 rounded-lg font-semibold text-xs">
+                            Out of Stock
+                          </span>
+                        </div>
+                      )}
                     </div>
+
+                    {/* Compact Product Info */}
+                    <div className="p-3 space-y-2">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="text-xl font-semibold text-gray-900 line-clamp-1">
+                          {item.heading}
+                        </h3>
+                      </div>
+
+                      <p className="text-xs text-gray-500 line-clamp-1">
+                        {item.brand}
+                      </p>
+
+                      {/* Compact Rating */}
+                      <div className="flex items-center gap-1">
+                        <span className="text-yellow-400 text-xs">★</span>
+                        <span className="text-xs font-medium text-gray-700">
+                          {item.rating}
+                        </span>
+                      </div>
+
+                      {/* Compact Price */}
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-lg font-bold text-gray-900">
+                          ${item.price}
+                        </span>
+                        <span className="text-xs text-gray-400 line-through">
+                          ${item.price * 2}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
           {/* Load More Button */}
           <motion.div
@@ -1099,7 +1114,7 @@ export default function BrandPage() {
             viewport={{ once: true }}
             className="backdrop-blur-sm bg-white/80 border border-gray-200/50 rounded-3xl p-12 shadow-2xl"
           >
-            
+
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Ready to Transform Your Bathroom?
             </h2>

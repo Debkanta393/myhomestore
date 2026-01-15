@@ -26,7 +26,7 @@ export function Header() {
       {/* Top Navigation Bar */}
       <div>
         <div className="bg-[#f5efed] w-full border-b border-[#D6CEC6]/30 relative z-40 overflow-visible">
-          <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-10/12 mx-auto">
             <nav className="flex justify-between items-center py-3">
               {/* Left Navigation */}
               <div className="flex gap-8 items-center">

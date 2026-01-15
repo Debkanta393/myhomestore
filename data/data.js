@@ -178,32 +178,32 @@ export const collections = {
       image: "./images/flooring/flooring2.webp",
       title: "Showers",
     },
-    {
-      image: "./images/kitchen/kitchen9.jpg",
-      title: "Kitchen Sinks",
-    },
-    {
-      image: "./images/tiles/tiles3.jpg",
-      title: "Shower Screens",
-    },
-    {
-      image: "./images/bathroom/vanities.jpg",
-      title: "Flooring",
-    },
-    {
-      image: "./images/kitchen/kitchen12.jpg",
-      title: "Disability & Aged Products",
-    },
+    // {
+    //   image: "./images/kitchen/kitchen9.jpg",
+    //   title: "Kitchen Sinks",
+    // },
+    // {
+    //   image: "./images/tiles/tiles3.jpg",
+    //   title: "Shower Screens",
+    // },
+    // {
+    //   image: "./images/bathroom/vanities.jpg",
+    //   title: "Flooring",
+    // },
+    // {
+    //   image: "./images/kitchen/kitchen12.jpg",
+    //   title: "Disability & Aged Products",
+    // },
   ],
   bathroom: [
     {
       image: "./images/collections/toilets.jpg",
       title: "Toilets",
     },
-    {
-      image: "./images/bathroom/bidets.png",
-      title: "Bidets",
-    },
+    // {
+    //   image: "./images/bathroom/bidets.png",
+    //   title: "Bidets",
+    // },
     {
       image: "./images/bathroom/bathtubs.webp",
       title: "Bathtubs",
@@ -229,123 +229,123 @@ export const collections = {
       title: "Showers",
     },
     {
-      image: "./images/collections/kitchen_sinks.webp",
-      title: "Kitchen Sinks",
-    },
-    {
       image: "./images/collections/shower_screen.webp",
       title: "Shower Screens",
     },
-    {
-      image: "./images/collections/flooring.png",
-      title: "Flooring",
-    },
-    {
-      image: "./images/bathroom/disability_aged.jpg",
-      title: "Disability & Aged Products",
-    },
+    // {
+    //   image: "./images/collections/kitchen_sinks.webp",
+    //   title: "Kitchen Sinks",
+    // },
+    // {
+    //   image: "./images/collections/flooring.png",
+    //   title: "Flooring",
+    // },
+    // {
+    //   image: "./images/bathroom/disability_aged.jpg",
+    //   title: "Disability & Aged Products",
+    // },
   ],
 
   flooring: [
     {
-      image: "./images/flooring/flooring1.webp",
-      title: "Toilets",
+      image: "./images/flooring/Hybrid.png",
+      title: "Hybrid",
     },
     {
-      image: "./images/flooring/flooring2.webp",
-      title: "Bidets",
+      image: "./images/flooring/Hydro-laminate.png",
+      title: "Hydro Laminate",
     },
     {
-      image: "./images/flooring/flooring3.jpg",
-      title: "Bathtubs",
+      image: "./images/flooring/Herringbone.png",
+      title: "Herringbone",
     },
     {
-      image: "./images/flooring/flooring4.jpg",
-      title: "Vanities",
+      image: "./images/flooring/Bamboo.png",
+      title: "Bamboo",
     },
     {
-      image: "./images/flooring/flooring5.webp",
-      title: "Basins",
+      image: "./images/flooring/Vinyl.png",
+      title: "Vinyl",
     },
     {
-      image: "./images/flooring/flooring6.jpg",
-      title: "Bathroom Mirrors",
+      image: "./images/flooring/Timber.png",
+      title: "Timber",
     },
     {
-      image: "./images/flooring/flooring7.jpg",
-      title: "Bathroom Tapware",
+      image: "./images/flooring/Laminate.png",
+      title: "Laminate",
     },
     {
-      image: "./images/flooring/flooring8.webp",
-      title: "Showers",
+      image: "./images/flooring/Engineered-oak.png",
+      title: "Engineered Oak",
     },
-    {
-      image: "./images/flooring/flooring9.jpg",
-      title: "Kitchen Sinks",
-    },
-    {
-      image: "./images/flooring/flooring10.jpg",
-      title: "Shower Screens",
-    },
-    {
-      image: "./images/flooring/flooring11.webp",
-      title: "Flooring",
-    },
-    {
-      image: "./images/flooring/flooring12.jpg",
-      title: "Disability & Aged Products",
-    },
+    // {
+    //   image: "./images/flooring/flooring9.jpg",
+    //   title: "Kitchen Sinks",
+    // },
+    // {
+    //   image: "./images/flooring/flooring10.jpg",
+    //   title: "Shower Screens",
+    // },
+    // {
+    //   image: "./images/flooring/flooring11.webp",
+    //   title: "Flooring",
+    // },
+    // {
+    //   image: "./images/flooring/flooring12.jpg",
+    //   title: "Disability & Aged Products",
+    // },
   ],
 
   tiles: [
     {
-      image: "./images/tiles/tiles1.jpg",
-      title: "Toilets",
+      image: "./images/tiles/Commercial.jpg",
+      title: "Commercial Floor Tiles",
     },
     {
-      image: "./images/tiles/tiles2.jpg",
-      title: "Bidets",
+      image: "./images/tiles/Feature.jpg",
+      title: "Feature",
     },
     {
-      image: "./images/tiles/tiles3.jpg",
-      title: "Bathtubs",
+      image: "./images/tiles/Floor.jpg",
+      title: "Floor",
     },
     {
-      image: "./images/tiles/tiles4.jpg",
-      title: "Vanities",
+      image: "./images/tiles/Mosaic.jpg",
+      title: "Mosaic",
     },
     {
-      image: "./images/tiles/tiles5.jpg",
-      title: "Basins",
+      image: "./images/tiles/Outdoor.jpg",
+      title: "Outdoor",
     },
     {
-      image: "./images/tiles/tiles6.jpg",
-      title: "Bathroom Mirrors",
+      image: "./images/tiles/Pool.jpg",
+      title: "Pool",
     },
     {
-      image: "./images/tiles/tiles7.jpg",
-      title: "Bathroom Tapware",
+      image: "./images/tiles/Porcelain.jpg",
+      title: "Porcelain",
     },
     {
-      image: "./images/tiles/tiles8.jpg",
-      title: "Showers",
+      image: "./images/tiles/Wall.jpg",
+      title: "Wall",
     },
-    {
-      image: "./images/tiles/tiles9.jpg",
-      title: "Kitchen Sinks",
-    },
-    {
-      image: "./images/tiles/tiles10.jpg",
-      title: "Shower Screens",
-    },
-    {
-      image: "./images/tiles/tiles11.jpg",
-      title: "Flooring",
-    },
-    {
-      image: "./images/tiles/tiles12.jpg",
-      title: "Disability & Aged Products",
-    },
+    // {
+    //   image: "./images/tiles/tiles9.jpg",
+    //   title: "Kitchen Sinks",
+    // },
+    // {
+    //   image: "./images/tiles/tiles10.jpg",
+    //   title: "Shower Screens",
+    // },
+    // {
+    //   image: "./images/tiles/tiles11.jpg",
+    //   title: "Flooring",
+    // },
+    // {
+    //   image: "./images/tiles/tiles12.jpg",
+    //   title: "Disability & Aged Products",
+    // },
   ],
 
   "kitchen & laundry": [
@@ -381,22 +381,22 @@ export const collections = {
       image: "./images/kitchen/kitchen8.jpg",
       title: "Showers",
     },
-    {
-      image: "./images/kitchen/kitchen9.jpg",
-      title: "Kitchen Sinks",
-    },
-    {
-      image: "./images/kitchen/kitchen10.jpg",
-      title: "Shower Screens",
-    },
-    {
-      image: "./images/kitchen/kitchen11.jpg",
-      title: "Flooring",
-    },
-    {
-      image: "./images/kitchen/kitchen12.jpg",
-      title: "Disability & Aged Products",
-    },
+    // {
+    //   image: "./images/kitchen/kitchen9.jpg",
+    //   title: "Kitchen Sinks",
+    // },
+    // {
+    //   image: "./images/kitchen/kitchen10.jpg",
+    //   title: "Shower Screens",
+    // },
+    // {
+    //   image: "./images/kitchen/kitchen11.jpg",
+    //   title: "Flooring",
+    // },
+    // {
+    //   image: "./images/kitchen/kitchen12.jpg",
+    //   title: "Disability & Aged Products",
+    // },
   ],
 };
 
