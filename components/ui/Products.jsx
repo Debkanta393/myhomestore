@@ -2,168 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight, HeartIcon, X, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useSelector } from "react-redux";
-import { category, brand } from "../../data/data";
+import { category, brand, products } from "../../data/data";
 
-const products = [
-  {
-    id: 1,
-    image: "./images/luxury1.webp",
-    heading: "Product1",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Hybrid",
-    brand: "Sony",
-    price: 100,
-    rating: 4.5,
-    inStock: true,
-    color: "Black",
-    size: "M",
-    material: "Leather",
-    isNew: true,
-    onSale: false,
-    tags: ["Premium", "Best Seller"],
-  },
-  {
-    id: 2,
-    image: "./images/luxury2.webp",
-    heading: "Product2",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Engineered Oak",
-    brand: "Nike",
-    price: 250,
-    rating: 4.0,
-    inStock: true,
-    color: "Blue",
-    size: "L",
-    material: "Cotton",
-    isNew: false,
-    onSale: true,
-    tags: ["Featured"],
-  },
-  {
-    id: 3,
-    image: "./images/luxury3.webp",
-    heading: "Product3",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Australian Timber",
-    brand: "IKEA",
-    price: 150,
-    rating: 5.0,
-    inStock: false,
-    color: "White",
-    size: "XL",
-    material: "Wood",
-    isNew: true,
-    onSale: false,
-    tags: ["Eco-Friendly"],
-  },
-  {
-    id: 4,
-    image: "./images/luxury1.webp",
-    heading: "Product4",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "European Timber",
-    brand: "Samsung",
-    price: 80,
-    rating: 3.5,
-    inStock: true,
-    color: "Silver",
-    size: "S",
-    material: "Metal",
-    isNew: false,
-    onSale: true,
-    tags: ["Budget Friendly"],
-  },
-  {
-    id: 5,
-    image: "./images/luxury2.webp",
-    heading: "Product5",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Laminate",
-    brand: "Adidas",
-    price: 300,
-    rating: 4.8,
-    inStock: true,
-    color: "Red",
-    size: "M",
-    material: "Polyester",
-    isNew: true,
-    onSale: true,
-    tags: ["Premium", "Limited Edition"],
-  },
-  {
-    id: 6,
-    image: "./images/luxury3.webp",
-    heading: "Product6",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Hydro Laminate",
-    brand: "West Elm",
-    price: 200,
-    rating: 4.2,
-    inStock: true,
-    color: "Brown",
-    size: "L",
-    material: "Fabric",
-    isNew: false,
-    onSale: false,
-    tags: ["Best Seller"],
-  },
-  {
-    id: 7,
-    image: "./images/luxury2.webp",
-    heading: "Product7",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Vinyl",
-    brand: "Puma",
-    price: 120,
-    rating: 4.6,
-    inStock: false,
-    color: "Green",
-    size: "XL",
-    material: "Synthetic",
-    isNew: false,
-    onSale: false,
-    tags: ["Featured"],
-  },
-  {
-    id: 8,
-    image: "./images/luxury3.webp",
-    heading: "Product8",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Bamboo",
-    brand: "Nike",
-    price: 90,
-    rating: 3.8,
-    inStock: true,
-    color: "Black",
-    size: "S",
-    material: "Nylon",
-    isNew: true,
-    onSale: true,
-    tags: ["New Arrival"],
-  },
-  {
-    id: 9,
-    image: "./images/luxury3.webp",
-    heading: "Product8",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Hybrid Shield",
-    brand: "Nike",
-    price: 90,
-    rating: 3.8,
-    inStock: true,
-    color: "Black",
-    size: "S",
-    material: "Nylon",
-    isNew: true,
-    onSale: true,
-    tags: ["New Arrival"],
-  },
-];
-
-const ITEMS_PER_PAGE = 8;
 
 export default function Products() {
   const ref = useRef(null);
+  const sidebarRef = useRef(null);
   const imageAnimation = useInView(ref, { once: true, amount: 0.2 });
   const [page, setPage] = useState(0);
   const [navigateTo, setNavigateTo] = useState("right");
@@ -224,11 +68,20 @@ export default function Products() {
   });
 
   const toggleSection = (section) => {
-    setExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  };
+  const scrollTop = sidebarRef.current?.scrollTop || 0;
+
+  setExpandedSections((prev) => ({
+    ...prev,
+    [section]: !prev[section],
+  }));
+
+  requestAnimationFrame(() => {
+    if (sidebarRef.current) {
+      sidebarRef.current.scrollTop = scrollTop;
+    }
+  });
+};
+
 
   // Apply Filters
   const filteredProducts = products.filter((product) => {
@@ -410,7 +263,8 @@ export default function Products() {
   // Filter Sidebar Component
   const FilterSidebar = ({ isMobile = false }) => (
     <div
-      className={`bg-white rounded-2xl shadow-lg ${isMobile ? "h-full overflow-y-auto p-6" : "sticky top-24 h-fit lg:max-h-[1360px] xl:max-h-[850px] overflow-y-auto p-6"
+    ref={sidebarRef}
+      className={`bg-white rounded-2xl shadow-lg ${isMobile ? "h-full overflow-y-auto p-6" : "sticky top-70 h-fit lg:max-h-[1360px] xl:max-h-[850px] overflow-y-auto p-6"
         }`}
     >
       {/* Header */}
@@ -905,7 +759,7 @@ export default function Products() {
                     initial="hidden"
                     animate="show"
                     exit="exit"
-                    className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-5"
+                    className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 2xl:grid-cols-4 gap-4 md:gap-5"
                   >
                     {visibleProducts.map((item) => (
                       <motion.div

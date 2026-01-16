@@ -5,6 +5,7 @@ import HomePage from "./pages/Home";
 import Product from "./pages/Product";
 import Brand from "./pages/Brand";
 import ClaverChoise from "./pages/ClaverChoise";
+import EngineeredOak from "./pages/EngineeredOak";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/product" element={<Product />} />
         <Route path="/brand" element={<Brand />} />
         <Route path="/claverchoise" element={<ClaverChoise />} />
+        <Route path="/engineered-oak" element={<EngineeredOak />} />
       </Route>
     </Routes>
   );
