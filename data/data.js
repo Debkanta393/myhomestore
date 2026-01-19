@@ -53,8 +53,8 @@ export const mainNav = [
     { label: "Vinyl", key: "vinyl", hasSubmenu: false },
     { label: "Bamboo", key: "bamboo", hasSubmenu: false },
     { label: "Hybrid Shield", key: "hybrid shield", hasSubmenu: false },
-    // { label: "Shop by Brands", key: "floorShopByBrands", hasSubmenu: true },
-    // { label: "Shop by Design", key: "shopByDesign", hasSubmenu: true },
+    { label: "Shop by Brands", key: "floorShopByBrands", hasSubmenu: true },
+    { label: "Shop by Design", key: "shopByDesign", hasSubmenu: true },
   ],
   [
     { label: "Wall Tiles", key: "wall tiles", hasSubmenu: false },

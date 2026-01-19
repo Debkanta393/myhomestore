@@ -408,15 +408,15 @@ export default function ClaverChoise() {
 
                             <ul className="space-y-4">
                                 <li className="flex items-start gap-3">
-                                    <span className="mt-1 text-[#8A6A5A]">✔</span>
+                                    <span className="mt-1 text-[#8A6A5A] font-bold">✓</span>
                                     <span>Carefully selected raw materials and finishes</span>
                                 </li>
                                 <li className="flex items-start gap-3">
-                                    <span className="mt-1 text-[#8A6A5A]">✔</span>
+                                    <span className="mt-1 text-[#8A6A5A] font-bold">✓</span>
                                     <span>Water-resistant and scratch-resistant technologies</span>
                                 </li>
                                 <li className="flex items-start gap-3">
-                                    <span className="mt-1 text-[#8A6A5A]">✔</span>
+                                    <span className="mt-1 text-[#8A6A5A] font-bold">✓</span>
                                     <span>Designed for Australian climate conditions</span>
                                 </li>
                             </ul>

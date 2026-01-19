@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ChevronRight,
   ChevronLeft,
@@ -11,6 +11,7 @@ import {
   ZoomIn,
   Package,
   Award,
+  Check
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -20,6 +21,13 @@ export default function Product() {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showZoom, setShowZoom] = useState(false);
+  const [calculatorData, setCalculatorData] = useState({
+    totalNeeded: 0,
+    wastage: null
+  })
+  const [cartonsNeeded, setCartonsNeeded] = useState(null)
+  const [price, setPrice] = useState(null)
+  const [packSize, setPackSize] = useState(1.1098)
 
   const otherImages = [
     "./images/luxury1.webp",
@@ -150,6 +158,31 @@ export default function Product() {
     },
   };
 
+
+  const calculatorDataHandler = (e) => {
+    console.log(e.target.name)
+    setCalculatorData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  }
+
+  console.log(calculatorData.totalNeeded)
+  console.log(calculatorData.wastage)
+
+  useEffect(() => {
+    if (!calculatorData.totalNeeded && calculatorData.wastage == null) {
+      return
+    }
+    const calculatorHandler = () => {
+      let totalCartons = calculatorData.wastage != 0 ? (calculatorData.totalNeeded * (calculatorData.wastage / 100)) / packSize
+       : (calculatorData.totalNeeded) / packSize
+      setCartonsNeeded(totalCartons)
+    }
+    calculatorHandler()
+
+  }, [calculatorData.totalNeeded, calculatorData.wastage])
+
   return (
     <div className="w-full mt-16 mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
       {/* Breadcrumb with glassmorphism */}
@@ -259,11 +292,10 @@ export default function Product() {
                 whileHover={{ scale: 1.05, y: -5 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedImage(image)}
-                className={`cursor-pointer rounded-2xl overflow-hidden border-3 transition-all shadow-md hover:shadow-xl ${
-                  selectedImage === image
-                    ? "border-[#8A6A5A] ring-4 ring-[#8A6A5A]/20"
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
+                className={`cursor-pointer rounded-2xl overflow-hidden border-3 transition-all shadow-md hover:shadow-xl ${selectedImage === image
+                  ? "border-[#8A6A5A] ring-4 ring-[#8A6A5A]/20"
+                  : "border-gray-200 hover:border-gray-300"
+                  }`}
               >
                 <img
                   src={image}
@@ -367,7 +399,48 @@ export default function Product() {
             </div>
           </motion.div>
 
-          {/* Tabs Section with modern styling */}
+
+          {/* Qualtiny calculator */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
+            className="shadow-md p-10 rounded-3xl"
+          >
+            <h2 className="text-3xl font-bold">Quantity Calculator</h2>
+            <p className="text-lg mt-2 bg-[#998e8a]/80 px-5 py-2 w-fit rounded-xl text-white"><b>Pack size:</b> 1.1098 m² per carton</p>
+            <form action="" className="mt-3">
+              <div className="flex xl:flex-row flex-col xl:items-center gap-x-10 gap-y-2">
+                <div>
+                  <label htmlFor="" className="text-lg">Total square meters needed</label>
+                  <br />
+                  <input type="text" placeholder="Enter m²"
+                    className="rounded-xl w-60 border border-[#8A6A5A] p-2 mt-2 active:border-[#8A6A5A] focus:border-[#8A6A5A]"
+                    name="totalNeeded"
+                    onChange={(e) => calculatorDataHandler(e)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="wastage" className="text-lg">Wastage</label>
+                  <div className="flex gap-3">
+                    <input type="radio" name="wastage" id="0%" value={0} onChange={(e) => calculatorDataHandler(e)}/>
+                    <label htmlFor="wastage">0%</label>
+                    <input type="radio" name="wastage" id="10%" value={10} onChange={(e) => calculatorDataHandler(e)}/>
+                    <label htmlFor="">10%</label>
+                    <input type="radio" name="wastage" id="20%" value={20} onChange={(e) => calculatorDataHandler(e)}/>
+                    <label htmlFor="">20%</label>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-5">
+                <p className="text-lg"><span className="font-semibold">Cartons Needed:</span> {cartonsNeeded}</p>
+                <p className="text-lg mt-1"><span className="font-semibold">Total Amount:</span></p>
+              </div>
+            </form>
+          </motion.div>
+
+
+          {/* Tabs Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -381,11 +454,10 @@ export default function Product() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-6 py-3 text-sm font-semibold rounded-full transition-all whitespace-nowrap ${
-                    activeTab === tab
-                      ? "bg-gradient-to-r from-[#8A6A5A] to-[#735644] text-white shadow-lg"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
+                  className={`px-6 py-3 text-sm font-semibold rounded-full transition-all whitespace-nowrap ${activeTab === tab
+                    ? "bg-gradient-to-r from-[#8A6A5A] to-[#735644] text-white shadow-lg"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
                 >
                   {tab}
                 </motion.button>
@@ -546,17 +618,15 @@ export default function Product() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsWishlisted(!isWishlisted)}
-              className={`p-5 rounded-2xl border-2 transition-all shadow-lg ${
-                isWishlisted
-                  ? "border-white"
-                  : "bg-white border-gray-300 hover:border-red-300"
-              }`}
+              className={`p-5 rounded-2xl border-2 transition-all shadow-lg ${isWishlisted
+                ? "border-white"
+                : "bg-white border-gray-300 hover:border-red-300"
+                }`}
             >
               <Heart
                 size={24}
-                className={`${
-                  isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600"
-                } transition-colors`}
+                className={`${isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600"
+                  } transition-colors`}
               />
             </motion.button>
           </motion.div>

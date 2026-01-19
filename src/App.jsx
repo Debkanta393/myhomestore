@@ -15,7 +15,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/product" element={<Product />} />
         <Route path="/brand" element={<Brand />} />
-        <Route path="/claverchoise" element={<ClaverChoise />} />
+        <Route path="/claverchoice" element={<ClaverChoise />} />
         <Route path="/engineered-oak" element={<EngineeredOak />} />
       </Route>
     </Routes>
