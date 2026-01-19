@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion"
 import { Link } from "react-router";
-import { PhoneCall, Mail } from "lucide-react";
+import { PhoneCall, Mail, Gem, ShieldCheck, Van } from "lucide-react";
 import Products from "../../components/ui/Products";
 
 export default function ClaverChoise() {
@@ -79,211 +79,211 @@ export default function ClaverChoise() {
 
 
     const products = [
-  {
-    id: 1,
-    image: "./images/luxury1.webp",
-    heading: "Product1",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Hybrid",
-    brand: "Sony",
-    price: 100,
-    rating: 4.5,
-    inStock: true,
-    color: "Black",
-    size: "M",
-    material: "Leather",
-    isNew: true,
-    onSale: false,
-    tags: ["Premium", "Best Seller"],
-  },
-  {
-    id: 2,
-    image: "./images/luxury2.webp",
-    heading: "Product2",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Engineered Oak",
-    brand: "Nike",
-    price: 250,
-    rating: 4.0,
-    inStock: true,
-    color: "Blue",
-    size: "L",
-    material: "Cotton",
-    isNew: false,
-    onSale: true,
-    tags: ["Featured"],
-  },
-  {
-    id: 3,
-    image: "./images/luxury3.webp",
-    heading: "Product3",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Australian Timber",
-    brand: "IKEA",
-    price: 150,
-    rating: 5.0,
-    inStock: false,
-    color: "White",
-    size: "XL",
-    material: "Wood",
-    isNew: true,
-    onSale: false,
-    tags: ["Eco-Friendly"],
-  },
-  {
-    id: 4,
-    image: "./images/luxury1.webp",
-    heading: "Product4",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "European Timber",
-    brand: "Samsung",
-    price: 80,
-    rating: 3.5,
-    inStock: true,
-    color: "Silver",
-    size: "S",
-    material: "Metal",
-    isNew: false,
-    onSale: true,
-    tags: ["Budget Friendly"],
-  },
-  {
-    id: 5,
-    image: "./images/luxury2.webp",
-    heading: "Product5",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Laminate",
-    brand: "Adidas",
-    price: 300,
-    rating: 4.8,
-    inStock: true,
-    color: "Red",
-    size: "M",
-    material: "Polyester",
-    isNew: true,
-    onSale: true,
-    tags: ["Premium", "Limited Edition"],
-  },
-  {
-    id: 6,
-    image: "./images/luxury3.webp",
-    heading: "Product6",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Hydro Laminate",
-    brand: "West Elm",
-    price: 200,
-    rating: 4.2,
-    inStock: true,
-    color: "Brown",
-    size: "L",
-    material: "Fabric",
-    isNew: false,
-    onSale: false,
-    tags: ["Best Seller"],
-  },
-  {
-    id: 7,
-    image: "./images/luxury2.webp",
-    heading: "Product7",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Vinyl",
-    brand: "Puma",
-    price: 120,
-    rating: 4.6,
-    inStock: false,
-    color: "Green",
-    size: "XL",
-    material: "Synthetic",
-    isNew: false,
-    onSale: false,
-    tags: ["Featured"],
-  },
-  {
-    id: 8,
-    image: "./images/luxury3.webp",
-    heading: "Product8",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Bamboo",
-    brand: "Nike",
-    price: 90,
-    rating: 3.8,
-    inStock: true,
-    color: "Black",
-    size: "S",
-    material: "Nylon",
-    isNew: true,
-    onSale: true,
-    tags: ["New Arrival"],
-  },
-  {
-    id: 9,
-    image: "./images/luxury3.webp",
-    heading: "Product8",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Hybrid Shield",
-    brand: "Nike",
-    price: 90,
-    rating: 3.8,
-    inStock: true,
-    color: "Black",
-    size: "S",
-    material: "Nylon",
-    isNew: true,
-    onSale: true,
-    tags: ["New Arrival"],
-  },
-  {
-    id: 10,
-    image: "./images/luxury3.webp",
-    heading: "Product8",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Hybrid Shield",
-    brand: "Nike",
-    price: 90,
-    rating: 3.8,
-    inStock: true,
-    color: "Black",
-    size: "S",
-    material: "Nylon",
-    isNew: true,
-    onSale: true,
-    tags: ["New Arrival"],
-  },
-  {
-    id: 11,
-    image: "./images/luxury3.webp",
-    heading: "Product8",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Hybrid Shield",
-    brand: "Nike",
-    price: 90,
-    rating: 3.8,
-    inStock: true,
-    color: "Black",
-    size: "S",
-    material: "Nylon",
-    isNew: true,
-    onSale: true,
-    tags: ["New Arrival"],
-  },
-  {
-    id: 12,
-    image: "./images/luxury3.webp",
-    heading: "Product8",
-    desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
-    category: "Hybrid Shield",
-    brand: "Nike",
-    price: 90,
-    rating: 3.8,
-    inStock: true,
-    color: "Black",
-    size: "S",
-    material: "Nylon",
-    isNew: true,
-    onSale: true,
-    tags: ["New Arrival"],
-  },
-];
+        {
+            id: 1,
+            image: "./images/luxury1.webp",
+            heading: "Product1",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "Hybrid",
+            brand: "Sony",
+            price: 100,
+            rating: 4.5,
+            inStock: true,
+            color: "Black",
+            size: "M",
+            material: "Leather",
+            isNew: true,
+            onSale: false,
+            tags: ["Premium", "Best Seller"],
+        },
+        {
+            id: 2,
+            image: "./images/luxury2.webp",
+            heading: "Product2",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "Engineered Oak",
+            brand: "Nike",
+            price: 250,
+            rating: 4.0,
+            inStock: true,
+            color: "Blue",
+            size: "L",
+            material: "Cotton",
+            isNew: false,
+            onSale: true,
+            tags: ["Featured"],
+        },
+        {
+            id: 3,
+            image: "./images/luxury3.webp",
+            heading: "Product3",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "Australian Timber",
+            brand: "IKEA",
+            price: 150,
+            rating: 5.0,
+            inStock: false,
+            color: "White",
+            size: "XL",
+            material: "Wood",
+            isNew: true,
+            onSale: false,
+            tags: ["Eco-Friendly"],
+        },
+        {
+            id: 4,
+            image: "./images/luxury1.webp",
+            heading: "Product4",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "European Timber",
+            brand: "Samsung",
+            price: 80,
+            rating: 3.5,
+            inStock: true,
+            color: "Silver",
+            size: "S",
+            material: "Metal",
+            isNew: false,
+            onSale: true,
+            tags: ["Budget Friendly"],
+        },
+        {
+            id: 5,
+            image: "./images/luxury2.webp",
+            heading: "Product5",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "Laminate",
+            brand: "Adidas",
+            price: 300,
+            rating: 4.8,
+            inStock: true,
+            color: "Red",
+            size: "M",
+            material: "Polyester",
+            isNew: true,
+            onSale: true,
+            tags: ["Premium", "Limited Edition"],
+        },
+        {
+            id: 6,
+            image: "./images/luxury3.webp",
+            heading: "Product6",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "Hydro Laminate",
+            brand: "West Elm",
+            price: 200,
+            rating: 4.2,
+            inStock: true,
+            color: "Brown",
+            size: "L",
+            material: "Fabric",
+            isNew: false,
+            onSale: false,
+            tags: ["Best Seller"],
+        },
+        {
+            id: 7,
+            image: "./images/luxury2.webp",
+            heading: "Product7",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "Vinyl",
+            brand: "Puma",
+            price: 120,
+            rating: 4.6,
+            inStock: false,
+            color: "Green",
+            size: "XL",
+            material: "Synthetic",
+            isNew: false,
+            onSale: false,
+            tags: ["Featured"],
+        },
+        {
+            id: 8,
+            image: "./images/luxury3.webp",
+            heading: "Product8",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "Bamboo",
+            brand: "Nike",
+            price: 90,
+            rating: 3.8,
+            inStock: true,
+            color: "Black",
+            size: "S",
+            material: "Nylon",
+            isNew: true,
+            onSale: true,
+            tags: ["New Arrival"],
+        },
+        {
+            id: 9,
+            image: "./images/luxury3.webp",
+            heading: "Product8",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "Hybrid Shield",
+            brand: "Nike",
+            price: 90,
+            rating: 3.8,
+            inStock: true,
+            color: "Black",
+            size: "S",
+            material: "Nylon",
+            isNew: true,
+            onSale: true,
+            tags: ["New Arrival"],
+        },
+        {
+            id: 10,
+            image: "./images/luxury3.webp",
+            heading: "Product8",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "Hybrid Shield",
+            brand: "Nike",
+            price: 90,
+            rating: 3.8,
+            inStock: true,
+            color: "Black",
+            size: "S",
+            material: "Nylon",
+            isNew: true,
+            onSale: true,
+            tags: ["New Arrival"],
+        },
+        {
+            id: 11,
+            image: "./images/luxury3.webp",
+            heading: "Product8",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "Hybrid Shield",
+            brand: "Nike",
+            price: 90,
+            rating: 3.8,
+            inStock: true,
+            color: "Black",
+            size: "S",
+            material: "Nylon",
+            isNew: true,
+            onSale: true,
+            tags: ["New Arrival"],
+        },
+        {
+            id: 12,
+            image: "./images/luxury3.webp",
+            heading: "Product8",
+            desc: "Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text Lorem ipsum text",
+            category: "Hybrid Shield",
+            brand: "Nike",
+            price: 90,
+            rating: 3.8,
+            inStock: true,
+            color: "Black",
+            size: "S",
+            material: "Nylon",
+            isNew: true,
+            onSale: true,
+            tags: ["New Arrival"],
+        },
+    ];
 
 
     const [cardHovered, setCardHovered] = useState(null)
@@ -433,18 +433,27 @@ export default function ClaverChoise() {
 
                     {/* Feature cards */}
                     <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <FeatureCard
-                            title="Premium Materials"
-                            description="High-quality timber, hybrid, and laminate flooring built to last."
-                        />
-                        <FeatureCard
-                            title="Certified & Durable"
-                            description="Products tested and certified to meet Australian standards."
-                        />
-                        <FeatureCard
-                            title="Australia-Wide Supply"
-                            description="Reliable distribution network supporting projects nationwide."
-                        />
+                        <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition">
+                            <div className="flex items-center gap-2">
+                            <div className="bg-[#998e8a] p-3 rounded-full text-white"><Gem /></div>
+                            <h4 className="text-xl font-semibold mb-3">Premium Materials</h4>
+                            </div>
+                            <p className="text-gray-600">High-quality timber, hybrid, and laminate flooring built to last.</p>
+                        </div>
+                        <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition">
+                            <div className="flex items-center gap-2">
+                            <div className="bg-[#998e8a] p-3 rounded-full text-white"><ShieldCheck /></div>
+                            <h4 className="text-xl font-semibold mb-3">Certified & Durable</h4>
+                            </div>
+                            <p className="text-gray-600">Products tested and certified to meet Australian standards.</p>
+                        </div>
+                        <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition">
+                            <div className="flex items-center gap-2">
+                            <div className="bg-[#998e8a] p-3 rounded-full text-white"><Van /></div>
+                            <h4 className="text-xl font-semibold mb-3">Australia-Wide Supply</h4>
+                            </div>
+                            <p className="text-gray-600">Reliable distribution network supporting projects nationwide.</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -526,7 +535,7 @@ export default function ClaverChoise() {
             </section> */}
 
             <div className="mb-32">
-            <Products />
+                <Products />
             </div>
 
 
@@ -582,11 +591,11 @@ export default function ClaverChoise() {
                                 className="group flex items-center gap-4 rounded-2xl bg-white p-6 shadow-lg hover:shadow-xl transition hover:-translate-y-1"
                             >
                                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#998e8a]/30 text-[#8A6A5A] text-2xl">
-                                   <Mail />
+                                    <Mail />
                                 </div>
                                 <div>
                                     <div className="text-sm text-gray-500 mb-1">Email Us</div>
-                                    <div className="text-lg font-bold text-gray-900 break-all group-hover:text-[#8A6A5A] transition">
+                                    <div className="text-lg font-bold text-gray-900 break-all group-hover:text-[#8A6A5A] transition whitespace-no">
                                         sales@cleverchoice.com.au
                                     </div>
                                 </div>
@@ -622,10 +631,11 @@ export default function ClaverChoise() {
     );
 }
 
-function FeatureCard({ title, description }) {
+function FeatureCard({ title, logo, description }) {
     return (
         <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition">
             <h4 className="text-xl font-semibold mb-3">{title}</h4>
+            <div>{logo}</div>
             <p className="text-gray-600">{description}</p>
         </div>
     );
