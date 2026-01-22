@@ -8,12 +8,18 @@ import {
   ShoppingBag,
   Menu,
   X,
+  LayoutDashboard,
+  Table2,
+  TableCellsMerge,
+  Bath,
+  Microwave,
+  House
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { setTabSelected } from "../../slice/slice";
 import { useDispatch } from "react-redux";
-import { tabs, mainNav, mainNavSub } from "../../data/data";
+import { mainNav, mainNavSub } from "../../data/data";
 
 export default function MainNav() {
   const [mainHovered, setMainHovered] = useState(null);
@@ -21,6 +27,17 @@ export default function MainNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const dispath = useDispatch();
+
+
+  // Tabs in header
+const tabs = [
+  {tab: "All Categories", icon: <LayoutDashboard />},
+  {tab: "Flooring", icon: <Table2 />},
+  {tab: "Tiles", icon: <TableCellsMerge />},
+  {tab: "Bathroom", icon: <Bath />},
+  {tab: "Kitchen & Laundry", icon: <Microwave />},
+  {tab: "Other Home Improvements", icon: <House />},
+];
 
   // Handle scroll for sticky header
   useEffect(() => {
@@ -32,6 +49,29 @@ export default function MainNav() {
   }, []);
 
   const [activeTab, setActiveTab] = useState(1);
+
+
+  // ${
+  //           activeTab === index
+  //             ? `
+  //               bg-gradient-to-br from-[#998e8a] via-[#8A6A5A] to-[#8A6A5A] 
+  //               text-white
+  //               shadow-[0_-4px_20px_rgba(138,106,90,0.3),0_-2px_10px_rgba(138,106,90,0.2)]
+  //               border-2 border-[#8A6A5A]
+  //               border-b-0
+  //               translate-y-[2px]
+  //             `
+  //             : `
+  //               bg-white/80 
+  //               text-[#8A6A5A] 
+  //               border-2 border-[#D6CEC6]/50
+  //               border-b-0
+  //               hover:bg-[#f5efed]/60
+  //               hover:border-[#B8B0A7]/60
+  //               shadow-[0_-2px_12px_rgba(138,106,90,0.1)]
+  //               hover:shadow-[0_-4px_16px_rgba(138,106,90,0.2)]
+  //             `
+  //         }
 
   return (
     <div>
@@ -89,7 +129,6 @@ export default function MainNav() {
                 >
                   <User size={22} />
                 </motion.div>
-                <span className="font-medium text-sm">Profile</span>
               </Link>
 
               {/* Cart */}
@@ -103,9 +142,6 @@ export default function MainNav() {
                 >
                   <ShoppingBag size={22} />
                 </motion.div>
-                <span className="hidden md:block font-medium text-sm">
-                  Cart
-                </span>
                 {/* Cart Count Badge */}
                 <span className="absolute -top-2 -right-2 bg-[#8A6A5A] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   0
@@ -149,54 +185,29 @@ export default function MainNav() {
                 whileHover={{ y: -3 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => {
-                  setActiveTab(index), dispath(setTabSelected(tab));
+                  setActiveTab(index), dispath(setTabSelected(tab.tab));
                 }}
                 onMouseEnter={() => {
-                  setActiveTab(index), dispath(setTabSelected(tab));
+                  setActiveTab(index), dispath(setTabSelected(tab.tab));
                 }}
-                className={`
-           text-center list-none
-          hidden lg:flex justify-center relative overflow-hidden group cursor-pointer
-          py-5 xl:p-3 lg:p-2
-          rounded-t-2xl
-          text-[12px] xl:text-sm font-bold tracking-wide uppercase
-          transition-all duration-500 ease-out
-          backdrop-blur-sm
-          w-[17%]
+                className={`text-center list-none hidden lg:flex justify-center relative overflow-hidden group cursor-pointer gap-3 py-3 rounded-t-2xl
+          text-[12px] xl:text-sm font-bold tracking-wide uppercase transition-all duration-500 ease-out backdrop-blur-sm w-fit px-10 text-[#8A6A5A] 
           
-          ${
-            activeTab === index
-              ? `
-                bg-gradient-to-br from-[#998e8a] via-[#8A6A5A] to-[#8A6A5A] 
-                text-white
-                shadow-[0_-4px_20px_rgba(138,106,90,0.3),0_-2px_10px_rgba(138,106,90,0.2)]
-                border-2 border-[#8A6A5A]
-                border-b-0
-                translate-y-[2px]
-              `
-              : `
-                bg-white/80 
-                text-[#8A6A5A] 
-                border-2 border-[#D6CEC6]/50
-                border-b-0
-                hover:bg-[#f5efed]/60
-                hover:border-[#B8B0A7]/60
-                shadow-[0_-2px_12px_rgba(138,106,90,0.1)]
-                hover:shadow-[0_-4px_16px_rgba(138,106,90,0.2)]
-              `
-          }
         `}
               >
                 {/* Active Tab Indicator - Top accent line */}
                 {activeTab === index && (
                   <motion.span
                     layoutId="activeTabIndicator"
-                    className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#D6CEC6] via-[#f5efed] to-[#D6CEC6] rounded-t-2xl"
+                    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8A6A5A] via-[#f5efed] to-[#998e8a] rounded-t-2xl"
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
 
                 {/* Button text */}
+                <span>
+                  {tab.icon}
+                </span>
                 <span
                   className={`relative z-10 my-auto ${
                     activeTab === index
@@ -204,7 +215,7 @@ export default function MainNav() {
                       : "drop-shadow-[0_1px_2px_rgba(138,106,90,0.2)]"
                   }`}
                 >
-                  {tab}
+                  {tab.tab}
                 </span>
               </motion.li>
             ))}

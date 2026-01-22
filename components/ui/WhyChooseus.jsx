@@ -1,6 +1,6 @@
 import React, {useRef} from "react";
 import { motion, useInView } from "framer-motion";
-import { ShieldCheck, LayoutGrid, Truck, Users, Gem, Package, Milestone } from "lucide-react";
+import { ShieldCheck, LayoutGrid, Truck, Users, Gem, Package, Milestone, Award } from "lucide-react";
 
 export default function WhyChooseUs() {
 
@@ -24,7 +24,7 @@ export default function WhyChooseUs() {
       desc: "Fast and secure delivery across Australia.",
     },
     {
-      icon: Users,
+      icon: Award,
       text: "Expert guidance at every step",
       desc: "Our specialists help you choose the right tile for every space.",
     },
@@ -80,12 +80,12 @@ export default function WhyChooseUs() {
   };
 
   return (
-    <section className="relative px-6 py-24 overflow-hidden">
+    <section className="relative px-6 py-28 overflow-hidden mt-[500px] sm:mt-[380px] lg:mt-[300px]">
       {/* Layered Background with Organic Shapes */}
       <div className="absolute inset-0 bg-[#f5efed] -z-10" />
 
       {/* Header */}
-      <div className="max-w-6xl mx-auto text-center px-6">
+      {/* <div className="max-w-6xl mx-auto text-center px-6">
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -105,7 +105,7 @@ export default function WhyChooseUs() {
           serve homeowners, builders, architects, and designers nationwide —
           delivering quality, value, and confidence in every tile.
         </motion.p>
-      </div>
+      </div> */}
 
       {/* Feature Cards */}
       <motion.div
@@ -114,7 +114,7 @@ export default function WhyChooseUs() {
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
         //className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mt-20"
-       className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-20" ref={ref}>
+       className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" ref={ref}>
         {problems.map((problem, index) => {
           const Icon = problem.icon;
 
@@ -127,22 +127,20 @@ export default function WhyChooseUs() {
                 scale: 1.03,
                 transition: { duration: 0.4, ease: "easeOut" }
               }}
-              className="group bg-white rounded-2xl p-10 text-center shadow-lg hover:shadow-2xl transition-all relative transition-all duration-500"
+              className="group bg-white rounded-2xl p-10 text-center shadow-lg hover:shadow-2xl transition-all relative transition-all duration-500 flex flex-col justify-between"
             >
               {/* Icon */}
               <div
-                className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full
-                bg-gradient-to-br from-[#8A6A5A] to-[#B8B0A7]
-                text-white shadow-lg group-hover:scale-110 transition-transform"
+                className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full text-[#8A6A5A] group-hover:scale-110 transition-transform"
               >
-                <Icon size={30} strokeWidth={1.8} />
+                <Icon size={35} strokeWidth={1.2} />
               </div>
 
               {/* Text */}
-              <p className="text-lg font-medium text-gray-800 mb-2">
+              <p className="text-lg font-medium text-black mb-2">
                 {problem.text}
               </p>
-              <p className="text-[#998e8a] leading-relaxed text-center text-[15px] font-light">{problem.desc}</p>
+              <p className="text-[#998e8a] lading-relaxed text-center text-[15px] font-light">{problem.desc}</p>
 
               {/* Bottom accent - expanding line on hover */}
               <motion.div

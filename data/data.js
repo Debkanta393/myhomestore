@@ -16,15 +16,7 @@ export const topNavSubList = {
   ],
 };
 
-// Tabs in header
-export const tabs = [
-  "All Categories",
-  "Flooring",
-  "Tiles",
-  "Bathroom",
-  "Kitchen & Laundry",
-  "Other Home Improvements",
-];
+
 
 // Main nav under tab
 export const mainNav = [

@@ -1,6 +1,6 @@
 import React from 'react';
 import Hero from '../../components/ui/Hero';
-import Features from '../../components/ui/Features';
+import Categories from '../../components/ui/Categories';
 import Services from '../../components/ui/Services';
 import Process from '../../components/ui/Process';
 import Testimonials from '../../components/ui/Testimonials';
@@ -18,10 +18,11 @@ function Home() {
     <div>
       <div className="overflow-x-hidden">
         <Hero />
-        <Features />
+        <WhyChooseus />
+        <Categories />
         <Products/>
         <Services />
-        <WhyChooseus />
+        
       </div>
       
       {/* OverlapScrolling without overflow wrapper */}

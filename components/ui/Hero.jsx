@@ -41,7 +41,7 @@ const Hero = () => {
   }, []);
   return (
     <section className="relative">
-      <div className="min-h-[600px] rounded-[50px] w-11/12 sm:w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]">
+      <div className="min-h-[600px] rounded-3xl w-11/12 sm:w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]">
         <AnimatePresence mode="wait">
           <motion.img
             key={currentHeader}
@@ -55,7 +55,7 @@ const Hero = () => {
           />
         </AnimatePresence>
         {/* Background Animation Circles */}
-        <div className="absolute inset-0 overflow-hidden top-0 left-0 h-full w-full bg-black/30 rounded-[50px]"></div>
+        <div className="absolute inset-0 overflow-hidden top-0 left-0 h-full w-full bg-black/30 rounded-3xl"></div>
 
         <div className="relative z-10 max-w-7xl px-3 md:px-5">
           <motion.p
@@ -67,10 +67,11 @@ const Hero = () => {
             Premium Tiles & Stone Solutions in Australia
           </motion.p>
           <motion.h1
-            className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+            className="text-3xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight font-(family-name: Playfair Display, serif)"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
+            style={{fontFamily: "Playfair Display, serif"}}
           >
             Premium Tiles & Surface Solutions <br /> Across
             <span className={`inline-block ml-4 text-[#D6CEC6]`}>
@@ -95,7 +96,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <button className="relative overflow-hidden py-3 px-12 bg-[#f5efed] text-black text-xl font-medium group cursor-pointer">
+            {/* <button className="relative overflow-hidden py-3 px-12 bg-[#f5efed] text-black text-xl font-medium group cursor-pointer">
               <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
                 Contact Us
               </span>
@@ -104,9 +105,9 @@ const Hero = () => {
                 className="absolute inset-0 bg-black transform scale-x-0 origin-left 
                    transition-transform duration-300 group-hover:scale-x-100"
               ></span>
-            </button>
+            </button> */}
 
-            <button className="border-2 border-white text-white py-2 px-12 text-xl font-medium cursor-pointer">
+            <button className="bg-white text-[#8A6A5A] py-4 px-12 text-xl font-medium cursor-pointer rounded-full">
               Get a quote
             </button>
           </motion.div>
@@ -129,7 +130,7 @@ const Hero = () => {
       </div>
 
 
-      <motion.div className="rounded-t-[50px] py-20  absolute -bottom-[500px] sm:-bottom-[380px] lg:-bottom-[300px] -z-10 bg-[#998e8a] flex justify-center items-center w-full">
+      <motion.div className="rounded-t-4xl py-20  absolute -bottom-[500px] sm:-bottom-[380px] lg:-bottom-[300px] -z-10 bg-[#998e8a] flex justify-center items-center w-full">
         <motion.img
           src="./images/abstract_image1.png"
           height={350}
