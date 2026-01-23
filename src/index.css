@@ -112,3 +112,15 @@ body {
 ::-webkit-scrollbar {
   height: 0px;
 }
+
+
+@layer base {
+  p, li, div, span, button {
+    font-family: "Urbanist", sans-serif;
+  }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Playfair Display", serif;
+  }
+}

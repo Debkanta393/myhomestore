@@ -39,14 +39,14 @@ export function Header() {
                   >
                     <Link
                       to={item.path}
-                      className="flex items-center gap-1.5 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 text-sm font-medium"
+                      className="flex items-center gap-1.5 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 text-lg font-medium"
                     >
                       {item.label}
                       <motion.div
                         animate={{ rotate: hovered === item.key ? 180 : 0 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <ChevronDown size={16} />
+                        <ChevronDown size={18} />
                       </motion.div>
                     </Link>
 
@@ -84,14 +84,14 @@ export function Header() {
                 ))}
                 <Link
                   to="/contact"
-                  className="text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 text-sm font-medium"
+                  className="text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 text-lg font-medium"
                 >
                   Contact
                 </Link>
               </div>
 
               {/* Right - Phone Number */}
-              <p className="text-[#8A6A5A] text-sm font-medium hidden md:block">
+              <p className="text-[#8A6A5A] text-lg font-medium hidden md:block">
                 Call:{" "}
                 <Link
                   to="tel:000000000"

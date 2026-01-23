@@ -114,7 +114,7 @@ export default function WhyChooseUs() {
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
         //className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mt-20"
-       className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" ref={ref}>
+       className="max-w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:gap-8 lg:gap-5 gap-y-8" ref={ref}>
         {problems.map((problem, index) => {
           const Icon = problem.icon;
 
@@ -127,20 +127,20 @@ export default function WhyChooseUs() {
                 scale: 1.03,
                 transition: { duration: 0.4, ease: "easeOut" }
               }}
-              className="group bg-white rounded-2xl p-10 text-center shadow-lg hover:shadow-2xl transition-all relative transition-all duration-500 flex flex-col justify-between"
+              className="group bg-white rounded-2xl py-10 lg:px-6 2xl:px-10 text-center hover:shadow-lg transition-all relative transition-all duration-500 flex flex-col justify-between"
             >
               {/* Icon */}
               <div
-                className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full text-[#8A6A5A] group-hover:scale-110 transition-transform"
+                className="mx-auto mb-2 flex h-16 w-16 items-center justify-center rounded-full text-[#8A6A5A] group-hover:scale-110 transition-transform"
               >
-                <Icon size={35} strokeWidth={1.2} />
+                <Icon size={38} strokeWidth={1.2} />
               </div>
 
               {/* Text */}
-              <p className="text-lg font-medium text-black mb-2">
+              <p className="text-2xl font-medium text-black mb-2">
                 {problem.text}
               </p>
-              <p className="text-[#998e8a] lading-relaxed text-center text-[15px] font-light">{problem.desc}</p>
+              <p className="text-[#666E7C] lading-relaxed text-center text-[18px] font-light">{problem.desc}</p>
 
               {/* Bottom accent - expanding line on hover */}
               <motion.div

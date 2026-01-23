@@ -13,7 +13,7 @@ import {
   TableCellsMerge,
   Bath,
   Microwave,
-  House
+  House,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,18 +26,20 @@ export default function MainNav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState(1);
+  const [activeNav, setActiveNav] = useState(null);
+  const [tabRect, setTabRect] = useState(null);
   const dispath = useDispatch();
 
-
   // Tabs in header
-const tabs = [
-  {tab: "All Categories", icon: <LayoutDashboard />},
-  {tab: "Flooring", icon: <Table2 />},
-  {tab: "Tiles", icon: <TableCellsMerge />},
-  {tab: "Bathroom", icon: <Bath />},
-  {tab: "Kitchen & Laundry", icon: <Microwave />},
-  {tab: "Other Home Improvements", icon: <House />},
-];
+  const tabs = [
+    { tab: "All Categories", icon: <LayoutDashboard />, hasMenu: true },
+    { tab: "Flooring", icon: <Table2 />, hasMenu: true },
+    { tab: "Tiles", icon: <TableCellsMerge />, hasMenu: true },
+    { tab: "Bathroom", icon: <Bath />, hasMenu: true },
+    { tab: "Kitchen & Laundry", icon: <Microwave />, hasMenu: true },
+    { tab: "Other Home Improvements", icon: <House />, hasMenu: true },
+  ];
 
   // Handle scroll for sticky header
   useEffect(() => {
@@ -48,13 +50,10 @@ const tabs = [
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const [activeTab, setActiveTab] = useState(1);
-
-
   // ${
   //           activeTab === index
   //             ? `
-  //               bg-gradient-to-br from-[#998e8a] via-[#8A6A5A] to-[#8A6A5A] 
+  //               bg-gradient-to-br from-[#998e8a] via-[#8A6A5A] to-[#8A6A5A]
   //               text-white
   //               shadow-[0_-4px_20px_rgba(138,106,90,0.3),0_-2px_10px_rgba(138,106,90,0.2)]
   //               border-2 border-[#8A6A5A]
@@ -62,8 +61,8 @@ const tabs = [
   //               translate-y-[2px]
   //             `
   //             : `
-  //               bg-white/80 
-  //               text-[#8A6A5A] 
+  //               bg-white/80
+  //               text-[#8A6A5A]
   //               border-2 border-[#D6CEC6]/50
   //               border-b-0
   //               hover:bg-[#f5efed]/60
@@ -80,10 +79,10 @@ const tabs = [
         className="sticky top-0 z-30 bg-white transition-all duration-300"
         animate={{
           boxShadow: isScrolled
-            ? "0 4px 20px rgba(138, 106, 90, 0.1)"
+            ? "0 4px 20px rgba(138, 106, 90, 0.2)"
             : "0 0 0 rgba(138, 106, 90, 0)",
         }}
-      >
+       >
         <div className="w-11/12 sm:max-w-10/12 mx-auto">
           <div className="flex justify-between items-center py-4 md:py-6">
             {/* Logo */}
@@ -109,7 +108,7 @@ const tabs = [
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#8A6A5A] text-white p-2 rounded-full hover:bg-[#998e8a] transition-colors duration-300"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#998e8a] text-white p-2 rounded-full hover:bg-[#998e8a] transition-colors duration-300"
                 >
                   <Search size={20} />
                 </motion.button>
@@ -152,7 +151,7 @@ const tabs = [
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="hidden lg:block relative overflow-hidden py-3 px-8 bg-[#8A6A5A] text-white font-semibold group border-2 border-[#8A6A5A] rounded-lg transition-all duration-300"
+                className="hidden lg:block relative overflow-hidden py-3 px-8 bg-[#998e8a] text-white font-semibold group border-2 border-[#998e8a] transition-all duration-300"
               >
                 <span className="relative z-10 transition-colors duration-300 group-hover:text-[#8A6A5A]">
                   Get a Quote
@@ -173,134 +172,132 @@ const tabs = [
         </div>
 
         {/* Tabs section */}
-        {/* Tabs section */}
-        <div className="max-w-10/12 mx-auto my-1">
-          <div className="flex justify-evenly xl:items-center gap-2">
-            {tabs.map((tab, index) => (
-              <motion.li
-                key={index}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.15 }}
-                whileHover={{ y: -3 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  setActiveTab(index), dispath(setTabSelected(tab.tab));
-                }}
-                onMouseEnter={() => {
-                  setActiveTab(index), dispath(setTabSelected(tab.tab));
-                }}
-                className={`text-center list-none hidden lg:flex justify-center relative overflow-hidden group cursor-pointer gap-3 py-3 rounded-t-2xl
-          text-[12px] xl:text-sm font-bold tracking-wide uppercase transition-all duration-500 ease-out backdrop-blur-sm w-fit px-10 text-[#8A6A5A] 
-          
-        `}
-              >
-                {/* Active Tab Indicator - Top accent line */}
-                {activeTab === index && (
-                  <motion.span
-                    layoutId="activeTabIndicator"
-                    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8A6A5A] via-[#f5efed] to-[#998e8a] rounded-t-2xl"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-
-                {/* Button text */}
-                <span>
-                  {tab.icon}
-                </span>
-                <span
-                  className={`relative z-10 my-auto ${
-                    activeTab === index
-                      ? "drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
-                      : "drop-shadow-[0_1px_2px_rgba(138,106,90,0.2)]"
-                  }`}
+        {/* Tabs Section */}
+        <div
+          className="relative"
+          onMouseLeave={() => {
+            setActiveNav(null)
+            setMainHovered(null);
+            setTabRect(null);
+          }}
+        >
+          {/* Tabs Section */}
+          <div className="max-w-10/12 mx-auto my-1">
+            <div className="flex justify-evenly xl:items-center gap-2">
+              {tabs.map((tab, index) => (
+                <motion.li
+                  key={index}
+                  onMouseEnter={(e) => {
+                    setActiveTab(index);
+                    setActiveNav(index)
+                    dispath(setTabSelected(tab.tab));
+                    setTabRect(e.currentTarget.getBoundingClientRect());
+                  }}
+                  onClick={(e) => {
+                    setActiveTab(index);
+                    dispath(setTabSelected(tab.tab));
+                    setTabRect(e.currentTarget.getBoundingClientRect());
+                  }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  whileHover={{ y: -3 }}
+                  className="hidden lg:flex justify-center items-center gap-2 py-3 px-5 rounded-t-2xl text-[12px] xl:text-sm font-bold uppercase tracking-wide text-[#8A6A5A] cursor-pointer relative"
                 >
-                  {tab.tab}
-                </span>
-              </motion.li>
-            ))}
-          </div>
-        </div>
-
-        {/* Main Navigation - Desktop */}
-        <div className="hidden lg:block border-t border-[#D6CEC6]/30 bg-[#f5efed]/30 backdrop-blur-sm">
-          <div className="max-w-10/12 mx-auto px-6">
-            <nav className="flex items-center xl:justify-center gap-4 xl:gap-8 py-4">
-              {activeTab != null &&
-                mainNav[activeTab].map((item, index) => (
-                  <div
-                    key={index}
-                    className="relative group"
-                    onMouseEnter={() => setMainHovered(item.key)}
-                    onMouseLeave={() => setMainHovered(null)}
-                  >
-                    <Link
-                      to={`/${item.key}`}
-                      className="flex items-center gap-1 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 font-medium text-md whitespace-nowrap"
-                    >
-                      {item.label}
-                      {item.hasSubmenu && (
-                        <motion.div
-                          animate={{
-                            rotate: mainHovered === item.key ? 180 : 0,
-                          }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <ChevronDown size={14} />
-                        </motion.div>
-                      )}
-                    </Link>
-
-                    {/* Bottom indicator line */}
-                    <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#8A6A5A] rounded-full"
-                      initial={{ scaleX: 0 }}
-                      whileHover={{ scaleX: 1 }}
-                      transition={{ duration: 0.3 }}
+                  {activeTab === index && (
+                    <motion.span
+                      layoutId="activeTabIndicator"
+                      className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8A6A5A] via-[#f5efed] to-[#998e8a] rounded-t-2xl"
                     />
+                  )}
 
-                    {/* Mega Menu */}
-                    <AnimatePresence>
-                      {mainHovered === item.key &&
-                        item.hasSubmenu &&
-                        mainNavSub[mainHovered] && (
+                  <span>{tab.icon}</span>
+                  <span>{tab.tab}</span>
+
+                  <motion.div
+                    animate={{ rotate: activeTab === index ? 180 : 0 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <ChevronDown size={16} />
+                  </motion.div>
+                </motion.li>
+              ))}
+            </div>
+          </div>
+
+          {/* Main Navigation */}
+          <div className="hidden lg:block border-t border-[#D6CEC6]/30 bg-[#f5efed]/30 backdrop-blur-sm">
+            <div className="max-w-10/12 mx-auto px-6 relative">
+              {activeNav !== null && tabRect && (
+                <nav
+                  style={{
+                    left: tabRect.left + tabRect.width / 2,
+                    transform: "translate(-100%, -15px)",
+                  }}
+                  className="absolute top-full mt-4 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 min-w-[320px] border border-[#D6CEC6]/20 flex flex-col gap-4 transition-all"
+                >
+                  {/* Arrow */}
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#D6CEC6]/30 rotate-45"></div>
+
+                  {mainNav[activeNav]?.map((item, index) => (
+                    <div
+                      key={index}
+                      className="relative group"
+                      onMouseEnter={() => setMainHovered(item.key)}
+                      onMouseLeave={() => setMainHovered(null)}
+                    >
+                      <Link
+                        to={`/${item.key}`}
+                        className="flex items-center justify-between gap-2 text-[#8A6A5A] hover:text-[#998e8a] font-medium text-md whitespace-nowrap transition"
+                      >
+                        {item.label}
+
+                        {item.hasSubmenu && (
                           <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 10 }}
-                            transition={{ duration: 0.2 }}
-                            className="absolute top-full  mt-4 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 min-w-[300px] border border-[#D6CEC6]/50"
+                            animate={{
+                              rotate: mainHovered === item.key ? 180 : 0,
+                            }}
+                            transition={{ duration: 0.25 }}
                           >
-                            {/* Arrow indicator */}
-                            <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#D6CEC6]/30 rotate-45"></div>
-
-                            <div className="gap-3 relative z-10">
-                              {mainNavSub[mainHovered].map(
-                                (subItem, subIndex) => (
-                                  <motion.div
-                                    key={subIndex}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: subIndex * 0.03 }}
-                                    className="hover:bg-[#f5efed] cursor-pointer text-[#8A6A5A] rounded-lg px-4 py-2.5 text-md font-medium transition-all duration-200 hover:translate-x-1"
-                                  >
-                                    <Link
-                                      to={`/${item.key}/${subItem
-                                        .toLowerCase()
-                                        .replace(/\s+/g, "-")}`}
-                                    >
-                                      {subItem}
-                                    </Link>
-                                  </motion.div>
-                                )
-                              )}
-                            </div>
+                            <ChevronDown size={14} />
                           </motion.div>
                         )}
-                    </AnimatePresence>
-                  </div>
-                ))}
-            </nav>
+                      </Link>
+
+                      {/* SIDE SUB MENU */}
+                      <AnimatePresence>
+                        {mainHovered === item.key &&
+                          item.hasSubmenu &&
+                          mainNavSub[item.key] && (
+                            <motion.div
+                              initial={{ opacity: 0, x: 10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 10 }}
+                              transition={{ duration: 0.2 }}
+                              className="absolute left-full top-0 ml-6 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-5 min-w-[260px] border border-[#D6CEC6]/40"
+                            >
+                              {mainNavSub[item.key].map((subItem, i) => (
+                                <motion.div
+                                  key={i}
+                                  className="hover:bg-[#f5efed] rounded-lg px-4 py-2 text-[#8A6A5A] text-md font-medium cursor-pointer hover:translate-x-1 transition"
+                                >
+                                  <Link
+                                    to={`/${item.key}/${subItem
+                                      .toLowerCase()
+                                      .replace(/\s+/g, "-")}`}
+                                  >
+                                    {subItem}
+                                  </Link>
+                                </motion.div>
+                              ))}
+                            </motion.div>
+                          )}
+                      </AnimatePresence>
+                    </div>
+                  ))}
+                </nav>
+              )}
+            </div>
           </div>
         </div>
       </motion.div>
@@ -358,7 +355,7 @@ const tabs = [
                           className="relative ml-6"
                           onClick={() =>
                             setMainHovered(
-                              mainHovered === item.key ? null : item.key
+                              mainHovered === item.key ? null : item.key,
                             )
                           }
                         >
@@ -411,7 +408,7 @@ const tabs = [
                                       >
                                         {subItem}
                                       </Link>
-                                    )
+                                    ),
                                   )}
                                 </motion.div>
                               )}

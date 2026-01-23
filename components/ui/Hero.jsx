@@ -67,7 +67,7 @@ const Hero = () => {
             Premium Tiles & Stone Solutions in Australia
           </motion.p>
           <motion.h1
-            className="text-3xl md:text-5xl lg:text-7xl font-bold mb-6 leading-tight font-(family-name: Playfair Display, serif)"
+            className="text-4xl md:text-5xl 2xl:text-7xl font-bold mb-6 leading-tight font-(family-name: Playfair Display, serif)"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -142,12 +142,12 @@ const Hero = () => {
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="max-w-6xl"
+            className="max-w-5xl"
           >
             <h2 className="text-3xl  sm:text-4xl text-white font-medium leading-tight">
               Timeless Tiles for Modern Australian Spaces
             </h2>
-            <p className="text-white text-lg sm:text-xl mt-5">
+            <p className="text-white text-lg mt-5">
               We provide high-quality tiles and professional installation
               services for homes and commercial spaces. Trusted for durability,
               modern designs, and flawless craftsmanship that transforms your
