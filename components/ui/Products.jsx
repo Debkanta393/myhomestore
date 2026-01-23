@@ -655,7 +655,7 @@ export default function Products() {
 
   return (
     <div className="w-full mt-28">
-      <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center">Featured Products</h2>
+      <h2 className="text-3xl md:text-5xl mb-16 text-center">Featured Products</h2>
 
       <div className="max-w-10/12 mx-auto">
         {/* Mobile Filter & Sort Bar */}

@@ -183,7 +183,7 @@ export default function MainNav() {
         >
           {/* Tabs Section */}
           <div className="max-w-10/12 mx-auto my-1">
-            <div className="flex justify-evenly xl:items-center gap-2">
+            <div className="flex justify-between xl:items-center gap-2">
               {tabs.map((tab, index) => (
                 <motion.li
                   key={index}

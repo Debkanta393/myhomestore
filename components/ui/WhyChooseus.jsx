@@ -80,7 +80,7 @@ export default function WhyChooseUs() {
   };
 
   return (
-    <section className="relative px-6 py-28 overflow-hidden mt-[500px] sm:mt-[380px] lg:mt-[300px]">
+    <section className="relative py-28 overflow-hidden mt-[500px] sm:mt-[380px] lg:mt-[300px]">
       {/* Layered Background with Organic Shapes */}
       <div className="absolute inset-0 bg-[#f5efed] -z-10" />
 
@@ -114,7 +114,7 @@ export default function WhyChooseUs() {
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
         //className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mt-20"
-       className="max-w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:gap-8 lg:gap-5 gap-y-8" ref={ref}>
+       className="max-w-10/12 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:gap-8 lg:gap-5 gap-y-8" ref={ref}>
         {problems.map((problem, index) => {
           const Icon = problem.icon;
 
@@ -127,7 +127,7 @@ export default function WhyChooseUs() {
                 scale: 1.03,
                 transition: { duration: 0.4, ease: "easeOut" }
               }}
-              className="group bg-white rounded-2xl py-10 lg:px-6 2xl:px-10 text-center hover:shadow-lg transition-all relative transition-all duration-500 flex flex-col justify-between"
+              className="group text-center relative flex flex-col justify-between"
             >
               {/* Icon */}
               <div
@@ -149,8 +149,8 @@ export default function WhyChooseUs() {
               />
 
               {/* Corner decorations */}
-              <div className="absolute top-4 right-4 w-16 h-16 border-t-2 border-r-2 border-[#D6CEC6]/20 rounded-tr-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="absolute bottom-4 left-4 w-16 h-16 border-b-2 border-l-2 border-[#D6CEC6]/20 rounded-bl-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* <div className="absolute top-4 right-4 w-16 h-16 border-t-2 border-r-2 border-[#D6CEC6]/20 rounded-tr-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute bottom-4 left-4 w-16 h-16 border-b-2 border-l-2 border-[#D6CEC6]/20 rounded-bl-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" /> */}
 
               {/* Shimmer effect */}
               <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000 overflow-hidden pointer-events-none">

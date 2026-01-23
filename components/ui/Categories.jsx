@@ -10,7 +10,7 @@ const Categories = () => {
   // bg-[#EDE6E1] 
   return (
     <section className="relative py-16 ">
-      <h2 className="max-w-11/12 text-4xl sm:text-5xl font-medium mx-auto text-center" style={{fontFamily: "Playfair Display, serif"}}>
+      <h2 className="max-w-11/12 text-4xl sm:text-5xl font-light mx-auto text-center" style={{fontFamily: "Playfair Display, serif"}}>
         Shop by categories
       </h2>
       <div className="max-w-10/12 mx-auto px-4 md:px-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-20">
