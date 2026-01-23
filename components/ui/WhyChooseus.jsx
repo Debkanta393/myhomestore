@@ -80,7 +80,7 @@ export default function WhyChooseUs() {
   };
 
   return (
-    <section className="relative py-28 overflow-hidden mt-[500px] sm:mt-[380px] lg:mt-[300px]">
+    <section className="relative py-20 overflow-hidden mt-[500px] sm:mt-[380px] lg:mt-[250px]">
       {/* Layered Background with Organic Shapes */}
       <div className="absolute inset-0 bg-[#f5efed] -z-10" />
 
@@ -127,7 +127,7 @@ export default function WhyChooseUs() {
                 scale: 1.03,
                 transition: { duration: 0.4, ease: "easeOut" }
               }}
-              className="group text-center relative flex flex-col justify-between"
+              className="group text-center relative flex flex-col justify-start"
             >
               {/* Icon */}
               <div

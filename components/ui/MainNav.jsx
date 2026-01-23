@@ -203,7 +203,8 @@ export default function MainNav() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   whileHover={{ y: -3 }}
-                  className="hidden lg:flex justify-center items-center gap-2 py-3 rounded-t-2xl text-[12px] xl:text-sm font-bold uppercase tracking-wide text-[#8A6A5A] cursor-pointer relative"
+                  className={`hidden lg:flex justify-center items-center gap-2 py-3 rounded-t-2xl text-[12px] xl:text-sm font-bold uppercase tracking-wide
+                     ${activeTab === index ? "text-[#8A6A5A]": "text-black"} cursor-pointer relative`}
                 >
                   {activeTab === index && (
                     <motion.span

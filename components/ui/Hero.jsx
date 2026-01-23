@@ -130,19 +130,19 @@ const Hero = () => {
       </div>
 
 
-      <motion.div className="rounded-t-4xl py-20  absolute -bottom-[500px] sm:-bottom-[380px] lg:-bottom-[300px] -z-10 bg-[#998e8a] flex justify-center items-center w-full">
+      <motion.div className="rounded-t-4xl py-20  absolute -bottom-[500px] sm:-bottom-[380px] lg:-bottom-[250px] -z-10 bg-[#998e8a] flex justify-center items-center w-full">
         <motion.img
           src="./images/abstract_image1.png"
           height={350}
           width={350}
           className="absolute -right-10 -bottom-10 opacity-35 rotate-6"
         />
-        <motion.div className="flex md:flex-row flex-col gap-10 justify-between items-center w-10/12 mt-20 md:mt-40">
+        <motion.div className="flex md:flex-row flex-col gap-10 justify-between items-center w-10/12 mt-20">
           <motion.div
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="max-w-5xl"
+            className="max-w-4xl"
           >
             <h2 className="text-3xl  sm:text-4xl text-white font-medium leading-tight">
               Timeless Tiles for Modern Australian Spaces

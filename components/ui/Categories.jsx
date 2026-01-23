@@ -9,7 +9,7 @@ const Categories = () => {
 
   // bg-[#EDE6E1] 
   return (
-    <section className="relative py-16 ">
+    <section className="relative py-20">
       <h2 className="max-w-11/12 text-4xl sm:text-5xl font-light mx-auto text-center" style={{fontFamily: "Playfair Display, serif"}}>
         Shop by categories
       </h2>
@@ -24,14 +24,14 @@ const Categories = () => {
             key={[index, selectedTab]}
           >
             {/* Black Overlay */}
-            <div className="absolute inset-0 bg-black/20 z-10"></div>
+            <div className="absolute inset-0 bg-black/40"></div>
 
             <img
               src={collection.image}
               alt=""
               className="w-full h-[220px] lg:h-[280px] 2xl:h-[400px]"
             />
-            <p className="font-normal text-center text-2xl absolute bottom-5 text-white z-20">
+            <p className="font-normal text-center text-2xl absolute bottom-5 text-white z-10">
               {collection.title}
             </p>
           </motion.div>
