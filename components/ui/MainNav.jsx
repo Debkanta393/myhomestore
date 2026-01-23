@@ -183,7 +183,7 @@ export default function MainNav() {
         >
           {/* Tabs Section */}
           <div className="max-w-10/12 mx-auto my-1">
-            <div className="flex justify-between xl:items-center gap-2">
+            <div className="flex justify-center xl:justify-evenly xl:items-center gap-2">
               {tabs.map((tab, index) => (
                 <motion.li
                   key={index}
@@ -195,6 +195,7 @@ export default function MainNav() {
                   }}
                   onClick={(e) => {
                     setActiveTab(index);
+                    setActiveNav(index)
                     dispath(setTabSelected(tab.tab));
                     setTabRect(e.currentTarget.getBoundingClientRect());
                   }}
@@ -202,7 +203,7 @@ export default function MainNav() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   whileHover={{ y: -3 }}
-                  className="hidden lg:flex justify-center items-center gap-2 py-3 px-5 rounded-t-2xl text-[12px] xl:text-sm font-bold uppercase tracking-wide text-[#8A6A5A] cursor-pointer relative"
+                  className="hidden lg:flex justify-center items-center gap-2 py-3 rounded-t-2xl text-[12px] xl:text-sm font-bold uppercase tracking-wide text-[#8A6A5A] cursor-pointer relative"
                 >
                   {activeTab === index && (
                     <motion.span
@@ -232,9 +233,9 @@ export default function MainNav() {
                 <nav
                   style={{
                     left: tabRect.left + tabRect.width / 2,
-                    transform: "translate(-100%, -15px)",
+                    transform: "translate(-120%, -15px)",
                   }}
-                  className="absolute top-full mt-4 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 min-w-[320px] border border-[#D6CEC6]/20 flex flex-col gap-4 transition-all"
+                  className="absolute top-full mt-4 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 min-w-[250px] border border-[#998e8a] flex flex-col gap-4 transition-all"
                 >
                   {/* Arrow */}
                   <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#D6CEC6]/30 rotate-45"></div>
@@ -258,6 +259,7 @@ export default function MainNav() {
                               rotate: mainHovered === item.key ? 180 : 0,
                             }}
                             transition={{ duration: 0.25 }}
+                            onClick={(e)=> {e.preventDefault(); setMainHovered(item.key)}}
                           >
                             <ChevronDown size={14} />
                           </motion.div>
@@ -274,7 +276,7 @@ export default function MainNav() {
                               animate={{ opacity: 1, x: 0 }}
                               exit={{ opacity: 0, x: 10 }}
                               transition={{ duration: 0.2 }}
-                              className="absolute left-full top-0 ml-6 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-5 min-w-[260px] border border-[#D6CEC6]/40"
+                              className="absolute left-full top-0 ml-6 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-5 min-w-[260px] border border-[#998e8a]"
                             >
                               {mainNavSub[item.key].map((subItem, i) => (
                                 <motion.div
