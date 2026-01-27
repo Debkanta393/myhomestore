@@ -277,7 +277,7 @@ export default function MainNav() {
                               animate={{ opacity: 1, x: 0 }}
                               exit={{ opacity: 0, x: 10 }}
                               transition={{ duration: 0.2 }}
-                              className="absolute left-full top-0 ml-6 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-5 min-w-[260px] border border-[#998e8a]"
+                              className="absolute -left-1/2 top-0 ml-6 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-5 min-w-[260px] border border-[#998e8a]"
                             >
                               {mainNavSub[item.key].map((subItem, i) => (
                                 <motion.div
