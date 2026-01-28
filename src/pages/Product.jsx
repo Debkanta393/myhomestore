@@ -11,9 +11,13 @@ import {
   ZoomIn,
   Package,
   Award,
-  Check
+  Check,
+  ChevronDown,
+  HeartIcon,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Reviews from "../../components/ui/Reviews";
+import WhyChooseus from "../../components/ui/WhyChooseus";
 
 export default function Product() {
   const [selectedImage, setSelectedImage] = useState("./images/luxury1.webp");
@@ -23,11 +27,12 @@ export default function Product() {
   const [showZoom, setShowZoom] = useState(false);
   const [calculatorData, setCalculatorData] = useState({
     totalNeeded: 0,
-    wastage: null
-  })
-  const [cartonsNeeded, setCartonsNeeded] = useState(null)
-  const [price, setPrice] = useState(null)
-  const [packSize, setPackSize] = useState(1.1098)
+    wastage: null,
+  });
+  const [cartonsNeeded, setCartonsNeeded] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [packSize, setPackSize] = useState(1.1098);
+  const [openAccordion, setOpenAccordion] = useState("Description");
 
   const otherImages = [
     "./images/luxury1.webp",
@@ -36,12 +41,7 @@ export default function Product() {
     "./images/category/indoor5.jpg",
   ];
 
-  const tabs = [
-    "Description",
-    "Specification",
-    "Additional Information",
-    "Reviews",
-  ];
+  const tabs = ["Description", "Specification", "Additional Information"];
 
   const products = [
     {
@@ -158,35 +158,36 @@ export default function Product() {
     },
   };
 
-
   const calculatorDataHandler = (e) => {
-    console.log(e.target.name)
-    setCalculatorData(prev => ({
+    console.log(e.target.name);
+    setCalculatorData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
-  }
+  };
 
-  console.log(calculatorData.totalNeeded)
-  console.log(calculatorData.wastage)
+  console.log(calculatorData.totalNeeded);
+  console.log(calculatorData.wastage);
 
   useEffect(() => {
     if (!calculatorData.totalNeeded && calculatorData.wastage == null) {
-      return
+      return;
     }
     const calculatorHandler = () => {
-      let totalCartons = calculatorData.wastage != 0 ? (calculatorData.totalNeeded * (calculatorData.wastage / 100)) / packSize
-       : (calculatorData.totalNeeded) / packSize
-      setCartonsNeeded(totalCartons)
-    }
-    calculatorHandler()
-
-  }, [calculatorData.totalNeeded, calculatorData.wastage])
+      let totalCartons =
+        calculatorData.wastage != 0
+          ? (calculatorData.totalNeeded * (calculatorData.wastage / 100)) /
+            packSize
+          : calculatorData.totalNeeded / packSize;
+      setCartonsNeeded(totalCartons);
+    };
+    calculatorHandler();
+  }, [calculatorData.totalNeeded, calculatorData.wastage]);
 
   return (
     <div className="w-full mt-16 mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
       {/* Breadcrumb with glassmorphism */}
-      <div className="w-[88%] mx-auto mb-10 pt-6">
+      <div className="w-10/12 mx-auto mb-10 pt-6">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -207,7 +208,7 @@ export default function Product() {
       </div>
 
       {/* Main Product Section */}
-      <div className="w-[88%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div className="w-10/12 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
         {/* Image Gallery with enhanced interactions */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -226,7 +227,7 @@ export default function Product() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.3 }}
-                className="w-full h-[700px] object-cover"
+                className="w-full h-[500px] object-cover"
               />
             </AnimatePresence>
 
@@ -292,10 +293,11 @@ export default function Product() {
                 whileHover={{ scale: 1.05, y: -5 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedImage(image)}
-                className={`cursor-pointer rounded-2xl overflow-hidden border-3 transition-all shadow-md hover:shadow-xl ${selectedImage === image
-                  ? "border-[#8A6A5A] ring-4 ring-[#8A6A5A]/20"
-                  : "border-gray-200 hover:border-gray-300"
-                  }`}
+                className={`cursor-pointer rounded-2xl overflow-hidden border-3 transition-all shadow-md hover:shadow-xl ${
+                  selectedImage === image
+                    ? "border-[#8A6A5A] ring-4 ring-[#8A6A5A]/20"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
               >
                 <img
                   src={image}
@@ -305,6 +307,20 @@ export default function Product() {
               </motion.div>
             ))}
           </motion.div>
+
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={selectedImage}
+              src={selectedImage}
+              alt="Product"
+              variants={imageVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.3 }}
+              className="w-full h-[500px] object-cover mt-10 rounded-3xl"
+            />
+          </AnimatePresence>
         </motion.div>
 
         {/* Product Details with modern styling */}
@@ -316,19 +332,19 @@ export default function Product() {
         >
           {/* Badges with glassmorphism */}
           <div className="flex items-center gap-3">
-            <motion.span
+            {/* <motion.span
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring" }}
               className="py-2.5 px-6 rounded-full backdrop-blur-sm bg-gray-100/80 border border-gray-300/50 text-sm font-bold text-gray-700 shadow-sm"
             >
               Sold Out
-            </motion.span>
+            </motion.span> */}
             <motion.span
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.3, type: "spring" }}
-              className="py-2.5 px-6 rounded-full bg-gradient-to-r from-[#8A6A5A] to-[#735644] text-sm font-bold text-white shadow-lg"
+              className="text-md font-bold text-black"
             >
               New Arrival
             </motion.span>
@@ -344,40 +360,44 @@ export default function Product() {
             >
               Premium Luxury Flooring
             </motion.h1>
+
+            {/* Enhanced Rating */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="flex items-center gap-3 backdrop-blur-sm bg-yellow-50/50 w-fit mt-5"
+            >
+              <div className="flex gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ delay: 0.7 + i * 0.1, type: "spring" }}
+                  >
+                    <Star
+                      size={20}
+                      className="fill-yellow-400 text-yellow-400"
+                    />
+                  </motion.div>
+                ))}
+              </div>
+              <span className="text-sm font-bold text-gray-800">
+                <span className="text-md text-gray-600">(200 reviews)</span>
+              </span>
+            </motion.div>
+
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="text-gray-600 text-lg font-medium"
+              className="text-gray-600 text-lg font-medium mt-5"
             >
-              by Elite Floors Collection
+              Lorem ipsum dolor sit amet consectetur. Cras pulvinar in non sit
+              massa aenean. Nisl ornare pharetra quis non aliquet.
             </motion.p>
           </div>
-
-          {/* Enhanced Rating */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="flex items-center gap-3 backdrop-blur-sm bg-yellow-50/50 border border-yellow-200/50 rounded-2xl px-5 py-3 w-fit"
-          >
-            <div className="flex gap-1">
-              {[...Array(5)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 0.7 + i * 0.1, type: "spring" }}
-                >
-                  <Star size={20} className="fill-yellow-400 text-yellow-400" />
-                </motion.div>
-              ))}
-            </div>
-            <span className="text-sm font-bold text-gray-800">
-              4.9{" "}
-              <span className="font-normal text-gray-600">(127 reviews)</span>
-            </span>
-          </motion.div>
 
           {/* Price section with modern design */}
           <motion.div
@@ -386,249 +406,231 @@ export default function Product() {
             transition={{ delay: 0.7 }}
           >
             <div className="flex items-center gap-4 flex-wrap">
-              <span className="bg-[#998e8a] text-white py-2.5 px-6 rounded-full text-sm font-bold shadow-md">
-                Save 20%
+              <span className="text-xl font-bold text-black">
+                $300{" "}
+                <span className="font-normal text-[#666E7C]">/sq meter</span>
               </span>
-              <span className="text-[#D6CEC6] line-through text-2xl font-medium">
-                $55.00
-              </span>
-              <span className="text-[#8A6A5A] text-3xl font-bold">$40.00</span>
-              <span className="text-gray-600 text-sm ml-auto">
-                Per sq meter
+              <span className="text-red-600 font-bold text-lg">- 20%</span>
+              <span className="line-through text-xl font-medium text-[#666E7C]">
+                $500
               </span>
             </div>
           </motion.div>
 
+          <motion.div className="w-full flex items-center gap-10">
+            <button className="bg-[#998E8A] py-3 text-white text-xl w-5/12 cursor-pointer">
+              Add to cart
+            </button>
+            <button className="border border-[#998E8A] text-[#998E8A] py-3 text-xl flex items-center w-5/12 justify-center gap-5 cursor-pointer">
+              <Heart size={24} className="text-[#998E8A] transition-colors" />
+              Wishlist
+            </button>
+          </motion.div>
 
           {/* Qualtiny calculator */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
-            className="shadow-md p-10 rounded-3xl"
+            className="mt-10"
           >
-            <h2 className="text-3xl font-bold">Quantity Calculator</h2>
-            <p className="text-lg mt-2 bg-[#998e8a]/80 px-5 py-2 w-fit rounded-xl text-white"><b>Pack size:</b> 1.1098 m² per carton</p>
+            <h2 className="text-3xl font-semibold">Quantity Calculator</h2>
+            <p className="text-xl mt-5 text-black font-bold">
+              Pack size: 1.1098 m² per carton
+            </p>
             <form action="" className="mt-3">
-              <div className="flex xl:flex-row flex-col xl:items-center gap-x-10 gap-y-2">
+              <div className="flex xl:flex-row flex-col xl:items-start gap-x-10 gap-y-2 mt-10">
                 <div>
-                  <label htmlFor="" className="text-lg">Total square meters needed</label>
+                  <label htmlFor="" className="text-xl text-[#666E7C]">
+                    Total square meters needed
+                  </label>
                   <br />
-                  <input type="text" placeholder="Enter m²"
-                    className="rounded-xl w-60 border border-[#8A6A5A] p-2 mt-2 active:border-[#8A6A5A] focus:border-[#8A6A5A]"
+                  <input
+                    type="text"
+                    placeholder="Enter m²"
+                    className="w-64 border border-[#E7E9EB] p-2 mt-2 active:border-[#E7E9EB] focus:border-[#E7E9EB]"
                     name="totalNeeded"
                     onChange={(e) => calculatorDataHandler(e)}
                   />
                 </div>
                 <div>
-                  <label htmlFor="wastage" className="text-lg">Wastage</label>
-                  <div className="flex gap-3">
-                    <input type="radio" name="wastage" id="0%" value={0} onChange={(e) => calculatorDataHandler(e)}/>
+                  <label htmlFor="wastage" className="text-lg text-[#666E7C]">
+                    Wastage
+                  </label>
+                  <div className="flex gap-3 mt-3">
+                    <input
+                      type="radio"
+                      name="wastage"
+                      id="0%"
+                      value={0}
+                      onChange={(e) => calculatorDataHandler(e)}
+                      className="text-[#8A6A5B]"
+                    />
                     <label htmlFor="wastage">0%</label>
-                    <input type="radio" name="wastage" id="10%" value={10} onChange={(e) => calculatorDataHandler(e)}/>
+                    <input
+                      type="radio"
+                      name="wastage"
+                      id="10%"
+                      value={10}
+                      onChange={(e) => calculatorDataHandler(e)}
+                    />
                     <label htmlFor="">10%</label>
-                    <input type="radio" name="wastage" id="20%" value={20} onChange={(e) => calculatorDataHandler(e)}/>
+                    <input
+                      type="radio"
+                      name="wastage"
+                      id="20%"
+                      value={20}
+                      onChange={(e) => calculatorDataHandler(e)}
+                    />
                     <label htmlFor="">20%</label>
                   </div>
                 </div>
               </div>
-              <div className="mt-5">
-                <p className="text-lg"><span className="font-semibold">Cartons Needed:</span> {cartonsNeeded}</p>
-                <p className="text-lg mt-1"><span className="font-semibold">Total Amount:</span></p>
+              <div className="mt-10">
+                <p className="text-lg">
+                  <span className="font-semibold text-[#666E7C]">
+                    Cartons Needed:
+                  </span>{" "}
+                  {cartonsNeeded}
+                </p>
+                <p className="text-lg mt-1 text-[#666E7C]">
+                  <span className="font-semibold">Total Amount:</span>
+                </p>
               </div>
             </form>
           </motion.div>
 
-
-          {/* Tabs Section */}
+          {/* Accordian section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="backdrop-blur-sm bg-white/60 border border-gray-200/50 rounded-3xl p-6 shadow-lg"
           >
-            <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-              {tabs.map((tab, index) => (
-                <motion.button
-                  key={index}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-6 py-3 text-sm font-semibold rounded-full transition-all whitespace-nowrap ${activeTab === tab
-                    ? "bg-gradient-to-r from-[#8A6A5A] to-[#735644] text-white shadow-lg"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                    }`}
-                >
-                  {tab}
-                </motion.button>
-              ))}
-            </div>
+            {tabs.map((tab, index) => {
+              const isOpen = openAccordion === tab;
 
-            {/* Tab Content with animations */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="min-h-[180px]"
-              >
-                {activeTab === "Description" && (
-                  <div className="space-y-3">
-                    <h3 className="text-2xl font-bold mb-4 text-gray-900">
-                      Product Description
-                    </h3>
-                    <ul className="space-y-3 text-gray-700">
-                      {[
-                        "Stylish waterproof flooring",
-                        "Perfect for apartments and family friendly residential",
-                        "Pet Proof & Durable",
-                        "Easy DIY Installation with Clicking System",
-                      ].map((item, i) => (
-                        <motion.li
-                          key={i}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.1 }}
-                          className="flex items-start gap-3 group"
-                        >
-                          <span className="text-[#8A6A5A] mt-1 text-xl group-hover:scale-125 transition-transform">
-                            ✓
-                          </span>
-                          <span className="leading-relaxed">{item}</span>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+              return (
+                <div key={index} className="overflow-hidden">
+                  {/* HEADER */}
+                  <button
+                    onClick={() => setOpenAccordion(isOpen ? null : tab)}
+                    className="w-full flex justify-between items-center py-4 text-left hover:bg-gray-50 transition"
+                  >
+                    <h3 className="text-2xl font-bold text-gray-900">{tab}</h3>
 
-                {activeTab === "Specification" && (
-                  <div className="space-y-4">
-                    <h3 className="text-2xl font-bold mb-5 text-gray-900">
-                      Technical Specifications
-                    </h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      {[
-                        { label: "Size", value: "1820mm x 225mm" },
-                        { label: "Type", value: "Rigid Core" },
-                        { label: "Thickness", value: "7mm" },
-                        { label: "Installation", value: "Click System" },
-                      ].map((spec, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: i * 0.1 }}
-                          className="backdrop-blur-sm bg-gray-50/50 border border-gray-200/50 rounded-2xl p-4 hover:shadow-md transition-all"
-                        >
-                          <p className="text-sm text-gray-500 mb-1">
-                            {spec.label}
-                          </p>
-                          <p className="font-bold text-gray-900">
-                            {spec.value}
-                          </p>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === "Additional Information" && (
-                  <div className="space-y-3">
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="space-y-2"
+                    <motion.span
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      className="text-gray-500"
                     >
-                      {[
-                        { label: "SKU", value: "FTCPFCS5013" },
-                        { label: "Category", value: "Chevron" },
-                        { label: "Tag", value: "15mm" },
-                        { label: "Brand", value: "Preference Floors" },
-                      ].map((info, i) => (
-                        <motion.p
-                          key={i}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.1 }}
-                          className="text-sm text-gray-600 flex items-center gap-2"
-                        >
-                          <span className="font-semibold text-gray-800">
-                            {info.label}:
-                          </span>
-                          <span>{info.value}</span>
-                        </motion.p>
-                      ))}
-                    </motion.div>
-                  </div>
-                )}
+                      <ChevronDown size={16} />
+                    </motion.span>
+                  </button>
 
-                {activeTab === "Reviews" && (
-                  <div className="text-center py-8">
-                    <Star className="w-16 h-16 mx-auto text-gray-300 mb-3" />
-                    <p className="text-gray-600">No reviews yet</p>
-                    <button className="mt-4 text-[#8A6A5A] font-semibold hover:underline">
-                      Be the first to review
-                    </button>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
+                  {/* CONTENT */}
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        key={tab}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                        className="min-h-[180px] px-6 pb-6"
+                      >
+                        {tab === "Description" && (
+                          <div className="space-y-3">
+                            <ul className="space-y-3 text-gray-700">
+                              {[
+                                "Stylish waterproof flooring",
+                                "Perfect for apartments and family friendly residential",
+                                "Pet Proof & Durable",
+                                "Easy DIY Installation with Clicking System",
+                              ].map((item, i) => (
+                                <motion.li
+                                  key={i}
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: i * 0.1 }}
+                                  className="flex items-start gap-3 group"
+                                >
+                                  <span className="text-[#8A6A5A] mt-1 text-xl group-hover:scale-125 transition-transform">
+                                    ✓
+                                  </span>
+                                  <span className="leading-relaxed">
+                                    {item}
+                                  </span>
+                                </motion.li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
 
-          {/* Quantity & CTA with modern design */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
-            className="flex items-center gap-4"
-          >
-            <div className="flex items-center backdrop-blur-sm bg-white/80 border-2 border-gray-300 rounded-2xl shadow-lg overflow-hidden">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="px-5 py-2 text-xl font-bold hover:bg-gray-100 transition-colors"
-              >
-                −
-              </motion.button>
-              <span className="px-6 py-3 text-lg font-bold border-x-2 border-gray-300 min-w-[80px] text-center">
-                {quantity}
-              </span>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setQuantity(quantity + 1)}
-                className="px-5 py-2 text-xl font-bold hover:bg-gray-100 transition-colors"
-              >
-                +
-              </motion.button>
-            </div>
+                        {tab === "Specification" && (
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                              {[
+                                { label: "Size", value: "1820mm x 225mm" },
+                                { label: "Type", value: "Rigid Core" },
+                                { label: "Thickness", value: "7mm" },
+                                {
+                                  label: "Installation",
+                                  value: "Click System",
+                                },
+                              ].map((spec, i) => (
+                                <motion.div
+                                  key={i}
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: i * 0.1 }}
+                                  className="backdrop-blur-sm bg-gray-50/50 border border-gray-200/50 rounded-2xl p-4 hover:shadow-md transition-all"
+                                >
+                                  <p className="text-sm text-gray-500 mb-1">
+                                    {spec.label}
+                                  </p>
+                                  <p className="font-bold text-gray-900">
+                                    {spec.value}
+                                  </p>
+                                </motion.div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
 
-            <motion.button
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex-1 bg-gradient-to-r from-[#8A6A5A] to-[#735644] hover:from-[#735644] hover:to-[#5d453a] text-white font-bold py-4 rounded-2xl transition-all shadow-xl hover:shadow-2xl"
-            >
-              Add to Cart
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setIsWishlisted(!isWishlisted)}
-              className={`p-5 rounded-2xl border-2 transition-all shadow-lg ${isWishlisted
-                ? "border-white"
-                : "bg-white border-gray-300 hover:border-red-300"
-                }`}
-            >
-              <Heart
-                size={24}
-                className={`${isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600"
-                  } transition-colors`}
-              />
-            </motion.button>
+                        {tab === "Additional Information" && (
+                          <div className="space-y-3">
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="space-y-2"
+                            >
+                              {[
+                                { label: "SKU", value: "FTCPFCS5013" },
+                                { label: "Category", value: "Chevron" },
+                                { label: "Tag", value: "15mm" },
+                                { label: "Brand", value: "Preference Floors" },
+                              ].map((info, i) => (
+                                <motion.p
+                                  key={i}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: i * 0.1 }}
+                                  className="text-sm text-gray-600 flex items-center gap-2"
+                                >
+                                  <span className="font-semibold text-gray-800">
+                                    {info.label}:
+                                  </span>
+                                  <span>{info.value}</span>
+                                </motion.p>
+                              ))}
+                            </motion.div>
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
           </motion.div>
 
           {/* Enhanced Features with icons */}
@@ -664,12 +666,14 @@ export default function Product() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.1 + i * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
-                className="backdrop-blur-sm bg-gradient-to-br from-white to-gray-50/50 border border-gray-200/50 rounded-2xl p-5 text-center shadow-lg hover:shadow-xl transition-all group"
+                className="backdrop-blur-sm bg-gradient-to-br from-white to-gray-50/50 border border-gray-200/50 text-center transition-all group flex flex-col items-center"
               >
-                <feature.icon
-                  size={36}
-                  className="text-[#8A6A5A] mx-auto mb-3 group-hover:scale-110 transition-transform"
-                />
+                <div className="p-3 w-fit rounded-full border border-[#8A6A5A]">
+                  <feature.icon
+                    size={36}
+                    className="text-[#8A6A5A] mx-auto group-hover:scale-110 transition-transform font-normal"
+                  />
+                </div>
                 <p className="text-md font-bold text-gray-900 mb-1">
                   {feature.title}
                 </p>
@@ -677,36 +681,19 @@ export default function Product() {
               </motion.div>
             ))}
           </motion.div>
-
-          {/* Trust badges */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-            className="flex items-center justify-center gap-6 pt-6 border-t border-gray-200/50"
-          >
-            {[Package, Award].map((Icon, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ scale: 1.1 }}
-                className="flex items-center gap-2 text-gray-600"
-              >
-                <Icon size={20} />
-                <span className="text-sm font-medium">
-                  {i === 0 ? "Quality Guaranteed" : "Certified Product"}
-                </span>
-              </motion.div>
-            ))}
-          </motion.div>
         </motion.div>
       </div>
+
+      <Reviews />
+
+      <WhyChooseus />
 
       {/* You may also like section */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        className="w-full mt-32 px-4 md:px-8"
+        className="w-full mt-20 px-4 md:px-8"
       >
         <div className="text-center mb-16">
           <motion.h2
@@ -728,48 +715,46 @@ export default function Product() {
           </motion.p>
         </div>
 
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-10/12 mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="show"
               exit="exit"
-              className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6 relative z-10"
             >
               {products.map((item) => (
                 <motion.div
                   key={item.id}
                   variants={cardVariants}
-                  className="group relative rounded-2xl bg-white overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ease-out hover:-translate-y-1 border border-gray-100"
+                  className="group relative bg-white overflow-hidden hover:shadow-xl transition-all duration-300 ease-out hover:-translate-y-1 border border-gray-100"
                 >
-                  {/* Compact Image Container */}
-                  <div className="relative aspect-[4/4] overflow-hidden bg-gray-50">
+                  <div className="relative bg-gray-50">
                     <img
                       src={item.image}
                       alt={item.heading}
                       loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="block h-[220px] lg:h-[280px] 2xl:h-[400px] w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                    {/* Compact Wishlist Button */}
+                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
                     <button
                       aria-label="Add to wishlist"
-                      className="absolute top-2 right-2 z-20 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm hover:bg-white hover:scale-110 transition-all duration-300"
+                      className="absolute top-2 right-2 z-20 bg-[#998E8A] backdrop-blur-sm p-1.5 rounded-full shadow-sm hover:bg-white hover:scale-110 transition-all duration-300"
                     >
-                      <Heart className="w-4 h-4 text-gray-700 hover:text-red-500" />
+                      <HeartIcon className="w-5 h-5 text-white hover:text-red-500" />
                     </button>
 
-                    {/* Badges */}
-                    <div className="absolute top-2 left-2 z-20 flex flex-col gap-1">
+                    <div className="absolute top-2 left-2 z-20 flex gap-3">
                       {item.isNew && (
-                        <span className="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide bg-[#998e8a] text-white rounded-md shadow-sm">
+                        <span className="inline-block px-4 py-1 text-md tracking-wide bg-white text-black font-semibold">
                           New
                         </span>
                       )}
                       {item.onSale && (
-                        <span className="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide bg-white text-black rounded-md shadow-sm">
+                        <span className="inline-block px-4 py-1 text-md font-semibold tracking-wide bg-white text-black">
                           Sale
                         </span>
                       )}
@@ -784,32 +769,36 @@ export default function Product() {
                     )}
                   </div>
 
-                  {/* Compact Product Info */}
-                  <div className="p-3 space-y-2">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="text-xl font-semibold text-gray-900 line-clamp-1">
-                        {item.heading}
-                      </h3>
+                  <div className="py-5 space-y-2">
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((_, i) => (
+                        <span key={i} className="text-yellow-400 text-xl">
+                          ★
+                        </span>
+                      ))}
+                      <span className="text-lg font-medium text-gray-700">
+                        (200)
+                      </span>
                     </div>
 
-                    <p className="text-xs text-gray-500 line-clamp-1">
-                      {item.brand}
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-2xl font-bold text-gray-900 line-clamp-1">
+                        Hydro Laminate Tiles
+                      </p>
+                    </div>
+
+                    <p className="text-lg text-gray-500 line-clamp-1">
+                      by Elite Floors Collection
                     </p>
 
-                    {/* Compact Rating */}
-                    <div className="flex items-center gap-1">
-                      <span className="text-yellow-400 text-xs">★</span>
-                      <span className="text-xs font-medium text-gray-700">
-                        {item.rating}
-                      </span>
-                    </div>
-
-                    {/* Compact Price */}
                     <div className="flex items-baseline gap-2">
-                      <span className="text-lg font-bold text-gray-900">
+                      <span className="text-xl font-bold text-gray-900">
                         ${item.price}
                       </span>
-                      <span className="text-xs text-gray-400 line-through">
+                      <span className="text-red-600 font-bold text-base">
+                        50%
+                      </span>
+                      <span className="text-base text-gray-400 line-through">
                         ${item.price * 2}
                       </span>
                     </div>

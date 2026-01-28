@@ -18,7 +18,9 @@ function Home() {
     <div>
       <div className="overflow-x-hidden">
         <Hero />
+        <div className='overflow-hidden mt-[500px] sm:mt-[380px] lg:mt-[250px]'>
         <WhyChooseus />
+        </div>
         <Categories />
         <Products/>
         <Services />
