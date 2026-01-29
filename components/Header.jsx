@@ -22,7 +22,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="bg-white w-full sticky top-0 z-50">
+    <header className="bg-white w-full sticky top-0 z-30">
       {/* Top Navigation Bar */}
       <div>
         <div className="bg-[#f5efed] w-full border-b border-[#D6CEC6]/30 relative z-40 overflow-visible">

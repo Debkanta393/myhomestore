@@ -185,7 +185,7 @@ export default function Product() {
   }, [calculatorData.totalNeeded, calculatorData.wastage]);
 
   return (
-    <div className="w-full mt-16 mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
+    <div className="w-full mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
       {/* Breadcrumb with glassmorphism */}
       <div className="w-10/12 mx-auto mb-10 pt-6">
         <motion.div
@@ -208,7 +208,7 @@ export default function Product() {
       </div>
 
       {/* Main Product Section */}
-      <div className="w-10/12 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div className="w-10/12 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 relative">
         {/* Image Gallery with enhanced interactions */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -216,7 +216,7 @@ export default function Product() {
           transition={{ duration: 0.6 }}
           className="w-full"
         >
-          <div className="relative bg-gradient-to-br from-gray-100 to-gray-50 rounded-3xl overflow-hidden group shadow-xl">
+          <div className="relative bg-gradient-to-br from-gray-100 to-gray-50 group shadow-xl">
             <AnimatePresence mode="wait">
               <motion.img
                 key={selectedImage}
@@ -235,7 +235,7 @@ export default function Product() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
             {/* Navigation buttons with glassmorphism */}
-            <motion.button
+            {/* <motion.button
               whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.95 }}
               onClick={handlePrevImage}
@@ -251,10 +251,10 @@ export default function Product() {
               className="absolute top-1/2 -translate-y-1/2 right-5 backdrop-blur-md bg-white/80 hover:bg-white shadow-2xl z-20 p-4 rounded-full transition-all opacity-0 group-hover:opacity-100 border border-white/50"
             >
               <ChevronRight size={24} className="text-gray-800" />
-            </motion.button>
+            </motion.button> */}
 
             {/* Quick action buttons */}
-            <div className="absolute top-5 right-5 flex flex-col gap-3 z-20">
+            {/* <div className="absolute top-5 right-5 flex flex-col gap-3 z-20">
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 whileTap={{ scale: 0.9 }}
@@ -270,14 +270,14 @@ export default function Product() {
               >
                 <Share2 size={20} className="text-gray-700" />
               </motion.button>
-            </div>
+            </div> */}
 
             {/* Image counter */}
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 backdrop-blur-md bg-black/40 px-4 py-2 rounded-full">
+            {/* <div className="absolute bottom-5 left-1/2 -translate-x-1/2 backdrop-blur-md bg-black/40 px-4 py-2 rounded-full">
               <span className="text-white text-sm font-medium">
                 {currentIndex + 1} / {otherImages.length}
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* Enhanced Thumbnail Gallery */}
@@ -293,7 +293,7 @@ export default function Product() {
                 whileHover={{ scale: 1.05, y: -5 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedImage(image)}
-                className={`cursor-pointer rounded-2xl overflow-hidden border-3 transition-all shadow-md hover:shadow-xl ${
+                className={`cursor-pointer border-3 transition-all shadow-md hover:shadow-xl ${
                   selectedImage === image
                     ? "border-[#8A6A5A] ring-4 ring-[#8A6A5A]/20"
                     : "border-gray-200 hover:border-gray-300"
@@ -318,7 +318,7 @@ export default function Product() {
               animate="center"
               exit="exit"
               transition={{ duration: 0.3 }}
-              className="w-full h-[500px] object-cover mt-10 rounded-3xl"
+              className="w-full h-[500px] object-cover mt-10"
             />
           </AnimatePresence>
         </motion.div>
@@ -328,18 +328,10 @@ export default function Product() {
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full space-y-6"
+          className="w-full space-y-6 sticky top-10"
         >
           {/* Badges with glassmorphism */}
           <div className="flex items-center gap-3">
-            {/* <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring" }}
-              className="py-2.5 px-6 rounded-full backdrop-blur-sm bg-gray-100/80 border border-gray-300/50 text-sm font-bold text-gray-700 shadow-sm"
-            >
-              Sold Out
-            </motion.span> */}
             <motion.span
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -418,10 +410,10 @@ export default function Product() {
           </motion.div>
 
           <motion.div className="w-full flex items-center gap-10">
-            <button className="bg-[#998E8A] py-3 text-white text-xl w-5/12 cursor-pointer">
+            <button className="bg-[#998E8A] py-3 text-white text-xl w-6/12 cursor-pointer">
               Add to cart
             </button>
-            <button className="border border-[#998E8A] text-[#998E8A] py-3 text-xl flex items-center w-5/12 justify-center gap-5 cursor-pointer">
+            <button className="border border-[#998E8A] text-[#998E8A] py-3 text-xl flex items-center w-6/12 justify-center gap-5 cursor-pointer">
               <Heart size={24} className="text-[#998E8A] transition-colors" />
               Wishlist
             </button>
@@ -448,7 +440,7 @@ export default function Product() {
                   <input
                     type="text"
                     placeholder="Enter m²"
-                    className="w-64 border border-[#E7E9EB] p-2 mt-2 active:border-[#E7E9EB] focus:border-[#E7E9EB]"
+                    className="w-72 border border-[#E7E9EB] p-2 mt-2 active:border-[#E7E9EB] focus:border-[#E7E9EB]"
                     name="totalNeeded"
                     onChange={(e) => calculatorDataHandler(e)}
                   />
@@ -666,7 +658,7 @@ export default function Product() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.1 + i * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
-                className="backdrop-blur-sm bg-gradient-to-br from-white to-gray-50/50 border border-gray-200/50 text-center transition-all group flex flex-col items-center"
+                className="backdrop-blur-sm bg-gradient-to-br from-white to-gray-50/50 text-center transition-all group flex flex-col items-center"
               >
                 <div className="p-3 w-fit rounded-full border border-[#8A6A5A]">
                   <feature.icon
@@ -686,7 +678,9 @@ export default function Product() {
 
       <Reviews />
 
-      <WhyChooseus />
+      <div className="mt-20">
+        <WhyChooseus />
+      </div>
 
       {/* You may also like section */}
       <motion.div
@@ -728,14 +722,14 @@ export default function Product() {
                 <motion.div
                   key={item.id}
                   variants={cardVariants}
-                  className="group relative bg-white overflow-hidden hover:shadow-xl transition-all duration-300 ease-out hover:-translate-y-1 border border-gray-100"
+                  className="group relative bg-white overflow-hidden transition-all duration-300 ease-out hover:-translate-y-1 border border-gray-100"
                 >
                   <div className="relative bg-gray-50">
                     <img
                       src={item.image}
                       alt={item.heading}
                       loading="lazy"
-                      className="block h-[220px] lg:h-[280px] 2xl:h-[400px] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="block h-[220px] lg:h-[280px] 2xl:h-[400px] w-full object-cover transition-transform duration-500"
                     />
 
                     <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -808,6 +802,9 @@ export default function Product() {
             </motion.div>
           </AnimatePresence>
         </div>
+        <button className="bg-[#998E8A] px-10 py-3 text-white flex justify-center items-center mx-auto mt-10 text-lg">
+          View All
+        </button>
       </motion.div>
     </div>
   );

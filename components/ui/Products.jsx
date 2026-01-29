@@ -14,7 +14,7 @@ import { category, brand, products } from "../../data/data";
 export default function Products() {
   const ref = useRef(null);
   const sidebarRef = useRef(null);
-  const filterRef=useRef(null)
+  const filterRef = useRef(null);
   const imageAnimation = useInView(ref, { once: true, amount: 0.2 });
   const [page, setPage] = useState(0);
   const [navigateTo, setNavigateTo] = useState("right");
@@ -35,13 +35,13 @@ export default function Products() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    if (width > 1200) {
-      setItemsPerPage(8);
-    } else if (width > 1000 && width < 1200) {
-      setItemsPerPage(6);
-    }
-  }, [width]);
+  // useEffect(() => {
+  //   if (width > 1200) {
+  //     setItemsPerPage(8);
+  //   } else if (width > 1000 && width < 1200) {
+  //     setItemsPerPage(6);
+  //   }
+  // }, [width]);
 
   console.log("Window width", width);
 
@@ -189,30 +189,28 @@ export default function Products() {
     setPage(0);
   };
 
-
   // hide filter data on clicking any where in the screen
   useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (filterRef.current && !filterRef.current.contains(event.target)) {
-      setExpandedSections({
-        category: false,
-        brand: false,
-        price: false,
-        rating: false,
-        color: false,
-        size: false,
-        design: false,
-        availability: false,
-        special: false,
-        tags: false,
-      });
-    }
-  };
+    const handleClickOutside = (event) => {
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setExpandedSections({
+          category: false,
+          brand: false,
+          price: false,
+          rating: false,
+          color: false,
+          size: false,
+          design: false,
+          availability: false,
+          special: false,
+          tags: false,
+        });
+      }
+    };
 
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => document.removeEventListener("mousedown", handleClickOutside);
-}, []);
-
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Get unique values for filters
   const categories = [...new Set(products.map((p) => p.category))];
@@ -404,7 +402,9 @@ export default function Products() {
               className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
           rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-50"
             >
-              <h3 className="text-lg font-semibold hidden xl:block">Categories</h3>
+              <h3 className="text-lg font-semibold hidden xl:block">
+                Categories
+              </h3>
               {category[selectedTab]?.map((category, index) => (
                 <div
                   key={index}
@@ -424,7 +424,9 @@ export default function Products() {
                   </span>
                 </div>
               ))}
-              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">Clear Filter</p>
+              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                Clear Filter
+              </p>
             </div>
           )}
         </div>
@@ -467,7 +469,9 @@ export default function Products() {
                   </span>
                 </label>
               ))}
-              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">Clear Filter</p>
+              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                Clear Filter
+              </p>
             </div>
           )}
         </div>
@@ -537,7 +541,9 @@ export default function Products() {
                   </button>
                 ),
               )}
-              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">Clear Filter</p>
+              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                Clear Filter
+              </p>
             </div>
           )}
         </div>
@@ -577,7 +583,9 @@ export default function Products() {
                   </span>
                 </label>
               ))}
-              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">Clear Filter</p>
+              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                Clear Filter
+              </p>
             </div>
           )}
         </div>
@@ -618,15 +626,22 @@ export default function Products() {
                   />
                   <div className="flex items-center gap-1">
                     {[...Array(rating)].map((_, i) => (
-                      <span key={i} className="text-yellow-400 text-md xl:text-lg">
+                      <span
+                        key={i}
+                        className="text-yellow-400 text-md xl:text-lg"
+                      >
                         ★
                       </span>
                     ))}
-                    <span className="text-md xl:text-lg text-gray-600 ml-1">& up</span>
+                    <span className="text-md xl:text-lg text-gray-600 ml-1">
+                      & up
+                    </span>
                   </div>
                 </label>
               ))}
-              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">Clear Filter</p>
+              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                Clear Filter
+              </p>
             </div>
           )}
         </div>
@@ -649,7 +664,9 @@ export default function Products() {
               className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
           rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-50"
             >
-              <h3 className="text-lg font-semibold hidden xl:block">Special Offer</h3>
+              <h3 className="text-lg font-semibold hidden xl:block">
+                Special Offer
+              </h3>
               <label className="flex items-center gap-3 cursor-pointer group">
                 <input
                   type="checkbox"
@@ -701,7 +718,9 @@ export default function Products() {
                   New Arrivals
                 </span>
               </label>
-              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">Clear Filter</p>
+              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                Clear Filter
+              </p>
             </div>
           )}
         </div>
@@ -738,7 +757,9 @@ export default function Products() {
                   {tag}
                 </button>
               ))}
-              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">Clear Filter</p>
+              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                Clear Filter
+              </p>
             </div>
           )}
         </div>
@@ -822,126 +843,120 @@ export default function Products() {
 
           {/* Products Grid */}
 
-            {/* Desktop Sort & Results Count */}
-            {sortedProducts.length === 0 ? (
-              <div className="text-center py-20">
-                <p className="text-gray-500 text-lg mb-2">
-                  No products found matching your filters.
-                </p>
-                <p className="text-gray-400 text-sm mb-4">
-                  Try adjusting or clearing your filters
-                </p>
-                <button
-                  onClick={clearFilters}
-                  className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+          {/* Desktop Sort & Results Count */}
+          {sortedProducts.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-gray-500 text-lg mb-2">
+                No products found matching your filters.
+              </p>
+              <p className="text-gray-400 text-sm mb-4">
+                Try adjusting or clearing your filters
+              </p>
+              <button
+                onClick={clearFilters}
+                className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                Clear All Filters
+              </button>
+            </div>
+          ) : (
+            <>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={page}
+                  custom={navigateTo}
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                  exit="exit"
+                  className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 relative -z-10"
                 >
-                  Clear All Filters
-                </button>
-              </div>
-            ) : (
-              <>
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={page}
-                    custom={navigateTo}
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="show"
-                    exit="exit"
-                    className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 relative -z-10"
-                  >
-                    {visibleProducts.map((item) => (
-                      <motion.div
-                        key={item.id}
-                        variants={cardVariants}
-                        custom={navigateTo}
-                        className="group relative bg-white overflow-hidden hover:shadow-xl transition-all duration-300 ease-out hover:-translate-y-1 border border-gray-100"
-                      >
-                        {/* Compact Image Container */}
-                        <div className="relative bg-gray-50">
-                          <img
-                            src={item.image}
-                            alt={item.heading}
-                            loading="lazy"
-                            className="h-[220px] lg:h-[280px] 2xl:h-[400px] w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {visibleProducts.map((item) => (
+                    <motion.div
+                      key={item.id}
+                      variants={cardVariants}
+                      className="group relative bg-white overflow-hidden transition-all duration-300 ease-out hover:-translate-y-1 border border-gray-100"
+                    >
+                      <div className="relative bg-gray-50">
+                        <img
+                          src={item.image}
+                          alt={item.heading}
+                          loading="lazy"
+                          className="block h-[220px] lg:h-[250px] 2xl:h-[400px] w-full object-cover transition-transform duration-500"
+                        />
 
-                          {/* Compact Wishlist Button */}
-                          <button
-                            aria-label="Add to wishlist"
-                            className="absolute top-2 right-2 z-20 bg-[#998E8A] backdrop-blur-sm p-1.5 rounded-full shadow-sm hover:bg-white hover:scale-110 transition-all duration-300"
-                          >
-                            <HeartIcon className="w-5 h-5 text-white hover:text-red-500" />
-                          </button>
+                        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                          {/* Badges */}
-                          <div className="absolute top-2 left-2 z-20 flex gap-3">
-                            {item.isNew && (
-                              <span className="inline-block px-4 py-1 text-md tracking-wide bg-white text-black font-semibold">
-                                New
-                              </span>
-                            )}
-                            {item.onSale && (
-                              <span className="inline-block px-4 py-1 text-md font-semibold tracking-wide bg-white text-black">
-                                Sale
-                              </span>
-                            )}
-                          </div>
+                        <button
+                          aria-label="Add to wishlist"
+                          className="absolute top-2 right-2 z-20 bg-[#998E8A] backdrop-blur-sm p-1.5 rounded-full shadow-sm hover:bg-white hover:scale-110 transition-all duration-300"
+                        >
+                          <HeartIcon className="w-5 h-5 text-white hover:text-red-500" />
+                        </button>
 
-                          {!item.inStock && (
-                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
-                              <span className="bg-white text-gray-900 px-3 py-1 rounded-lg font-semibold text-xs">
-                                Out of Stock
-                              </span>
-                            </div>
+                        <div className="absolute top-2 left-2 z-20 flex gap-3">
+                          {item.isNew && (
+                            <span className="inline-block px-4 py-1 text-md tracking-wide bg-white text-black font-semibold">
+                              New
+                            </span>
+                          )}
+                          {item.onSale && (
+                            <span className="inline-block px-4 py-1 text-md font-semibold tracking-wide bg-white text-black">
+                              Sale
+                            </span>
                           )}
                         </div>
 
-                        {/* Compact Product Info */}
-                        <div className="py-5 space-y-2">
-                          {/* Compact Rating */}
-                          <div className="flex items-center gap-1">
-                            {[1, 2, 3, 4, 5].map((_, i) => (
-                              <span key={i} className="text-yellow-400 text-xl">
-                                ★
-                              </span>
-                            ))}
-                            <span className="text-lg font-medium text-gray-700">
-                              (200)
+                        {!item.inStock && (
+                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
+                            <span className="bg-white text-gray-900 px-3 py-1 rounded-lg font-semibold text-xs">
+                              Out of Stock
                             </span>
                           </div>
+                        )}
+                      </div>
 
-                          <div className="flex items-start justify-between gap-2">
-                            <p className="text-2xl font-bold text-gray-900 line-clamp-1">
-                              Hydro Laminate Tiles
-                            </p>
-                          </div>
-
-                          <p className="text-lg text-gray-500 line-clamp-1">
-                            by Elite Floors Collection
-                          </p>
-
-                          {/* Compact Price */}
-                          <div className="flex items-baseline gap-2">
-                            <span className="text-xl font-bold text-gray-900">
-                              ${item.price}
+                      <div className="py-5 space-y-2">
+                        <div className="flex items-center gap-1">
+                          {[1, 2, 3, 4, 5].map((_, i) => (
+                            <span key={i} className="text-yellow-400 text-xl">
+                              ★
                             </span>
-                            <span className="text-red-600 font-bold text-base">
-                              50%
-                            </span>
-                            <span className="text-base text-gray-400 line-through">
-                              ${item.price * 2}
-                            </span>
-                          </div>
+                          ))}
+                          <span className="text-lg font-medium text-gray-700">
+                            (200)
+                          </span>
                         </div>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                </AnimatePresence>
 
-                {/* Pagination */}
-                {/* {totalPages > 1 && (
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="text-xl xl:text-2xl font-bold text-gray-900 line-clamp-1">
+                            Hydro Laminate Tiles
+                          </p>
+                        </div>
+
+                        <p className="text-md xl:text-lg text-gray-500 line-clamp-1">
+                          by Elite Floors Collection
+                        </p>
+
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-xl font-bold text-gray-900">
+                            ${item.price}
+                          </span>
+                          <span className="text-red-600 font-bold text-base">
+                            50%
+                          </span>
+                          <span className="text-base text-gray-400 line-through">
+                            ${item.price * 2}
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Pagination */}
+              {/* {totalPages > 1 && (
                   <div className="flex items-center justify-center gap-4 mt-10">
                     <button
                       onClick={prev}
@@ -966,10 +981,11 @@ export default function Products() {
                     </button>
                   </div>
                 )} */}
-                <button className="bg-[#998E8A] px-10 py-3 text-white flex justify-center items-center mx-auto mt-10 text-lg">View All</button>
-              </>
-            )}
-          
+              <button className="bg-[#998E8A] px-10 py-3 text-white flex justify-center items-center mx-auto mt-10 text-lg">
+                View All
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

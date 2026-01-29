@@ -130,7 +130,7 @@ const Hero = () => {
       </div>
 
 
-      <motion.div className="rounded-t-4xl py-20  absolute -bottom-[500px] sm:-bottom-[380px] lg:-bottom-[250px] -z-10 bg-[#998e8a] flex justify-center items-center w-full">
+      <motion.div className="rounded-t-4xl py-20  absolute -bottom-[500px] sm:-bottom-[380px] lg:-bottom-[290px] xl:-bottom-[250px] -z-10 bg-[#998e8a] flex justify-center items-center w-full">
         <motion.img
           src="./images/abstract_image1.png"
           height={350}
@@ -154,7 +154,7 @@ const Hero = () => {
               space.
             </p>
           </motion.div>
-          <motion.button className="border-2 border-white text-white text-xl py-3 px-10 cursor-pointer">
+          <motion.button className="border-2 border-white text-white text-xl py-3 px-10 cursor-pointer text-nowrap">
             Request a quote 
           </motion.button>
         </motion.div>

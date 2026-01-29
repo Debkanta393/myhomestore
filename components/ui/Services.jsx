@@ -137,7 +137,7 @@ const Services = () => {
       {/* <div className="absolute inset-0 overflow-hidden top-0 left-0 h-full w-full bg-black/30"></div> */}
       <div className="w-11/12 md:w-10/12 mx-auto">
         <motion.h2
-          className="text-3xl md:text-5xl text-center  text-white mb-16"
+          className="text-3xl md:text-4xl lg:text-5xl text-center  text-white mb-16"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
@@ -145,7 +145,7 @@ const Services = () => {
           Start Your Home Transformation Journey
         </motion.h2>
 
-        <div className="flex md:flex-row flex-col justify-center md:justify-baseline gap-20">
+        <div className="flex lg:flex-row flex-col justify-center md:justify-baseline gap-20">
           {/* Tab Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -189,7 +189,7 @@ const Services = () => {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              className="hidden md:grid grid-cols-1 md:grid-cols-2 gap-6"
+              className="hidden md:grid grid-cols-2 xl:grid-cols-2 gap-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -198,7 +198,7 @@ const Services = () => {
               {services[activeTab].map((service, index) => (
                 <motion.div
                   key={index}
-                  className="relative bg-gradient-to-br from-gray-100 to-gray-200 flex lg:flex-row-reverse flex-col items-center rounded-2xl overflow-hidden cursor-pointer group"
+                  className="relative bg-gradient-to-br from-gray-100 to-gray-200 flex xl:flex-row-reverse flex-col items-center rounded-2xl overflow-hidden cursor-pointer group"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -210,9 +210,9 @@ const Services = () => {
                   <img
                     src={service.image}
                     alt=""
-                    className="lg:w-1/2 w-full h-full rounded-r-2xl rounded-bl-2xl lg:rounded-bl-none"
+                    className="xl:w-1/2 w-full h-full rounded-r-2xl rounded-bl-2xl xl:rounded-bl-none"
                   />
-                  <div className="lg:w-1/2 w-full p-10">
+                  <div className="xl:w-1/2 w-full p-10">
                     <h3 className="text-xl font-bold mb-3 text-gray-900">
                       {service.title}
                     </h3>

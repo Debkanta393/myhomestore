@@ -14,6 +14,7 @@ import {
   Package,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import PopularCollections from "../../components/ui/PopularCollections";
 
 export default function BrandPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -552,7 +553,7 @@ export default function BrandPage() {
 
       {/* Popular Categories Section */}
       <section className="py-20 px-4 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-10/12 mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -575,7 +576,7 @@ export default function BrandPage() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6"
           >
             {categories.map((category) => (
               <motion.div
@@ -611,79 +612,11 @@ export default function BrandPage() {
       </section>
 
       {/* Popular Collections Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-10/12 mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <span className="text-[#8A6A5A] font-semibold text-sm uppercase tracking-widest mb-4 block border border-[#8A6A5A] w-fit py-1 px-4 rounded-4xl mx-auto">
-              Collections
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Popular Collections
-            </h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Curated collections for every style and preference
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-          >
-            {collections.map((collection, index) => (
-              <motion.div
-                key={collection.id}
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
-                className={`relative rounded-3xl overflow-hidden shadow-2xl group cursor-pointer `}
-              >
-                <div
-                  className={`relative overflow-hidden h-80`}
-                >
-                  <img
-                    src={collection.image}
-                    alt={collection.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"></div>
-
-                  <div className="absolute inset-0 flex flex-col justify-end p-8">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                    >
-                      <h3 className="text-4xl font-extrabold text-white mb-3">
-                        {collection.name}
-                      </h3>
-                      <p className="text-white/90 text-lg mb-2">
-                        {collection.description}
-                      </p>
-                      <p className="text-white/70 text-sm mb-6">
-                        {collection.products} Products Available
-                      </p>
-                      <button className="bg-white text-[#8A6A5A] px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-all flex items-center gap-2">
-                        View Collection <ArrowRight size={18} />
-                      </button>
-                    </motion.div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+      <PopularCollections />
 
       {/* Popular Colors Section */}
       <section className="py-20 px-4 bg-gradient-to-b from-white via-gray-50 to-white">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-10/12 mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -706,7 +639,7 @@ export default function BrandPage() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6"
           >
             {colors.map((color) => (
               <motion.div

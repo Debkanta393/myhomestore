@@ -114,7 +114,7 @@ export default function WhyChooseUs() {
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
         //className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mt-20"
-       className="max-w-10/12 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:gap-8 lg:gap-5 gap-y-8" ref={ref}>
+       className="max-w-10/12 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 gap-y-8" ref={ref}>
         {problems.map((problem, index) => {
           const Icon = problem.icon;
 
