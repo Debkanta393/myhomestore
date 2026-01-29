@@ -848,7 +848,7 @@ export default function Products() {
                     initial="hidden"
                     animate="show"
                     exit="exit"
-                    className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 2xl:grid-cols-4 gap-4 md:gap-6 relative -z-10"
+                    className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 relative -z-10"
                   >
                     {visibleProducts.map((item) => (
                       <motion.div
