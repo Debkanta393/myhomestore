@@ -18,21 +18,30 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import Reviews from "../../components/ui/Reviews";
 import WhyChooseus from "../../components/ui/WhyChooseus";
+import { useParams } from "react-router";
+import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getProductById } from "../../slice/product-slice";
 
 export default function Product() {
   const [selectedImage, setSelectedImage] = useState("./images/luxury1.webp");
-  const [activeTab, setActiveTab] = useState("Description");
-  const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
-  const [showZoom, setShowZoom] = useState(false);
+  // const [activeTab, setActiveTab] = useState("Description");
+  // const [quantity, setQuantity] = useState(1);
+  // const [isWishlisted, setIsWishlisted] = useState(false);
+  // const [showZoom, setShowZoom] = useState(false);
   const [calculatorData, setCalculatorData] = useState({
     totalNeeded: 0,
     wastage: null,
   });
   const [cartonsNeeded, setCartonsNeeded] = useState(null);
-  const [price, setPrice] = useState(null);
+  const dispatch = useDispatch();
+  const [productData, setProductData] = useState([]);
+  // const [proSpecification, setProductSpecification] = useState([]);
+  // const [price, setPrice] = useState(null);
   const [packSize, setPackSize] = useState(1.1098);
   const [openAccordion, setOpenAccordion] = useState("Description");
+  const params = useParams();
+   const { pathname } = useLocation();
 
   const otherImages = [
     "./images/luxury1.webp",
@@ -114,6 +123,24 @@ export default function Product() {
     },
   ];
 
+//   useEffect(() => {
+//   if (pathname.startsWith("/product")) {
+//     window.scrollTo(0, 0);
+//   }
+// }, [pathname]);
+
+
+
+  const { id } = params;
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const response = await dispatch(getProductById(id));
+      setProductData(response.payload.data.products);
+    };
+    getProducts();
+  }, [dispatch]);
+
   const currentIndex = otherImages.indexOf(selectedImage);
 
   const handlePrevImage = () => {
@@ -165,9 +192,6 @@ export default function Product() {
       [e.target.name]: e.target.value,
     }));
   };
-
-  console.log(calculatorData.totalNeeded);
-  console.log(calculatorData.wastage);
 
   useEffect(() => {
     if (!calculatorData.totalNeeded && calculatorData.wastage == null) {
@@ -350,7 +374,7 @@ export default function Product() {
               transition={{ delay: 0.4 }}
               className="text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-3 leading-tight"
             >
-              Premium Luxury Flooring
+              {productData?.productName}
             </motion.h1>
 
             {/* Enhanced Rating */}
@@ -531,13 +555,8 @@ export default function Product() {
                       >
                         {tab === "Description" && (
                           <div className="space-y-3">
-                            <ul className="space-y-3 text-gray-700">
-                              {[
-                                "Stylish waterproof flooring",
-                                "Perfect for apartments and family friendly residential",
-                                "Pet Proof & Durable",
-                                "Easy DIY Installation with Clicking System",
-                              ].map((item, i) => (
+                            <ul className="space-y-2 text-gray-700">
+                              {productData?.description?.map((item, i) => (
                                 <motion.li
                                   key={i}
                                   initial={{ opacity: 0, x: -20 }}
@@ -559,31 +578,31 @@ export default function Product() {
 
                         {tab === "Specification" && (
                           <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                              {[
-                                { label: "Size", value: "1820mm x 225mm" },
-                                { label: "Type", value: "Rigid Core" },
-                                { label: "Thickness", value: "7mm" },
-                                {
-                                  label: "Installation",
-                                  value: "Click System",
-                                },
-                              ].map((spec, i) => (
-                                <motion.div
-                                  key={i}
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ delay: i * 0.1 }}
-                                  className="backdrop-blur-sm bg-gray-50/50 border border-gray-200/50 rounded-2xl p-4 hover:shadow-md transition-all"
-                                >
-                                  <p className="text-sm text-gray-500 mb-1">
-                                    {spec.label}
-                                  </p>
-                                  <p className="font-bold text-gray-900">
-                                    {spec.value}
-                                  </p>
-                                </motion.div>
-                              ))}
+                            <div className="grid grid-cols-2 gap-6">
+                              <Specification
+                                label="Dimensions"
+                                value={productData.dimensions}
+                              />
+                              <Specification
+                                label="packsize"
+                                value={productData.packsize}
+                              />
+                              <Specification
+                                label="Pattern"
+                                value={productData.pattern}
+                              />
+                              <Specification
+                                label="Petfriendly"
+                                value={productData.petfriendly}
+                              />
+                              <Specification
+                                label="Scratch resistant"
+                                value={productData.scratchresistant}
+                              />
+                              <Specification
+                                label="Water resistant"
+                                value={productData.waterresistant}
+                              />
                             </div>
                           </div>
                         )}
@@ -595,25 +614,34 @@ export default function Product() {
                               animate={{ opacity: 1 }}
                               className="space-y-2"
                             >
-                              {[
+                              {/* {[
                                 { label: "SKU", value: "FTCPFCS5013" },
                                 { label: "Category", value: "Chevron" },
                                 { label: "Tag", value: "15mm" },
                                 { label: "Brand", value: "Preference Floors" },
                               ].map((info, i) => (
-                                <motion.p
-                                  key={i}
-                                  initial={{ opacity: 0, x: -10 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: i * 0.1 }}
-                                  className="text-sm text-gray-600 flex items-center gap-2"
-                                >
-                                  <span className="font-semibold text-gray-800">
-                                    {info.label}:
-                                  </span>
-                                  <span>{info.value}</span>
-                                </motion.p>
-                              ))}
+                                
+                              ))} */}
+                              <AdditionalInformation
+                                label="SKU"
+                                value={productData.sku}
+                              />
+                              <AdditionalInformation
+                                label="Thikness"
+                                value={productData.thikness}
+                              />
+                              <AdditionalInformation
+                                label="Category"
+                                value={productData.category}
+                              />
+                              <AdditionalInformation
+                                label="Range"
+                                value={productData.range}
+                              />
+                              <AdditionalInformation
+                                label="Brand"
+                                value={productData.brand}
+                              />
                             </motion.div>
                           </div>
                         )}
@@ -807,5 +835,32 @@ export default function Product() {
         </button>
       </motion.div>
     </div>
+  );
+}
+
+function Specification({ label, value }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="backdrop-blur-sm bg-gray-50/50 border border-gray-200/50 rounded-2xl p-4 hover:shadow-md transition-all"
+    >
+      <p className="text-sm text-gray-500 mb-1">{label}</p>
+      <p className="font-bold text-gray-900">{value}</p>
+    </motion.div>
+  );
+}
+
+function AdditionalInformation({label, value}) {
+  return (
+    <motion.p
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      // transition={{ delay: i * 0.1 }}
+      className="text-sm text-gray-600 flex items-center gap-2"
+    >
+      <span className="font-semibold text-gray-800">{label}:</span>
+      <span>{value}</span>
+    </motion.p>
   );
 }

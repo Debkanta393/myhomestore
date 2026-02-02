@@ -5,11 +5,11 @@ import WhyChooseUs from "../../components/ui/WhyChooseus";
 const EngineeredOak = () => {
   return (
     <div>
-      {/* Hero Section */}
+      {/* Hero */}
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="relative h-[70vh] bg-gradient-to-br from-[#8A6A5A] via-[#735644] to-[#5d453a] overflow-hidden"
+        className="min-h-[600px] rounded-3xl w-11/12 sm:w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]"
         style={{
           backgroundImage: "url(./images/header3.jpg)",
           backgroundSize: "cover",
@@ -28,7 +28,7 @@ const EngineeredOak = () => {
               transition={{ duration: 0.8 }}
               className="mb-6"
             >
-              <h1 className="text-7xl md:text-8xl font-bold text-white mb-6 tracking-tight">
+              <h1 className="text-6xl font-bold text-white mb-6 tracking-tight">
                 Engineered Oak
               </h1>
               <div className="w-32 h-1 bg-white/60 mx-auto mb-8"></div>
@@ -38,7 +38,7 @@ const EngineeredOak = () => {
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="text-2xl md:text-3xl text-white/90 mb-8 font-light"
+              className="text-2xl text-white/90 mb-8 font-light"
             >
               Quality Bathroom Solutions for Modern Living
             </motion.p>

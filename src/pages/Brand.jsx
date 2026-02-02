@@ -224,8 +224,6 @@ export default function BrandPage() {
     },
   ];
 
-
-
   const products = [
     {
       id: 1,
@@ -311,7 +309,7 @@ export default function BrandPage() {
       isNew: false,
       onSale: true,
       tags: ["Budget Friendly"],
-    }
+    },
   ];
 
   // Special offers
@@ -407,14 +405,16 @@ export default function BrandPage() {
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="relative h-[70vh] bg-gradient-to-br from-[#8A6A5A] via-[#735644] to-[#5d453a] overflow-hidden"
+        className="min-h-[600px] rounded-3xl w-11/12 sm:w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]"
         style={{
           backgroundImage: "url(./images/header3.jpg)",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "bottom",
         }}
-      >
+       >
+        {/* Background overlay */}
+        <div className="absolute top-0 left-0 w-full h-full bg-black/20"></div>
 
         {/* Background overlay */}
         <div className="absolute top-0 left-0 w-full h-full bg-black/50"></div>
@@ -427,7 +427,7 @@ export default function BrandPage() {
               transition={{ duration: 0.8 }}
               className="mb-6"
             >
-              <h1 className="text-7xl md:text-8xl font-bold text-white mb-6 tracking-tight">
+              <h1 className="text-6xl font-bold text-white mb-6 tracking-tight">
                 Fienza
               </h1>
               <div className="w-32 h-1 bg-white/60 mx-auto mb-8"></div>
@@ -437,7 +437,7 @@ export default function BrandPage() {
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="text-2xl md:text-3xl text-white/90 mb-8 font-light"
+              className="text-2xl text-white/90 mb-8 font-light"
             >
               Quality Bathroom Solutions for Modern Living
             </motion.p>
@@ -647,10 +647,11 @@ export default function BrandPage() {
                 variants={itemVariants}
                 whileHover={{ scale: 1.1, y: -10 }}
                 onClick={() => setSelectedColor(color.name)}
-                className={`cursor-pointer group ${selectedColor === color.name
+                className={`cursor-pointer group ${
+                  selectedColor === color.name
                     ? "ring-4 ring-[#8A6A5A] ring-offset-4"
                     : ""
-                  } rounded-3xl`}
+                } rounded-3xl`}
               >
                 <div className="backdrop-blur-sm bg-white/80 border border-gray-200/50 rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all">
                   <div
@@ -722,10 +723,11 @@ export default function BrandPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-8 py-3 rounded-full font-semibold whitespace-nowrap transition-all ${selectedCategory === cat
+                className={`px-8 py-3 rounded-full font-semibold whitespace-nowrap transition-all ${
+                  selectedCategory === cat
                     ? "bg-gradient-to-r from-[#8A6A5A] to-[#735644] text-white shadow-lg"
                     : "bg-white border-2 border-gray-300 text-gray-700 hover:border-[#8A6A5A]"
-                  }`}
+                }`}
               >
                 {cat}
               </motion.button>
@@ -735,7 +737,6 @@ export default function BrandPage() {
           {/* Products Grid */}
           <div className="max-w-full">
             <AnimatePresence mode="wait">
-
               <motion.div
                 variants={containerVariants}
                 initial="hidden"
@@ -1047,7 +1048,6 @@ export default function BrandPage() {
             viewport={{ once: true }}
             className="backdrop-blur-sm bg-white/80 border border-gray-200/50 rounded-3xl p-12 shadow-2xl"
           >
-
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               Ready to Transform Your Bathroom?
             </h2>

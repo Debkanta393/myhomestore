@@ -1,9 +1,20 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
-import { PhoneCall, Mail, Gem, ShieldCheck, Van, ArrowRight, } from "lucide-react";
+import {
+  PhoneCall,
+  Mail,
+  Gem,
+  ShieldCheck,
+  Van,
+  ArrowRight,
+  CircleUser,
+  BrickWall,
+  Award,
+} from "lucide-react";
 import Products from "../../components/ui/Products";
 import PopularCollections from "../../components/ui/PopularCollections";
+import Whychooseus from "../../components/ui/WhyChooseus";
 
 export default function ClaverChoise() {
   const productRanges = [
@@ -63,15 +74,20 @@ export default function ClaverChoise() {
     },
   ];
 
+  const statData = [
+    { value: "20+", label: "Years of Experience", icon: <CircleUser /> },
+    { value: "100+", label: "Flooring Options", icon: <BrickWall /> },
+    { value: "Nationwide", label: "Supply Network", icon: <Van /> },
+    { value: "Trusted", label: "By Builders & Homeowners", icon: <Award /> },
+  ];
 
-  
   return (
     <div className="font-sans text-gray-900">
       {/* Hero */}
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="relative h-[70vh] bg-gradient-to-br from-[#8A6A5A] via-[#735644] to-[#5d453a] overflow-hidden"
+        className="min-h-[600px] rounded-3xl w-11/12 sm:w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]"
         style={{
           backgroundImage: "url(./images/header3.jpg)",
           backgroundSize: "cover",
@@ -90,8 +106,8 @@ export default function ClaverChoise() {
               transition={{ duration: 0.8 }}
               className="mb-6"
             >
-              <h1 className="text-7xl xl:text-8xl font-bold text-white mb-6 tracking-tight">
-                Claver Choice
+              <h1 className="text-6xl font-bold text-white mb-6 tracking-tight">
+                Clever Choice
               </h1>
               <div className="w-32 h-1 bg-white/60 mx-auto mb-8"></div>
             </motion.div>
@@ -100,7 +116,7 @@ export default function ClaverChoise() {
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="text-2xl md:text-3xl text-white/90 mb-8 font-light"
+              className="text-2xl text-white/90 mb-8 font-light"
             >
               Quality Bathroom Solutions for Modern Living
             </motion.p>
@@ -122,7 +138,7 @@ export default function ClaverChoise() {
               transition={{ delay: 0.7, duration: 0.8 }}
               className="flex gap-4 justify-center flex-wrap"
             >
-              <button className="relative overflow-hidden py-3 px-12 bg-[#f5efed] text-black text-xl font-medium group cursor-pointer">
+              <button className="relative overflow-hidden py-3 px-12 bg-[#f5efed] text-[#8A6A5A] text-xl font-medium group cursor-pointer">
                 <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
                   Shop Collection
                 </span>
@@ -140,7 +156,7 @@ export default function ClaverChoise() {
         </div>
 
         {/* Scroll indicator */}
-        <motion.div
+        {/* <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2"
@@ -148,7 +164,7 @@ export default function ClaverChoise() {
           <div className="w-6 h-10 border-2 border-white/60 rounded-full flex items-start justify-center p-2">
             <div className="w-1 h-3 bg-white/60 rounded-full"></div>
           </div>
-        </motion.div>
+        </motion.div> */}
       </motion.section>
 
       {/* About / Why Choose */}
@@ -156,28 +172,22 @@ export default function ClaverChoise() {
         {/* Decorative background */}
         <div className="absolute inset-0" />
 
-        <div className="relative max-w-10/12 mx-auto px-6">
-          {/* Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              About <span>Clever Choice</span>
-            </h2>
-            <p className="max-w-3xl mx-auto text-gray-700 text-lg leading-relaxed">
-              Since 2003, Clever Choice has been delivering premium flooring
-              solutions across Australia. From engineered timber and hybrid
-              flooring to laminate and bamboo, our products are designed to
-              combine beauty, durability, and long-term value.
-            </p>
-          </div>
-
+        <div className="relative max-w-10/12 mx-auto">
           {/* Main content */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left content */}
             <div>
-              <h3 className="text-2xl font-semibold mb-4">
+              <h2 className="text-4xl font-bold mb-6">About Clever Choice</h2>
+              <p className="max-w-3xl mx-auto text-gray-700 text-lg leading-relaxed">
+                Since 2003, Clever Choice has been delivering premium flooring
+                solutions across Australia. From engineered timber and hybrid
+                flooring to laminate and bamboo, our products are designed to
+                combine beauty, durability, and long-term value.
+              </p>
+              <h3 className="text-xl font-semibold mb-2 mt-5">
                 Flooring You Can Trust
               </h3>
-              <p className="text-gray-600 leading-relaxed mb-6">
+              <p className="text-gray-600 leading-relaxed mb-6 text-lg">
                 We work closely with manufacturers and suppliers to ensure every
                 Clever Choice product meets strict Australian standards. Whether
                 for residential or commercial spaces, our flooring is engineered
@@ -185,80 +195,51 @@ export default function ClaverChoise() {
               </p>
 
               <ul className="space-y-4">
-                <li className="flex items-start gap-3">
+                <li className="flex items-start gap-3 text-lg">
                   <span className="mt-1 text-[#8A6A5A] font-bold">✓</span>
                   <span>Carefully selected raw materials and finishes</span>
                 </li>
-                <li className="flex items-start gap-3">
+                <li className="flex items-start gap-3 text-lg">
                   <span className="mt-1 text-[#8A6A5A] font-bold">✓</span>
                   <span>
                     Water-resistant and scratch-resistant technologies
                   </span>
                 </li>
-                <li className="flex items-start gap-3">
+                <li className="flex items-start gap-3 text-lg">
                   <span className="mt-1 text-[#8A6A5A] font-bold">✓</span>
                   <span>Designed for Australian climate conditions</span>
                 </li>
               </ul>
             </div>
 
-            {/* Right stats / highlights */}
-            <div className="grid grid-cols-2 gap-6">
-              <StatCard value="20+" label="Years of Experience" />
-              <StatCard value="100+" label="Flooring Options" />
-              <StatCard value="Nationwide" label="Supply Network" />
-              <StatCard value="Trusted" label="By Builders & Homeowners" />
+            <div className="flex items-center justify-around">
+              <img src="./images/claverchoice2.png" alt="" />
+              <img src="./images/claverchoice1.png" alt="" />
             </div>
           </div>
 
-          {/* Feature cards */}
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition">
-              <div className="flex items-center gap-2">
-                <div className="bg-[#998e8a] p-3 rounded-full text-white">
-                  <Gem />
+          <div className="mt-20">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-center justify-between gap-10">
+              {statData.map((item, index) => (
+                <div className="bg-white rounded-2xl p-5 text-center shadow w-full flex items-center gap-5">
+                  <div className="bg-[#998e8a] p-4 rounded-full text-white w-14">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-[#8A6A5A]">
+                      {item.value}
+                    </div>
+                    <div className="mt-2 text-gray-600">{item.label}</div>
+                  </div>
                 </div>
-                <h4 className="text-xl font-semibold mb-3">
-                  Premium Materials
-                </h4>
-              </div>
-              <p className="text-gray-600">
-                High-quality timber, hybrid, and laminate flooring built to
-                last.
-              </p>
-            </div>
-            <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition">
-              <div className="flex items-center gap-2">
-                <div className="bg-[#998e8a] p-3 rounded-full text-white">
-                  <ShieldCheck />
-                </div>
-                <h4 className="text-xl font-semibold mb-3">
-                  Certified & Durable
-                </h4>
-              </div>
-              <p className="text-gray-600">
-                Products tested and certified to meet Australian standards.
-              </p>
-            </div>
-            <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition">
-              <div className="flex items-center gap-2">
-                <div className="bg-[#998e8a] p-3 rounded-full text-white">
-                  <Van />
-                </div>
-                <h4 className="text-xl font-semibold mb-3">
-                  Australia-Wide Supply
-                </h4>
-              </div>
-              <p className="text-gray-600">
-                Reliable distribution network supporting projects nationwide.
-              </p>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* Flooring ranges */}
-      <section id="products" className="w-10/12 mx-auto px-6 py-16">
+      <section id="products" className="w-10/12 mx-auto px-6 py-16 mb-20">
         <h2 className="text-4xl lg:text-5xl font-bold text-center mb-8">
           Explore Our Flooring Ranges
         </h2>
@@ -306,9 +287,13 @@ export default function ClaverChoise() {
         </div>
       </section>
 
+      {/* Why choose us */}
+      <Whychooseus />
+
       {/* Popular collections */}
       <PopularCollections />
 
+      {/* Products */}
       <div className="mb-32">
         <Products />
       </div>
@@ -332,7 +317,7 @@ export default function ClaverChoise() {
 
           {/* Content */}
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl md:text-4xl  lg:text-5xl text-center mb-6 leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl text-center mb-6 leading-tight font-bold">
               Let’s Talk About Your Flooring Project
             </h2>
 
