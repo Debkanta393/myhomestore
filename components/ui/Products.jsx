@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { HeartIcon, X, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,19 +20,66 @@ export default function Products() {
     (state) => state.activeTab.tabSelected,
   ).toLowerCase();
   const [itemsPerPage, setItemsPerPage] = useState(8);
+  const [allProducts, setAllProducts] = useState([]);
   const [productData, setProductData] = useState([]);
   const dispatch = useDispatch();
 
+  // Filter data
+  const [filterData, setFilterData] = useState({
+    categories: [],
+    thickness: [],
+    brands: [],
+    patterns: [],
+    colors: [],
+    scratchresistant: [],
+    waterresistant: [],
+    petfriendly: [],
+    priceRange: [0, 500],
+  });
+
+  // Checked filter
+  const [checkedFilter, setCheckedFilter] = useState({
+    category: [],
+    thickness: [],
+    brand: [],
+    pattern: [],
+    color: [],
+    scratchresistant: [],
+    waterresistant: [],
+    petfriendly: [],
+    priceRange: [0, 500],
+  });
+
+  // Fetch product from database
   useEffect(() => {
     const fetchProduct = async () => {
       const response = await dispatch(getAllProducts());
-      setProductData(response.payload.data.products)
-      console.log(response.payload.data.products);
+      setAllProducts(response.payload.data.products);
+      setProductData(response.payload.data.products);
     };
     fetchProduct();
   }, [dispatch]);
+  console.log(productData);
 
-
+  // Set filter data according to type
+  useEffect(() => {
+    if (!productData?.length) return;
+    setFilterData((prev) => ({
+      ...prev,
+      categories: [...new Set(productData.map((item) => item.category))],
+      thickness: [...new Set(productData.map((item) => item.thickness))],
+      brands: [...new Set(productData.map((item) => item.brand))],
+      patterns: [...new Set(productData.map((item) => item.pattern))],
+      colors: [...new Set(productData.flatMap((item) => item.color || []))],
+      scratchresistant: [
+        ...new Set(productData.map((item) => item.scratchresistant)),
+      ],
+      waterresistant: [
+        ...new Set(productData.map((item) => item.waterresistant)),
+      ],
+      petfriendly: [...new Set(productData.map((item) => item.petfriendly))],
+    }));
+  }, [productData]);
 
   // Window width
   const [width, setWidth] = useState(window.innerWidth);
@@ -44,90 +91,85 @@ export default function Products() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // useEffect(() => {
-  //   if (width > 1200) {
-  //     setItemsPerPage(8);
-  //   } else if (width > 1000 && width < 1200) {
-  //     setItemsPerPage(6);
-  //   }
-  // }, [width]);
-
-  console.log("Window width", width);
-
-  // Expanded Filter States
-  const [filters, setFilters] = useState({
-    categories: [],
-    brands: [],
-    priceRange: [0, 500],
-    rating: 0,
-    inStock: false,
-    colors: [],
-    sizes: [],
-    materials: [],
-    isNew: false,
-    onSale: false,
-    tags: [],
-  });
-
   // Expandable sections state
   const [expandedSections, setExpandedSections] = useState({
     category: false,
+    thickness: false,
     brand: false,
-    price: false,
-    rating: false,
+    pattern: false,
     color: false,
-    size: false,
-    design: false,
-    availability: false,
-    special: false,
-    tags: false,
+    additional: false,
+    scratchresistant: false,
+    waterresistant: false,
+    petfriendly: false,
+    price: false,
   });
 
+  const innerSections = ["scratchresistant", "waterresistant", "petfriendly"];
+
   const toggleSection = (section) => {
-    if (!section) return;
+    console.log(section);
+    const isInner = innerSections.includes(section);
+    console.log(isInner);
+
     setExpandedSections((prev) => ({
+      additional: isInner ? true : false,
       [section]: !prev[section],
     }));
   };
 
-  // Apply Filters
-  const filteredProducts = productData?.filter((product) => {
-    const categoryMatch =
-      filters.categories.length === 0 ||
-      filters.categories.includes(product.category);
-    const brandMatch =
-      filters.brands.length === 0 || filters.brands.includes(product.brand);
-    // const priceMatch =
-    //   product.price >= filters.priceRange[0] &&
-    //   product.price <= filters.priceRange[1];
-    // const ratingMatch = product.rating >= filters.rating;
-    // const stockMatch = !filters.inStock || product.inStock;
-    // const colorMatch =
-    //   filters.colors.length === 0 || filters.colors.includes(product.color);
-    // const sizeMatch =
-    //   filters.sizes.length === 0 || filters.sizes.includes(product.size);
-    // const materialMatch =
-    //   filters.materials.length === 0 ||
-    //   filters.materials.includes(product.material);
-    // const newMatch = !filters.isNew || product.isNew;
-    // const saleMatch = !filters.onSale || product.onSale;
-    // const tagsMatch =
-    //   filters.tags.length === 0 ||
-    //   filters.tags.some((tag) => product.tags.includes(tag));
+  // Apply Filters on product
+  const filteredProducts = useMemo(() => {
+    return allProducts.filter((product) => {
+      const categoryMatch =
+        filterData.categories.length === 0 ||
+        filterData.categories.includes(product.category);
 
-    return (
-      categoryMatch && brandMatch
-      // priceMatch &&
-      // ratingMatch &&
-      // stockMatch &&
-      // colorMatch &&
-      // sizeMatch &&
-      // materialMatch &&
-      // newMatch &&
-      // saleMatch &&
-      // tagsMatch
-    );
-  });
+      const brandMatch =
+        filterData.brands.length === 0 ||
+        filterData.brands.includes(product.brand);
+
+      const thicknessMatch =
+        filterData.thickness.length === 0 ||
+        filterData.thickness.includes(product.thickness);
+
+      const patternMatch =
+        filterData.patterns.length === 0 ||
+        filterData.patterns.includes(product.pattern);
+
+      const shadeMatch =
+        filterData.colors.length === 0 ||
+        filterData.colors.includes(product.shade);
+
+      const scratchresistantMatch =
+        filterData.colors.length === 0 ||
+        filterData.colors.includes(product.shade);
+
+      const waterresistantMatch =
+        filterData.colors.length === 0 ||
+        filterData.colors.includes(product.shade);
+
+      const petfriendlyMatch =
+        filterData.colors.length === 0 ||
+        filterData.colors.includes(product.shade);
+
+      const priceMatch =
+        product.price >= filterData.priceRange[0] &&
+        product.price <= filterData.priceRange[1];
+
+      return (
+        categoryMatch &&
+        brandMatch &&
+        thicknessMatch &&
+        patternMatch &&
+        shadeMatch &&
+        scratchresistantMatch &&
+        waterresistantMatch &&
+        petfriendlyMatch &&
+        priceMatch
+      );
+    });
+  }, [productData, filterData]);
 
   // Sorting logic
   const sortedProducts =
@@ -164,40 +206,48 @@ export default function Products() {
   //   setNavigateTo("left");
   // };
 
-  // Handle filters
+  // Handle filterData
   const toggleArrayFilter = (filterKey, value) => {
     console.log(filterKey);
     console.log(value);
-    setFilters((prev) => ({
-      ...prev,
-      [filterKey]: prev[filterKey].includes(value)
-        ? prev[filterKey].filter((item) => item !== value)
-        : [...prev[filterKey], value],
-    }));
+    setCheckedFilter((prev) => {
+      const currentArray = prev[filterKey] ?? [];
+      return {
+        ...prev,
+        [filterKey]: currentArray.includes(value)
+          ? currentArray.filter((item) => item !== value)
+          : [...currentArray, value],
+      };
+    });
+
+    // Filter the array
+    const filteredArray = productData?.filter(
+      (product) => product[filterKey] == value,
+    );
+    console.log(filteredArray);
+    setProductData(filteredArray);
     setPage(0);
   };
 
+  // console.log("Product data after filter", productData)
+
   const handlePriceChange = (index, value) => {
-    const newRange = [...filters.priceRange];
+    const newRange = [...filterData.priceRange];
     newRange[index] = Number(value);
-    setFilters((prev) => ({ ...prev, priceRange: newRange }));
+    setFilterData((prev) => ({ ...prev, priceRange: newRange }));
     setPage(0);
   };
 
   const clearFilters = () => {
-    setFilters({
+    setCheckedFilter({
       categories: [],
+      thickness: [],
       brands: [],
+      patterns: [],
+      shades: [],
       priceRange: [0, 500],
-      rating: 0,
-      inStock: false,
-      colors: [],
-      sizes: [],
-      materials: [],
-      isNew: false,
-      onSale: false,
-      tags: [],
     });
+    setProductData(allProducts);
     setPage(0);
   };
 
@@ -207,15 +257,12 @@ export default function Products() {
       if (filterRef.current && !filterRef.current.contains(event.target)) {
         setExpandedSections({
           category: false,
+          thickness: false,
           brand: false,
-          price: false,
-          rating: false,
+          pattern: false,
           color: false,
-          size: false,
-          design: false,
-          availability: false,
-          special: false,
-          tags: false,
+          additional: false,
+          price: false,
         });
       }
     };
@@ -224,27 +271,15 @@ export default function Products() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Get unique values for filters
-  const categories = [...new Set(products?.map((p) => p.category))];
-  const brands = [...new Set(products?.map((p) => p.brand))];
-  const colors = [...new Set(products?.map((p) => p.color))];
-  const sizes = [...new Set(products?.map((p) => p.size))];
-  const materials = [...new Set(products?.map((p) => p.material))];
-  const allTags = [...new Set(products?.flatMap((p) => p.tags))];
-
-  // Count active filters
+  // Count active filterData
   const activeFilterCount =
-    filters.categories.length +
-    filters.brands.length +
-    filters.colors.length +
-    filters.sizes.length +
-    filters.materials.length +
-    filters.tags.length +
-    (filters.rating > 0 ? 1 : 0) +
-    (filters.inStock ? 1 : 0) +
-    (filters.isNew ? 1 : 0) +
-    (filters.onSale ? 1 : 0);
+    filterData.categories.length +
+    filterData.brands.length +
+    filterData.thickness.length +
+    filterData.patterns.length +
+    filterData.colors.length;
 
+  // Animation styling
   const cardVariants = {
     hidden: (direction) => ({
       opacity: 0,
@@ -285,22 +320,11 @@ export default function Products() {
     }),
   };
 
-  // Color mapping for visual color filter
-  // const colorStyles = {
-  //   Black: "bg-black",
-  //   Blue: "bg-blue-600",
-  //   White: "bg-white border-2 border-gray-300",
-  //   Silver: "bg-gray-300",
-  //   Red: "bg-red-600",
-  //   Brown: "bg-amber-700",
-  //   Green: "bg-green-600",
-  // };
-
   // Filter Sidebar Component
   const FilterSidebar = ({ isMobile = false }) => (
     <div
       ref={sidebarRef}
-      className={`bg-white rounded-2xl mb-3 ${
+      className={`bg-white rounded-2xl mb-3 z-[1] ${
         isMobile ? "h-full overflow-y-auto" : "sticky top-70"
       }`}
     >
@@ -335,72 +359,15 @@ export default function Products() {
         </div>
       )} */}
 
-      <div className="flex xl:flex-row flex-col xl:items-center justify-between px-6 xl:px-0 z-50">
+      <div className="flex xl:flex-row flex-col xl:items-center justify-between px-6 xl:px-0">
         <p className="text-md text-[#666666]">Filter by:</p>
-        {/* Price Range */}
-        <div className="relative border-b xl:border-none border-gray-200 pb-2 xl:pb-0">
-          <button
-            onClick={() => toggleSection("price")}
-            className={`flex items-center gap-3 text-left cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 ${expandedSections.price && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
-          >
-            Price
-            <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.price ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-          {expandedSections.price && (
-            <div
-              className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
-          rounded-2xl px-6 pb-6 xl:pt-6 xl:mt-2 min-w-[250px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-50"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex-1">
-                  <label className="text-xs text-gray-500 mb-1 block">
-                    Min
-                  </label>
-                  <input
-                    type="number"
-                    value={filters.priceRange[0]}
-                    onChange={(e) => handlePriceChange(0, e.target.value)}
-                    className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
-                    min="0"
-                    max={filters.priceRange[1]}
-                  />
-                </div>
-                <span className="text-gray-400 mt-5">-</span>
-                <div className="flex-1">
-                  <label className="text-xs text-gray-500 mb-1 block">
-                    Max
-                  </label>
-                  <input
-                    type="number"
-                    value={filters.priceRange[1]}
-                    onChange={(e) => handlePriceChange(1, e.target.value)}
-                    className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
-                    min={filters.priceRange[0]}
-                    max="500"
-                  />
-                </div>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="500"
-                value={filters.priceRange[1]}
-                onChange={(e) => handlePriceChange(1, e.target.value)}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-              />
-            </div>
-          )}
-        </div>
 
         {/* Category Filter */}
         <div className="relative border-b xl:border-none border-gray-200 pb-2 xl:pb-0">
           <button
             onClick={() => toggleSection("category")}
-            className={`flex items-center gap-3 text-left cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 ${expandedSections.category && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
+            className={`flex items-center gap-3 text-left cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 
+              ${expandedSections.category && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
           >
             Category
             <ChevronDown
@@ -412,27 +379,84 @@ export default function Products() {
           {expandedSections.category && (
             <div
               className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
-          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-50"
+          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-[1]"
             >
               <h3 className="text-lg font-semibold hidden xl:block">
                 Categories
               </h3>
-              {category[selectedTab]?.map((category, index) => (
+              {filterData.categories?.map((category, index) => (
                 <div
                   key={index}
                   className="flex items-center gap-3 cursor-pointer group"
                 >
                   <input
                     type="checkbox"
-                    checked={filters.categories.includes(category)}
-                    onChange={() => toggleArrayFilter("categories", category)}
+                    checked={
+                      checkedFilter.category &&
+                      checkedFilter.category.includes(category)
+                    }
+                    onChange={() => toggleArrayFilter("category", category)}
                     className="w-4 h-4 rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
                   />
                   <span className="text-md xl:text-lg text-gray-700 group-hover:text-gray-900">
                     {category}
                   </span>
                   <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                    {products.filter((p) => p.category === category).length}
+                    {productData?.filter((p) => p.category == category).length}
+                  </span>
+                </div>
+              ))}
+              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                Clear Filter
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Thickness Filter */}
+        <div className="relative border-b xl:border-none border-gray-200 pb-2 xl:pb-0">
+          <button
+            onClick={() => toggleSection("thickness")}
+            className={`flex items-center gap-3 text-left cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 
+              ${expandedSections.thickness && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
+          >
+            Thickness
+            <ChevronDown
+              className={`w-4 h-4 transition-transform ${
+                expandedSections.thickness ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+          {expandedSections.thickness && (
+            <div
+              className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
+          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-[1]"
+            >
+              <h3 className="text-lg font-semibold hidden xl:block">
+                Thickness
+              </h3>
+              {filterData.thickness?.map((thickness, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-3 cursor-pointer group"
+                >
+                  <input
+                    type="checkbox"
+                    checked={
+                      checkedFilter.thickness &&
+                      checkedFilter.thickness.includes(thickness)
+                    }
+                    onChange={() => toggleArrayFilter("thickness", thickness)}
+                    className="w-4 h-4 rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
+                  />
+                  <span className="text-md xl:text-lg text-gray-700 group-hover:text-gray-900">
+                    {thickness}
+                  </span>
+                  <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                    {
+                      productData?.filter((p) => p.thickness === thickness)
+                        .length
+                    }
                   </span>
                 </div>
               ))}
@@ -459,25 +483,27 @@ export default function Products() {
           {expandedSections.brand && (
             <div
               className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
-          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-50"
+          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-[1]"
             >
               <h3 className="text-lg font-semibold hidden xl:block">Brand</h3>
-              {brand[selectedTab]?.map((brand) => (
+              {filterData.brands?.map((brand) => (
                 <label
                   key={brand}
                   className="flex items-center gap-3 cursor-pointer group"
                 >
                   <input
                     type="checkbox"
-                    checked={filters.brands.includes(brand)}
-                    onChange={() => toggleArrayFilter("brands", brand)}
+                    checked={
+                      checkedFilter.brand && checkedFilter.brand.includes(brand)
+                    }
+                    onChange={() => toggleArrayFilter("brand", brand)}
                     className="w-4 h-4 rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
                   />
                   <span className="text-md xl:text-lg text-gray-700 group-hover:text-gray-900">
                     {brand}
                   </span>
                   <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                    {products.filter((p) => p.brand === brand).length}
+                    {productData?.filter((p) => p.brand === brand).length}
                   </span>
                 </label>
               ))}
@@ -488,13 +514,63 @@ export default function Products() {
           )}
         </div>
 
-        {/* Color Filter */}
-        {/* <div className="border-b border-gray-200 pb-4">
+        {/* Pattern Filter */}
+        <div className="relative border-b xl:border-none border-gray-200 pb-2 xl:pb-0">
+          <button
+            onClick={() => toggleSection("pattern")}
+            className={`flex items-center gap-3 text-left cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 
+              ${expandedSections.pattern && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
+          >
+            Pattern
+            <ChevronDown
+              className={`w-4 h-4 transition-transform ${
+                expandedSections.pattern ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+          {expandedSections.pattern && (
+            <div
+              className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
+          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-wrap xl:flex-col gap-4 transition-all z-[1]"
+            >
+              <h3 className="text-lg font-semibold hidden xl:block">Pattern</h3>
+              {filterData.patterns?.map((pattern) => (
+                <label
+                  key={pattern}
+                  className="flex items-center gap-3 cursor-pointer group"
+                >
+                  <input
+                    type="checkbox"
+                    checked={
+                      checkedFilter.pattern &&
+                      checkedFilter.pattern.includes(pattern)
+                    }
+                    onChange={() => toggleArrayFilter("pattern", pattern)}
+                    className="w-4 h-4 rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
+                  />
+                  <span className="text-md xl:text-lg text-gray-700 group-hover:text-gray-900">
+                    {pattern}
+                  </span>
+                  <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                    {productData?.filter((p) => p.pattern === pattern).length}
+                  </span>
+                </label>
+              ))}
+              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                Clear Filter
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Shade Filter */}
+        <div className="relative border-b xl:border-none border-gray-200 pb-2 xl:pb-0">
           <button
             onClick={() => toggleSection("color")}
-            className="flex items-center justify-between w-full text-left"
+            className={`flex items-center gap-3 text-left cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 
+              ${expandedSections.color && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
           >
-            <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Color</h4>
+            Shade
             <ChevronDown
               className={`w-4 h-4 transition-transform ${
                 expandedSections.color ? "rotate-180" : ""
@@ -502,96 +578,29 @@ export default function Products() {
             />
           </button>
           {expandedSections.color && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {colors.map((color) => (
-                <button
-                  key={color}
-                  onClick={() => toggleArrayFilter("colors", color)}
-                  className={`w-10 h-10 rounded-full ${colorStyles[color]} ${
-                    filters.colors.includes(color)
-                      ? "ring-2 ring-blue-600 ring-offset-2"
-                      : "ring-1 ring-gray-300"
-                  } hover:scale-110 transition-all`}
-                  title={color}
-                />
-              ))}
-            </div>
-          )}
-        </div> */}
-
-        {/* Size Filter */}
-        <div className="relative border-b xl:border-none border-gray-200 pb-2 xl:pb-0">
-          <button
-            onClick={() => toggleSection("size")}
-            className={`flex items-center gap-3 text-left cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 ${expandedSections.size && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
-          >
-            Size
-            <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.size ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-          {expandedSections.size && (
             <div
               className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
-          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-wrap xl:flex-col gap-4 transition-all z-50"
+          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-wrap xl:flex-col gap-4 transition-all z-[1]"
             >
-              <h3 className="text-lg font-semibold hidden xl:block">Size</h3>
-              {["6mm", "7mm", "8mm", "9mm", "10mm", "11mm", "12mm"].map(
-                (size) => (
-                  <button
-                    key={size}
-                    onClick={() => toggleArrayFilter("sizes", size)}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all ${
-                      filters.sizes.includes(size)
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-white text-gray-700 border-gray-300 hover:border-blue-600"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ),
-              )}
-              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
-                Clear Filter
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Design Filter */}
-        <div className="relative border-b xl:border-none border-gray-200 pb-2 xl:pb-0">
-          <button
-            onClick={() => toggleSection("material")}
-            className={`flex items-center gap-3 text-left cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 ${expandedSections.material && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
-          >
-            Design
-            <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.material ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-          {expandedSections.material && (
-            <div
-              className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
-          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-50"
-            >
-              <h3 className="text-lg font-semibold hidden xl:block">Design</h3>
-              {["Long boards", "Herringbone", "Chevron"].map((material) => (
+              <h3 className="text-lg font-semibold hidden xl:block">Shade</h3>
+              {filterData.colors?.map((shade) => (
                 <label
-                  key={material}
+                  key={shade}
                   className="flex items-center gap-3 cursor-pointer group"
                 >
                   <input
                     type="checkbox"
-                    checked={filters.materials.includes(material)}
-                    onChange={() => toggleArrayFilter("materials", material)}
-                    className="w-4 h-4 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                    checked={
+                      checkedFilter.color && checkedFilter.color.includes(shade)
+                    }
+                    onChange={() => toggleArrayFilter("color", shade)}
+                    className="w-4 h-4 rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
                   />
                   <span className="text-md xl:text-lg text-gray-700 group-hover:text-gray-900">
-                    {material}
+                    {shade}
+                  </span>
+                  <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                    {productData?.filter((p) => p.color == shade).length}
                   </span>
                 </label>
               ))}
@@ -602,8 +611,67 @@ export default function Products() {
           )}
         </div>
 
-        {/* Rating Filter */}
+        {/* Price Range */}
         <div className="relative border-b xl:border-none border-gray-200 pb-2 xl:pb-0">
+          <button
+            onClick={() => toggleSection("price")}
+            className={`flex items-center gap-3 text-left cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 ${expandedSections.price && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
+          >
+            Price
+            <ChevronDown
+              className={`w-4 h-4 transition-transform ${
+                expandedSections.price ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+          {expandedSections.price && (
+            <div
+              className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
+          rounded-2xl px-6 pb-6 xl:pt-6 xl:mt-2 min-w-[250px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-[1]"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <label className="text-xs text-gray-500 mb-1 block">
+                    Min
+                  </label>
+                  <input
+                    type="number"
+                    value={filterData.priceRange[0]}
+                    onChange={(e) => handlePriceChange(0, e.target.value)}
+                    className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                    min="0"
+                    max={filterData.priceRange[1]}
+                  />
+                </div>
+                <span className="text-gray-400 mt-5">-</span>
+                <div className="flex-1">
+                  <label className="text-xs text-gray-500 mb-1 block">
+                    Max
+                  </label>
+                  <input
+                    type="number"
+                    value={filterData.priceRange[1]}
+                    onChange={(e) => handlePriceChange(1, e.target.value)}
+                    className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+                    min={filterData.priceRange[0]}
+                    max="500"
+                  />
+                </div>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="500"
+                value={filterData.priceRange[1]}
+                onChange={(e) => handlePriceChange(1, e.target.value)}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Rating Filter */}
+        {/* <div className="relative border-b xl:border-none border-gray-200 pb-2 xl:pb-0">
           <button
             onClick={() => toggleSection("rating")}
             className={`flex items-center gap-3 text-left cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 ${expandedSections.rating && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
@@ -618,7 +686,7 @@ export default function Products() {
           {expandedSections.rating && (
             <div
               className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
-          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-50"
+          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-[1]"
             >
               <h3 className="text-lg font-semibold hidden xl:block">Rating</h3>
               {[4, 3, 2, 1].map((rating) => (
@@ -631,7 +699,7 @@ export default function Products() {
                     name="rating"
                     checked={filters.rating === rating}
                     onChange={() => {
-                      setFilters((prev) => ({ ...prev, rating }));
+                      setFilterData((prev) => ({ ...prev, rating }));
                       setPage(0);
                     }}
                     className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-2 focus:ring-blue-500 cursor-pointer"
@@ -656,125 +724,7 @@ export default function Products() {
               </p>
             </div>
           )}
-        </div>
-
-        {/* Special Filters */}
-        <div className="relative border-b xl:border-none border-gray-200 pb-2 xl:pb-0">
-          <button
-            onClick={() => toggleSection("special")}
-            className={`flex items-center gap-3 text-left cursor-pointer text-md xl:text-lg xl:px-4 2xl:px-8 py-2 ${expandedSections.special && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
-          >
-            Special Offers
-            <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.special ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-          {expandedSections.special && (
-            <div
-              className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
-          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-50"
-            >
-              <h3 className="text-lg font-semibold hidden xl:block">
-                Special Offer
-              </h3>
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={filters.inStock}
-                  onChange={(e) => {
-                    setFilters((prev) => ({
-                      ...prev,
-                      inStock: e.target.checked,
-                    }));
-                    setPage(0);
-                  }}
-                  className="w-4 h-4 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                />
-                <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                  In Stock Only
-                </span>
-              </label>
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={filters.onSale}
-                  onChange={(e) => {
-                    setFilters((prev) => ({
-                      ...prev,
-                      onSale: e.target.checked,
-                    }));
-                    setPage(0);
-                  }}
-                  className="w-4 h-4 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                />
-                <span className="text-md xl:text-lg font-medium text-gray-700 group-hover:text-gray-900">
-                  On Sale
-                </span>
-              </label>
-              <label className="flex items-center gap-3 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={filters.isNew}
-                  onChange={(e) => {
-                    setFilters((prev) => ({
-                      ...prev,
-                      isNew: e.target.checked,
-                    }));
-                    setPage(0);
-                  }}
-                  className="w-4 h-4 rounded border-2 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                />
-                <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-                  New Arrivals
-                </span>
-              </label>
-              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
-                Clear Filter
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Tags Filter */}
-        <div className="relative border-b xl:border-none border-gray-200 pb-2 xl:pb-0">
-          <button
-            onClick={() => toggleSection("tags")}
-            className={`flex items-center gap-3 text-left cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 ${expandedSections.tags && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
-          >
-            Tags
-            <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                expandedSections.tags ? "rotate-180" : ""
-              }`}
-            />
-          </button>
-          {expandedSections.tags && (
-            <div
-              className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
-          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-wrap gap-4 transition-all z-50"
-            >
-              <h3 className="text-lg font-semibold hidden xl:block">Tags</h3>
-              {allTags.map((tag) => (
-                <button
-                  key={tag}
-                  onClick={() => toggleArrayFilter("tags", tag)}
-                  className={`px-3 py-1.5 text-sm xl:text-base font-medium rounded-full transition-all ${
-                    filters.tags.includes(tag)
-                      ? "bg-[#8A6A5B] text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {tag}
-                </button>
-              ))}
-              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
-                Clear Filter
-              </p>
-            </div>
-          )}
-        </div>
+        </div> */}
 
         {/* Clear filter */}
         <button
@@ -785,10 +735,124 @@ export default function Products() {
           Clear All
         </button>
       </div>
-      <button className="flex items-center justify-center gap-3 mx-auto border border-[#998e8a] px-8 py-3 mt-6 cursor-pointer">
-        Additional Filters{" "}
-        <ChevronDown className={`w-4 h-4 transition-transform `} />
-      </button>
+
+      {/* Additional filter */}
+      <div className="relative w-fit mx-auto">
+        <button
+          onClick={() => toggleSection("additional")}
+          className={`flex items-center gap-3 text-left border border-[#998e8a] px-8 py-3 mt-6 cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 
+              ${expandedSections.additional && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
+        >
+          Additional Filters{" "}
+          <ChevronDown className={`w-4 h-4 transition-transform `} />
+        </button>
+        {expandedSections.additional && (
+          <div
+            className="xl:absolute top-12 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
+          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-wrap xl:flex-col gap-4 transition-all z-[1]"
+          >
+            <h3 className="text-lg font-semibold hidden xl:block">
+              Additional Filter
+            </h3>
+            <ul>
+              <li
+                className="hover:bg-[#f5efed] p-2 rounded-lg cursor-pointer"
+                onClick={() => toggleSection("scratchresistant")}
+              >
+                <div className="flex items-cener justify-between">
+                  Scratch Resistant
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform ${
+                      expandedSections.scratchresistant ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+                {expandedSections.scratchresistant && (
+                  <div className="grid grid-cols-3 gap-5 mt-2">
+                    {filterData?.scratchresistant?.map((value, index) => (
+                      <div
+                        key={index}
+                        className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${
+                          checkedFilter.scratchresistant && checkedFilter.scratchresistant.includes(value)
+                            ? "bg-[#998E8A] text-white border-[#998E8A]"
+                            : "bg-white text-gray-700 border-gray-300 hover:border-[#998E8A]"
+                        }`}
+                        onClick={(e) => {e.stopPropagation(); toggleArrayFilter("scratchresistant", value)}}
+                      >
+                        {value}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </li>
+              <li
+                className="hover:bg-[#f5efed] p-2 rounded-lg cursor-pointer"
+                onClick={() => toggleSection("waterresistant")}
+              >
+                <div className="flex items-cener justify-between">
+                  Water Resistant
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform ${
+                      expandedSections.waterresistant ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+
+                {expandedSections.waterresistant && (
+                  <div className="grid grid-cols-3 gap-5 mt-2">
+                    {filterData?.waterresistant?.map((value, index) => (
+                      <div
+                        key={index}
+                        className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${
+                          checkedFilter.waterresistant && checkedFilter.waterresistant.includes(value)
+                            ? "bg-[#998E8A] text-white border-[#998E8A]"
+                            : "bg-white text-gray-700 border-gray-300 hover:border-[#998E8A]"
+                        }`}
+                        onClick={(e) => {e.stopPropagation(); toggleArrayFilter("waterresistant", value)}}
+                      >
+                        {value}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </li>
+              <li
+                className="hover:bg-[#f5efed] p-2 rounded-lg cursor-pointer"
+                onClick={() => toggleSection("petfriendly")}
+              >
+                <div className="flex items-cener justify-between">
+                  Pet Friendly
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform ${
+                      expandedSections.petfriendly ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+                {expandedSections.petfriendly && (
+                  <div className="grid grid-cols-3 gap-5 mt-2">
+                    {filterData?.petfriendly?.map((value, index) => (
+                      <div
+                        key={index}
+                        className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${
+                          checkedFilter.petfriendly && checkedFilter.petfriendly.includes(value)
+                             ? "bg-[#998E8A] text-white border-[#998E8A]"
+                            : "bg-white text-gray-700 border-gray-300 hover:border-[#998E8A]"
+                        }`}
+                        onClick={(e) => {e.stopPropagation(); toggleArrayFilter("petfriendly", value)}}
+                      >
+                        {value}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </li>
+            </ul>
+            <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+              Clear Filter
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 
@@ -857,25 +921,24 @@ export default function Products() {
             <FilterSidebar />
           </div>
 
-          {/* Products Grid */}
-
           {/* Desktop Sort & Results Count */}
-          {sortedProducts?.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-gray-500 text-lg mb-2">
-                No products found matching your filters.
-              </p>
-              <p className="text-gray-400 text-sm mb-4">
-                Try adjusting or clearing your filters
-              </p>
-              <button
-                onClick={clearFilters}
-                className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
-              >
-                Clear All Filters
-              </button>
-            </div>
-          ) : (
+          {sortedProducts?.length === 0 && (
+            // ? (
+            //   <div className="text-center py-20">
+            //     <p className="text-gray-500 text-lg mb-2">
+            //       No products found matching your filters.
+            //     </p>
+            //     <p className="text-gray-400 text-sm mb-4">
+            //       Try adjusting or clearing your filters
+            //     </p>
+            //     <button
+            //       onClick={clearFilters}
+            //       className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+            //     >
+            //       Clear All Filters
+            //     </button>
+            //   </div>
+            // ) :
             <>
               <AnimatePresence mode="wait">
                 <motion.div
@@ -885,15 +948,15 @@ export default function Products() {
                   initial="hidden"
                   animate="show"
                   exit="exit"
-                  className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 relative mt-6"
+                  className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 relative mt-6 z-0"
                 >
                   {productData?.slice(0, 8).map((item) => (
                     <motion.div
                       key={item._id}
                       variants={cardVariants}
                       className="group relative bg-white overflow-hidden transition-all duration-300 ease-out 
-                      hover:-translate-y-1 border border-gray-100 cursor-pointer bg-amber-700"
-                      onClick={() => navigate(`/product/${item._id}`)}
+                      hover:-translate-y-1 border border-gray-100 cursor-pointer bg-amber-700 z-0"
+                      onClick={() => navigate(`/${item.type}/${item.productName}`)}
                     >
                       <div className="relative bg-gray-50">
                         <img
@@ -907,7 +970,8 @@ export default function Products() {
 
                         <button
                           aria-label="Add to wishlist"
-                          className="absolute top-2 right-2 z-20 bg-[#998E8A] backdrop-blur-sm p-1.5 rounded-full shadow-sm hover:bg-white hover:scale-110 transition-all duration-300"
+                          className="absolute top-2 right-2 z-20 bg-[#998E8A] backdrop-blur-sm p-1.5 rounded-full shadow-sm 
+                          hover:bg-white/60 hover:scale-110 transition-all duration-300 cursor-pointer"
                         >
                           <HeartIcon className="w-5 h-5 text-white hover:text-red-500" />
                         </button>
@@ -948,7 +1012,7 @@ export default function Products() {
                         </div> */}
 
                         <div className="flex flex-col items-start justify-between gap-1">
-                          <p className="text-xl xl:text-3xl font-semibold text-gray-900 line-clamp-1">
+                          <p className="text-lg xl:text-2xl font-semibold text-gray-900 line-clamp-1">
                             {item.productName}
                           </p>
                           <div className="flex items-center gap-20">

@@ -19,7 +19,7 @@ export default function App() {
       {/* Layout Route */}
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/product/:id" element={<Product />} />
+        <Route path="/:type/:productName" element={<Product />} />
         <Route path="/brand" element={<Brand />} />
         <Route path="/cleverchoice" element={<ClaverChoise />} />
         <Route path="/engineered-oak" element={<EngineeredOak />} />

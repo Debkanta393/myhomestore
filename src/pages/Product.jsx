@@ -21,7 +21,7 @@ import WhyChooseus from "../../components/ui/WhyChooseus";
 import { useParams } from "react-router";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getProductById } from "../../slice/product-slice";
+import { getProductByTypeName } from "../../slice/product-slice";
 
 export default function Product() {
   const [selectedImage, setSelectedImage] = useState("./images/luxury1.webp");
@@ -35,7 +35,7 @@ export default function Product() {
   });
   const [cartonsNeeded, setCartonsNeeded] = useState(null);
   const dispatch = useDispatch();
-  const [productData, setProductData] = useState([]);
+  const [productData, setProductData] = useState();
   // const [proSpecification, setProductSpecification] = useState([]);
   // const [price, setPrice] = useState(null);
   const [packSize, setPackSize] = useState(1.1098);
@@ -132,14 +132,17 @@ export default function Product() {
 
 
   const { id } = params;
+  const {type, productName}=params
+
 
   useEffect(() => {
     const getProducts = async () => {
-      const response = await dispatch(getProductById(id));
-      setProductData(response.payload.data.products);
+      const response = await dispatch(getProductByTypeName({type, productName}));
+      setProductData(response.payload.data.data[0]);
     };
     getProducts();
   }, [dispatch]);
+
 
   const currentIndex = otherImages.indexOf(selectedImage);
 

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { UPLOAD_PRODUCT, ALL_PRODUCT,PRODUCT_BY_ID } from "../api/apis";
+import { UPLOAD_PRODUCT, ALL_PRODUCT,PRODUCT_BY_ID, PRODUCT_BY_TYPE_NAME } from "../api/apis";
 import api from "../api/axios";
 
 const initialState = {
@@ -48,7 +48,24 @@ export const getProductById = createAsyncThunk(
   async (proId, { rejectWithValue }) => {
     try {
       console.log("Product id:", proId)
-      const data  = await api.post(`${PRODUCT_BY_ID}/${proId}`);
+      const data  = await api.post(PRODUCT_BY_ID, proId);
+      console.log(data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  },
+);
+
+
+export const getProductByTypeName = createAsyncThunk(
+  "product/getProductbyTypeandBrand",
+  async ({type, productName}, { rejectWithValue }) => {
+    try {
+      const productData={type, productName}
+      console.log(productData)
+      console.log("Product id:", productData)
+      const data  = await api.post(PRODUCT_BY_TYPE_NAME, productData);
       console.log(data);
       return data;
     } catch (error) {
@@ -101,6 +118,19 @@ const productSlice = createSlice({
         state.list.data = action.payload.data;
       })
       .addCase(getProductById.rejected, (state, action) => {
+        state.list.loading = false;
+        state.list.error = action.payload;
+      });
+
+      builder
+      .addCase(getProductByTypeName.pending, (state) => {
+        state.list.loading = true;
+      })
+      .addCase(getProductByTypeName.fulfilled, (state, action) => {
+        state.list.loading = false;
+        state.list.data = action.payload.data;
+      })
+      .addCase(getProductByTypeName.rejected, (state, action) => {
         state.list.loading = false;
         state.list.error = action.payload;
       });
