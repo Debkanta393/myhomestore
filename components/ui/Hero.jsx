@@ -40,8 +40,9 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <section className="relative">
-      <div className="min-h-[600px] rounded-3xl w-11/12 sm:w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden bg-[#998e8a]">
+    <section className="relative mt-5">
+      <div className="min-h-[600px] rounded-3xl w-11/12 sm:w-10/12 mx-auto relative text-center flex flex-col items-center justify-center text-white overflow-hidden
+       bg-[#998e8a]">
         <AnimatePresence mode="wait">
           <motion.img
             key={currentHeader}
@@ -107,7 +108,7 @@ const Hero = () => {
               ></span>
             </button> */}
 
-            <button className="bg-white text-[#8A6A5A] py-4 px-12 text-xl font-medium cursor-pointer rounded-full">
+            <button className="bg-white text-[#8A6A5A] py-4 px-12 text-xl font-medium cursor-pointer">
               Get a quote
             </button>
           </motion.div>
@@ -154,7 +155,7 @@ const Hero = () => {
               space.
             </p>
           </motion.div>
-          <motion.button className="border-2 border-white text-white text-xl py-3 px-10 cursor-pointer text-nowrap">
+          <motion.button className="bg-white text-[#8A6A5A] text-xl py-3 px-10 text-nowrap z-10 cursor-pointer">
             Request a quote 
           </motion.button>
         </motion.div>

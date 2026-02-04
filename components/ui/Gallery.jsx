@@ -53,7 +53,7 @@ export default function Category() {
   };
 
   return (
-    <div className="relative w-full mt-32 py-32 overflow-hidden">
+    <div className="relative w-full mt-32 py-24 overflow-hidden">
       {/* Enhanced Background with Overlay */}
       <div
         className="absolute inset-0 -z-10"
@@ -108,10 +108,10 @@ export default function Category() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
-        >
+          className="text-center mb-10"
+         >
           {/* Badge */}
-          <motion.span
+          {/* <motion.span
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
@@ -120,9 +120,9 @@ export default function Category() {
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[#f5efed] animate-pulse" />
             SHOWCASE
-          </motion.span>
+          </motion.span> */}
 
-          <h2 className="text-4xl md:text-6xl lg:text-7xl text-[#f5efed] font-bold mb-4 tracking-tight">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl text-[#f5efed] font-bold mb-2 tracking-tight">
             Image Gallery
           </h2>
 
@@ -142,7 +142,7 @@ export default function Category() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
-          className="flex items-center gap-4 md:gap-6 justify-center mb-16"
+          className="flex items-center gap-4 md:gap-6 justify-center mb-12"
         >
           {["inner", "outer"].map((type) => (
             <motion.button

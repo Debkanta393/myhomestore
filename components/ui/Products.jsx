@@ -737,30 +737,30 @@ export default function Products() {
       </div>
 
       {/* Additional filter */}
-      <div className="relative w-fit mx-auto">
+      <div className="relative w-full mx-auto">
         <button
           onClick={() => toggleSection("additional")}
-          className={`flex items-center gap-3 text-left border border-[#998e8a] px-8 py-3 mt-6 cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 
-              ${expandedSections.additional && "xl:bg-[#8A6A5B] text-black xl:text-white"}`}
+          className={`flex items-center mx-auto gap-3 text-left border border-[#998e8a] px-8 py-3 mt-6 cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 
+              ${expandedSections.additional ? "hidden" : "block"}`}
         >
           Additional Filters{" "}
           <ChevronDown className={`w-4 h-4 transition-transform `} />
         </button>
+
+        {/* Additional filter tabs */}
         {expandedSections.additional && (
-          <div
-            className="xl:absolute top-12 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
-          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-wrap xl:flex-col gap-4 transition-all z-[1]"
-          >
-            <h3 className="text-lg font-semibold hidden xl:block">
-              Additional Filter
-            </h3>
-            <ul>
-              <li
-                className="hover:bg-[#f5efed] p-2 rounded-lg cursor-pointer"
+          <div>
+            <div
+              className="w-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
+           rounded-2xl py-6 xl:mt-2 grid grid-cols-3 justify-center items-center gap-4 transition-all z-[1]"
+            >
+              <div
+                className={`relative p-3 cursor-pointer flex justify-center items-center 
+                ${expandedSections.scratchresistant && "bg-[#8A6A5B] text-black xl:text-white"}`}
                 onClick={() => toggleSection("scratchresistant")}
               >
-                <div className="flex items-cener justify-between">
-                  Scratch Resistant
+                <div className="flex items-center justify-center text-lg gap-5">
+                  <p>Scratch Resistant</p>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform ${
                       expandedSections.scratchresistant ? "rotate-180" : ""
@@ -768,29 +768,40 @@ export default function Products() {
                   />
                 </div>
                 {expandedSections.scratchresistant && (
-                  <div className="grid grid-cols-3 gap-5 mt-2">
-                    {filterData?.scratchresistant?.map((value, index) => (
-                      <div
-                        key={index}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${
-                          checkedFilter.scratchresistant && checkedFilter.scratchresistant.includes(value)
-                            ? "bg-[#998E8A] text-white border-[#998E8A]"
-                            : "bg-white text-gray-700 border-gray-300 hover:border-[#998E8A]"
-                        }`}
-                        onClick={(e) => {e.stopPropagation(); toggleArrayFilter("scratchresistant", value)}}
-                      >
-                        {value}
-                      </div>
-                    ))}
+                  <div className="absolute top-14 bg-white z-[1] rounded-lg p-6 min-w-[280px] mx-auto">
+                    <div className="grid grid-cols-3 gap-5 my-3">
+                      {filterData?.scratchresistant?.map((value, index) => (
+                        <div
+                          key={index}
+                          className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${
+                            checkedFilter.scratchresistant &&
+                            checkedFilter.scratchresistant.includes(value)
+                              ? "bg-[#998E8A] text-white border-[#998E8A]"
+                              : "bg-white text-gray-700 border-gray-300 hover:border-[#998E8A]"
+                          }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleArrayFilter("scratchresistant", value);
+                          }}
+                        >
+                          {value}
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                      Clear Filter
+                    </p>
                   </div>
                 )}
-              </li>
-              <li
-                className="hover:bg-[#f5efed] p-2 rounded-lg cursor-pointer"
+              </div>
+
+              <div
+                className={`relative p-3 cursor-pointer flex justify-center items-center 
+                ${expandedSections.waterresistant && "bg-[#8A6A5B] text-black xl:text-white"}`}
                 onClick={() => toggleSection("waterresistant")}
               >
-                <div className="flex items-cener justify-between">
-                  Water Resistant
+                <div className="flex items-center justify-center text-lg gap-5">
+                  <p>Water Resistant</p>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform ${
                       expandedSections.waterresistant ? "rotate-180" : ""
@@ -799,29 +810,39 @@ export default function Products() {
                 </div>
 
                 {expandedSections.waterresistant && (
-                  <div className="grid grid-cols-3 gap-5 mt-2">
-                    {filterData?.waterresistant?.map((value, index) => (
-                      <div
-                        key={index}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${
-                          checkedFilter.waterresistant && checkedFilter.waterresistant.includes(value)
-                            ? "bg-[#998E8A] text-white border-[#998E8A]"
-                            : "bg-white text-gray-700 border-gray-300 hover:border-[#998E8A]"
-                        }`}
-                        onClick={(e) => {e.stopPropagation(); toggleArrayFilter("waterresistant", value)}}
-                      >
-                        {value}
-                      </div>
-                    ))}
+                  <div className="absolute top-14 bg-white z-[1] rounded-lg p-6 min-w-[280px] mx-auto">
+                    <div className="grid grid-cols-3 gap-5 my-3">
+                      {filterData?.waterresistant?.map((value, index) => (
+                        <div
+                          key={index}
+                          className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${
+                            checkedFilter.waterresistant &&
+                            checkedFilter.waterresistant.includes(value)
+                              ? "bg-[#998E8A] text-white border-[#998E8A]"
+                              : "bg-white text-gray-700 border-gray-300 hover:border-[#998E8A]"
+                          }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleArrayFilter("waterresistant", value);
+                          }}
+                        >
+                          {value}
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                      Clear Filter
+                    </p>
                   </div>
                 )}
-              </li>
-              <li
-                className="hover:bg-[#f5efed] p-2 rounded-lg cursor-pointer"
+              </div>
+              <div
+                className={`relative p-3 cursor-pointer flex justify-center items-center 
+                ${expandedSections.petfriendly && "bg-[#8A6A5B] text-black xl:text-white"}`}
                 onClick={() => toggleSection("petfriendly")}
               >
-                <div className="flex items-cener justify-between">
-                  Pet Friendly
+                <div className="flex items-center justify-center text-lg gap-5">
+                  <p>Pet Friendly</p>
                   <ChevronDown
                     className={`w-4 h-4 transition-transform ${
                       expandedSections.petfriendly ? "rotate-180" : ""
@@ -829,27 +850,45 @@ export default function Products() {
                   />
                 </div>
                 {expandedSections.petfriendly && (
-                  <div className="grid grid-cols-3 gap-5 mt-2">
-                    {filterData?.petfriendly?.map((value, index) => (
-                      <div
-                        key={index}
-                        className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${
-                          checkedFilter.petfriendly && checkedFilter.petfriendly.includes(value)
-                             ? "bg-[#998E8A] text-white border-[#998E8A]"
-                            : "bg-white text-gray-700 border-gray-300 hover:border-[#998E8A]"
-                        }`}
-                        onClick={(e) => {e.stopPropagation(); toggleArrayFilter("petfriendly", value)}}
-                      >
-                        {value}
-                      </div>
-                    ))}
+                  <div className="absolute top-14 bg-white z-[1] rounded-lg p-6 min-w-[280px] mx-auto">
+                    <div className="grid grid-cols-3 gap-5 my-3">
+                      {filterData?.petfriendly?.map((value, index) => (
+                        <div
+                          key={index}
+                          className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${
+                            checkedFilter.petfriendly &&
+                            checkedFilter.petfriendly.includes(value)
+                              ? "bg-[#998E8A] text-white border-[#998E8A]"
+                              : "bg-white text-gray-700 border-gray-300 hover:border-[#998E8A]"
+                          }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleArrayFilter("petfriendly", value);
+                          }}
+                        >
+                          {value}
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                      Clear Filter
+                    </p>
                   </div>
                 )}
-              </li>
-            </ul>
-            <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
-              Clear Filter
-            </p>
+              </div>
+            </div>
+            <button
+              onClick={() =>
+                setExpandedSections((prev) => ({
+                  ...prev,
+                  additional: false,
+                }))
+              }
+              className="flex items-center gap-3 text-left border border-[#998e8a] px-8 py-3 mt-6 cursor-pointer text-lg xl:px-4 2xl:px-8 py-2 mx-auto"
+            >
+              Close Filters
+              <X />
+            </button>
           </div>
         )}
       </div>
@@ -956,7 +995,9 @@ export default function Products() {
                       variants={cardVariants}
                       className="group relative bg-white overflow-hidden transition-all duration-300 ease-out 
                       hover:-translate-y-1 border border-gray-100 cursor-pointer bg-amber-700 z-0"
-                      onClick={() => navigate(`/${item.type}/${item.productName}`)}
+                      onClick={() =>
+                        navigate(`/${item.type}/${item.productName}`)
+                      }
                     >
                       <div className="relative bg-gray-50">
                         <img

@@ -50,7 +50,7 @@ export default function Product() {
     "./images/category/indoor5.jpg",
   ];
 
-  const tabs = ["Description", "Specification", "Additional Information"];
+  const tabs = ["Specification", "Additional Information"];
 
   const products = [
     {
@@ -413,8 +413,7 @@ export default function Product() {
               transition={{ delay: 0.5 }}
               className="text-gray-600 text-lg font-medium mt-5"
             >
-              Lorem ipsum dolor sit amet consectetur. Cras pulvinar in non sit
-              massa aenean. Nisl ornare pharetra quis non aliquet.
+              {productData?.description}
             </motion.p>
           </div>
 
@@ -556,28 +555,6 @@ export default function Product() {
                         transition={{ duration: 0.3 }}
                         className="min-h-[180px] px-6 pb-6"
                       >
-                        {tab === "Description" && (
-                          <div className="space-y-3">
-                            <ul className="space-y-2 text-gray-700">
-                              {productData?.description?.map((item, i) => (
-                                <motion.li
-                                  key={i}
-                                  initial={{ opacity: 0, x: -20 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: i * 0.1 }}
-                                  className="flex items-start gap-3 group"
-                                >
-                                  <span className="text-[#8A6A5A] mt-1 text-xl group-hover:scale-125 transition-transform">
-                                    ✓
-                                  </span>
-                                  <span className="leading-relaxed">
-                                    {item}
-                                  </span>
-                                </motion.li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
 
                         {tab === "Specification" && (
                           <div className="space-y-4">

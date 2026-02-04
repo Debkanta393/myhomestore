@@ -24,7 +24,7 @@ const Categories = () => {
             key={[index, selectedTab]}
           >
             {/* Black Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80"></div>
 
             <img
               src={collection.image}

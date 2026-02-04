@@ -198,7 +198,8 @@ const Services = () => {
               {services[activeTab].map((service, index) => (
                 <motion.div
                   key={index}
-                  className="relative bg-gradient-to-br from-gray-100 to-gray-200 flex xl:flex-row-reverse flex-col items-center rounded-2xl overflow-hidden cursor-pointer group"
+                  className="relative bg-gradient-to-br from-gray-100 to-gray-200 flex xl:flex-row-reverse flex-col items-center rounded-2xl overflow-hidden
+                   cursor-pointer group"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -221,7 +222,8 @@ const Services = () => {
                     </p>
                   </div>
                   {/* Hover Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#998e8a]/10 to-[#998e8a]/30 opacity-0 group-hover:opacity-100 transition-opacity
+                   duration-300 pointer-events-none" />
                 </motion.div>
               ))}
             </motion.div>
@@ -245,7 +247,8 @@ const Services = () => {
                 {services[activeTab].map((service, index) => (
                   <motion.div
                     key={index}
-                    className="min-w-[320px] md:min-w-[500px] bg-gradient-to-br from-gray-100 to-gray-200 flex md:flex-row-reverse flex-col items-center rounded-2xl overflow-hidden cursor-pointer group"
+                    className="min-w-[320px] md:min-w-[500px] bg-gradient-to-br from-gray-100 to-gray-200 flex md:flex-row-reverse flex-col items-center
+                     rounded-2xl overflow-hidden cursor-pointer group"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -270,7 +273,8 @@ const Services = () => {
                     </div>
 
                     {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity
+                     duration-300 pointer-events-none" />
                   </motion.div>
                 ))}
               </div>
@@ -280,7 +284,8 @@ const Services = () => {
                 whileHover={{ scale: 1.1, x: -5 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handlePrevButton}
-                className="absolute left-5 top-1/2 -translate-y-1/2 backdrop-blur-md bg-white/80 hover:bg-white shadow-2xl z-30 p-3 rounded-full transition-all border border-white/50"
+                className="absolute left-5 top-1/2 -translate-y-1/2 backdrop-blur-md bg-white/80 hover:bg-white shadow-2xl z-30 p-3 rounded-full transition-all border
+                 border-white/50"
               >
                 <ChevronLeft size={24} className="text-gray-800" />
               </motion.button>
@@ -290,7 +295,8 @@ const Services = () => {
                 whileHover={{ scale: 1.1, x: 5 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleNextButton}
-                className="absolute right-5 top-1/2 -translate-y-1/2 backdrop-blur-md bg-white/80 hover:bg-white shadow-2xl z-30 p-3 rounded-full transition-all border border-white/50"
+                className="absolute right-5 top-1/2 -translate-y-1/2 backdrop-blur-md bg-white/80 hover:bg-white shadow-2xl z-30 p-3 rounded-full transition-all
+                 border border-white/50"
               >
                 <ChevronRight size={24} className="text-gray-800" />
               </motion.button>

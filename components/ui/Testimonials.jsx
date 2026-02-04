@@ -39,7 +39,7 @@ const Testimonials = () => {
 
   const prevTestimonial = () => {
     setCurrentIndex(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length
+      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
     );
   };
 
@@ -57,11 +57,11 @@ const Testimonials = () => {
       {/* Testimonial Container */}
       <div
         className="max-w-4xl mx-auto relative mt-20"
-        style={{
-          backgroundImage: "url(./images/australia_map.png)",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
+        // style={{
+        //   backgroundImage: "url(./images/australia_map.png)",
+        //   backgroundSize: "cover",
+        //   backgroundRepeat: "no-repeat",
+        // }}
       >
         {/* Navigation Buttons */}
         <button
@@ -82,17 +82,17 @@ const Testimonials = () => {
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
-            className="bg-gradient-to-br from-black/80 to-black/30 text-white rounded-3xl p-10 md:p-12 shadow-2xl min-h-[350px] flex flex-col justify-between"
+            className="bg-gradient-to-br from-[#998e8a]/80 to-[#998e8a]/30 text-white rounded-3xl p-10 md:p-12 shadow-2xl min-h-[350px] flex flex-col justify-between"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
             transition={{ duration: 0.5 }}
           >
-            <p className="text-2xl md:text-3xl italic leading-relaxed mb-8 text-center">
+            <p className="text-2xl md:text-3xl italic leading-relaxed mb-8 text-center text-black">
               "{testimonials[currentIndex].text}"
             </p>
 
-            <div className="space-y-1">
+            <div className="space-y-1 text-center text-black">
               <p className="text-xl font-bold">
                 {testimonials[currentIndex].author}
               </p>
