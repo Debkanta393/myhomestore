@@ -32,25 +32,6 @@ const Services = () => {
         title: "Bathroom Renovations",
         description: "More space, better flow. Expand without moving",
       },
-      //   {
-      //     images: "./images/luxury2.webp",
-      //     title: "Kitchen Renovations",
-      //     description: "The heart of your home — reimagined",
-      //   },
-      //   {
-      //     images: "./images/luxury3.webp",
-      //     title: "Granny Flats",
-      //     description: "Self-contained living for family or guests",
-      //   },
-      //   {
-      //     images: "./images/tiles.jpg",
-      //     title: "Outdoor Living",
-      //     description: "Decks, pergolas, alfresco zones",
-      //   },
-      //   {
-      //     title: "Storage Solutions",
-      //     description: "Everyday spaces designed with efficiency",
-      //   },
     ],
     investor: [
       {
@@ -73,25 +54,6 @@ const Services = () => {
         title: "Commercial Upgrades",
         description: "Increase tenant value and retention",
       },
-      //   {
-      //     images: "./images/luxury2.webp",
-      //     title: "Secondary Dwellings",
-      //     description: "Add passive income opportunities",
-      //   },
-      //   {
-      //     images: "./images/luxury3.webp",
-      //     title: "Land Subdivision",
-      //     description: "Unlock equity by splitting land",
-      //   },
-      //   {
-      //     images: "./images/tiles.jpg",
-      //     title: "Co-Living Builds",
-      //     description: "Purpose-designed for room-by-room rental",
-      //   },
-      //   {
-      //     title: "Development Advisory",
-      //     description: "Strategic support from feasibility to completion",
-      //   },
     ],
   };
 

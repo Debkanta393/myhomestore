@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { UPLOAD_PRODUCT, ALL_PRODUCT,PRODUCT_BY_ID, PRODUCT_BY_TYPE_NAME } from "../api/apis";
+import {
+  UPLOAD_PRODUCT,
+  ALL_PRODUCT,
+  PRODUCT_BY_ID,
+  PRODUCT_BY_TYPE_NAME,
+} from "../api/apis";
 import api from "../api/axios";
 
 const initialState = {
@@ -12,7 +17,7 @@ const initialState = {
     loading: false,
     data: [],
     error: null,
-    fetched: false
+    fetched: false,
   },
 };
 
@@ -20,12 +25,52 @@ export const uploadProduct = createAsyncThunk(
   "product/uploadProduct",
   async (productData, { rejectWithValue }) => {
     try {
-      const { data } = await api.post(UPLOAD_PRODUCT, productData);
+      const formData = new FormData();
+
+      // text fields
+      formData.append("category", productData.category);
+      formData.append("type", productData.type);
+      formData.append("brand", productData.brand);
+      formData.append("range", productData.range);
+      formData.append("productName", productData.productName);
+      formData.append("productDetails", productData.productDetails);
+      formData.append("sku", productData.sku);
+      formData.append("petfriendly", productData.petfriendly);
+      formData.append("waterresistant", productData.waterresistant);
+      formData.append("scratchresistant", productData.scratchresistant);
+      formData.append("pattern", productData.pattern);
+      formData.append("dimensions", productData.dimensions);
+      formData.append("packsize", productData.packsize);
+      formData.append("brochurelink", productData.brochurelink);
+      formData.append("thickness", productData.thickness);
+      formData.append("description", productData.description);
+
+      // arrays → stringify
+      formData.append("color", JSON.stringify(productData.color));
+
+      // product images
+      productData.productImage?.forEach((file) => {
+        formData.append("productImage", file);
+      });
+
+      // function images
+      productData.functionsImage?.forEach((file) => {
+        formData.append("functionsImage", file);
+      });
+
+      console.log(formData)
+
+      const { data } = await api.post(UPLOAD_PRODUCT, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       return data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  },
+  }
 );
 
 export const getAllProducts = createAsyncThunk(
@@ -34,7 +79,7 @@ export const getAllProducts = createAsyncThunk(
     console.log("THUNK HIT");
     console.log(ALL_PRODUCT);
     try {
-      const data  = await api.get(ALL_PRODUCT);
+      const data = await api.get(ALL_PRODUCT);
       console.log(data);
       return data;
     } catch (error) {
@@ -47,8 +92,8 @@ export const getProductById = createAsyncThunk(
   "product/getProductById",
   async (proId, { rejectWithValue }) => {
     try {
-      console.log("Product id:", proId)
-      const data  = await api.post(PRODUCT_BY_ID, proId);
+      console.log("Product id:", proId);
+      const data = await api.post(PRODUCT_BY_ID, proId);
       console.log(data);
       return data;
     } catch (error) {
@@ -57,15 +102,14 @@ export const getProductById = createAsyncThunk(
   },
 );
 
-
 export const getProductByTypeName = createAsyncThunk(
   "product/getProductbyTypeandBrand",
-  async ({type, productName}, { rejectWithValue }) => {
+  async ({ type, productName }, { rejectWithValue }) => {
     try {
-      const productData={type, productName}
-      console.log(productData)
-      console.log("Product id:", productData)
-      const data  = await api.post(PRODUCT_BY_TYPE_NAME, productData);
+      const productData = { type, productName };
+      console.log(productData);
+      console.log("Product id:", productData);
+      const data = await api.post(PRODUCT_BY_TYPE_NAME, productData);
       console.log(data);
       return data;
     } catch (error) {
@@ -95,21 +139,21 @@ const productSlice = createSlice({
 
     builder
       .addCase(getAllProducts.pending, (state) => {
-        state.list.loading = true
-        state.list.fetched=false
+        state.list.loading = true;
+        state.list.fetched = false;
       })
       .addCase(getAllProducts.fulfilled, (state, action) => {
         state.list.loading = false;
-        state.list.fetched=true
+        state.list.fetched = true;
         state.list.data = action.payload.data.products;
       })
       .addCase(getAllProducts.rejected, (state, action) => {
         state.list.loading = false;
-        state.list.fetched=false
+        state.list.fetched = false;
         state.list.error = action.payload;
       });
 
-      builder
+    builder
       .addCase(getProductById.pending, (state) => {
         state.list.loading = true;
       })
@@ -122,7 +166,7 @@ const productSlice = createSlice({
         state.list.error = action.payload;
       });
 
-      builder
+    builder
       .addCase(getProductByTypeName.pending, (state) => {
         state.list.loading = true;
       })

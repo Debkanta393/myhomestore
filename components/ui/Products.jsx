@@ -25,7 +25,7 @@ export default function Products() {
   const dispatch = useDispatch();
 
   // Filter data
-  const [filterData, setFilterData] = useState({
+  const [filterOptions, setFilterOptions] = useState({
     categories: [],
     thickness: [],
     brands: [],
@@ -63,23 +63,25 @@ export default function Products() {
 
   // Set filter data according to type
   useEffect(() => {
-    if (!productData?.length) return;
-    setFilterData((prev) => ({
+    if (!allProducts?.length) return;
+    setFilterOptions((prev) => ({
       ...prev,
-      categories: [...new Set(productData.map((item) => item.category))],
-      thickness: [...new Set(productData.map((item) => item.thickness))],
-      brands: [...new Set(productData.map((item) => item.brand))],
-      patterns: [...new Set(productData.map((item) => item.pattern))],
-      colors: [...new Set(productData.flatMap((item) => item.color || []))],
+      categories: [...new Set(allProducts.map((item) => item.category))],
+      thickness: [...new Set(allProducts.map((item) => item.thickness))],
+      brands: [...new Set(allProducts.map((item) => item.brand))],
+      patterns: [...new Set(allProducts.map((item) => item.pattern))],
+      colors: [...new Set(allProducts.flatMap((item) => item.color || []))],
       scratchresistant: [
-        ...new Set(productData.map((item) => item.scratchresistant)),
+        ...new Set(allProducts.map((item) => item.scratchresistant)),
       ],
       waterresistant: [
-        ...new Set(productData.map((item) => item.waterresistant)),
+        ...new Set(allProducts.map((item) => item.waterresistant)),
       ],
-      petfriendly: [...new Set(productData.map((item) => item.petfriendly))],
+      petfriendly: [...new Set(allProducts.map((item) => item.petfriendly))],
     }));
-  }, [productData]);
+  }, [allProducts]);
+
+  console.log(filterOptions.colors);
 
   // Window width
   const [width, setWidth] = useState(window.innerWidth);
@@ -122,40 +124,40 @@ export default function Products() {
   const filteredProducts = useMemo(() => {
     return allProducts.filter((product) => {
       const categoryMatch =
-        filterData.categories.length === 0 ||
-        filterData.categories.includes(product.category);
+        filterOptions.categories.length === 0 ||
+        filterOptions.categories.includes(product.category);
 
       const brandMatch =
-        filterData.brands.length === 0 ||
-        filterData.brands.includes(product.brand);
+        filterOptions.brands.length === 0 ||
+        filterOptions.brands.includes(product.brand);
 
       const thicknessMatch =
-        filterData.thickness.length === 0 ||
-        filterData.thickness.includes(product.thickness);
+        filterOptions.thickness.length === 0 ||
+        filterOptions.thickness.includes(product.thickness);
 
       const patternMatch =
-        filterData.patterns.length === 0 ||
-        filterData.patterns.includes(product.pattern);
+        filterOptions.patterns.length === 0 ||
+        filterOptions.patterns.includes(product.pattern);
 
       const shadeMatch =
-        filterData.colors.length === 0 ||
-        filterData.colors.includes(product.shade);
+        filterOptions.colors.length === 0 ||
+        filterOptions.colors.includes(product.shade);
 
       const scratchresistantMatch =
-        filterData.colors.length === 0 ||
-        filterData.colors.includes(product.shade);
+        filterOptions.colors.length === 0 ||
+        filterOptions.colors.includes(product.shade);
 
       const waterresistantMatch =
-        filterData.colors.length === 0 ||
-        filterData.colors.includes(product.shade);
+        filterOptions.colors.length === 0 ||
+        filterOptions.colors.includes(product.shade);
 
       const petfriendlyMatch =
-        filterData.colors.length === 0 ||
-        filterData.colors.includes(product.shade);
+        filterOptions.colors.length === 0 ||
+        filterOptions.colors.includes(product.shade);
 
       const priceMatch =
-        product.price >= filterData.priceRange[0] &&
-        product.price <= filterData.priceRange[1];
+        product.price >= filterOptions.priceRange[0] &&
+        product.price <= filterOptions.priceRange[1];
 
       return (
         categoryMatch &&
@@ -169,7 +171,7 @@ export default function Products() {
         priceMatch
       );
     });
-  }, [productData, filterData]);
+  }, [productData, filterOptions]);
 
   // Sorting logic
   const sortedProducts =
@@ -189,12 +191,12 @@ export default function Products() {
       }
     });
 
-  const totalPages = Math.ceil(sortedProducts?.length / itemsPerPage);
+  // const totalPages = Math.ceil(sortedProducts?.length / itemsPerPage);
 
-  const visibleProducts = sortedProducts?.slice(
-    page * itemsPerPage,
-    page * itemsPerPage + itemsPerPage,
-  );
+  // const visibleProducts = sortedProducts?.slice(
+  //   page * itemsPerPage,
+  //   page * itemsPerPage + itemsPerPage,
+  // );
 
   // const next = () => {
   //   if (page < totalPages - 1) setPage(page + 1);
@@ -206,7 +208,7 @@ export default function Products() {
   //   setNavigateTo("left");
   // };
 
-  // Handle filterData
+  // Handle filterOptions
   const toggleArrayFilter = (filterKey, value) => {
     console.log(filterKey);
     console.log(value);
@@ -220,7 +222,7 @@ export default function Products() {
       };
     });
 
-    // Filter the array
+    // Filter the filteredArray
     const filteredArray = productData?.filter(
       (product) => product[filterKey] == value,
     );
@@ -229,24 +231,44 @@ export default function Products() {
     setPage(0);
   };
 
+  // Filter product data
+  //   useEffect(() => {
+  //   if (!allProducts.length) return;
+
+  //   let filtered = [...allProducts];
+
+  //   Object.entries(checkedFilter).forEach(([key, values]) => {
+  //     if (Array.isArray(values) && values.length > 0) {
+  //       filtered = filtered.filter((product) =>
+  //         values.includes(product[key])
+  //       );
+  //     }
+  //   });
+
+  //   setProductData(filtered);
+  // }, [checkedFilter, allProducts]);
   // console.log("Product data after filter", productData)
 
   const handlePriceChange = (index, value) => {
-    const newRange = [...filterData.priceRange];
+    const newRange = [...filterOptions.priceRange];
     newRange[index] = Number(value);
-    setFilterData((prev) => ({ ...prev, priceRange: newRange }));
+    setFilterOptions((prev) => ({ ...prev, priceRange: newRange }));
     setPage(0);
   };
 
   const clearFilters = () => {
     setCheckedFilter({
-      categories: [],
+      category: [],
       thickness: [],
-      brands: [],
-      patterns: [],
-      shades: [],
+      brand: [],
+      pattern: [],
+      color: [],
+      scratchresistant: [],
+      waterresistant: [],
+      petfriendly: [],
       priceRange: [0, 500],
     });
+
     setProductData(allProducts);
     setPage(0);
   };
@@ -273,11 +295,11 @@ export default function Products() {
 
   // Count active filterData
   const activeFilterCount =
-    filterData.categories.length +
-    filterData.brands.length +
-    filterData.thickness.length +
-    filterData.patterns.length +
-    filterData.colors.length;
+    filterOptions.categories.length +
+    filterOptions.brands.length +
+    filterOptions.thickness.length +
+    filterOptions.patterns.length +
+    filterOptions.colors.length;
 
   // Animation styling
   const cardVariants = {
@@ -384,7 +406,7 @@ export default function Products() {
               <h3 className="text-lg font-semibold hidden xl:block">
                 Categories
               </h3>
-              {filterData.categories?.map((category, index) => (
+              {filterOptions.categories?.map((category, index) => (
                 <div
                   key={index}
                   className="flex items-center gap-3 cursor-pointer group"
@@ -402,11 +424,15 @@ export default function Products() {
                     {category}
                   </span>
                   <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                    {productData?.filter((p) => p.category == category).length}
+                    {allProducts?.filter((p) => p.category == category).length}
                   </span>
                 </div>
               ))}
-              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+              <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer" onClick={()=> setCheckedFilter((prev)=>
+              ({
+                ...prev,
+
+              }))}>
                 Clear Filter
               </p>
             </div>
@@ -435,7 +461,7 @@ export default function Products() {
               <h3 className="text-lg font-semibold hidden xl:block">
                 Thickness
               </h3>
-              {filterData.thickness?.map((thickness, index) => (
+              {filterOptions.thickness?.map((thickness, index) => (
                 <div
                   key={index}
                   className="flex items-center gap-3 cursor-pointer group"
@@ -454,7 +480,7 @@ export default function Products() {
                   </span>
                   <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
                     {
-                      productData?.filter((p) => p.thickness === thickness)
+                      allProducts?.filter((p) => p.thickness === thickness)
                         .length
                     }
                   </span>
@@ -486,7 +512,7 @@ export default function Products() {
           rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-col gap-4 transition-all z-[1]"
             >
               <h3 className="text-lg font-semibold hidden xl:block">Brand</h3>
-              {filterData.brands?.map((brand) => (
+              {filterOptions.brands?.map((brand) => (
                 <label
                   key={brand}
                   className="flex items-center gap-3 cursor-pointer group"
@@ -503,7 +529,7 @@ export default function Products() {
                     {brand}
                   </span>
                   <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                    {productData?.filter((p) => p.brand === brand).length}
+                    {allProducts?.filter((p) => p.brand === brand).length}
                   </span>
                 </label>
               ))}
@@ -534,7 +560,7 @@ export default function Products() {
           rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-wrap xl:flex-col gap-4 transition-all z-[1]"
             >
               <h3 className="text-lg font-semibold hidden xl:block">Pattern</h3>
-              {filterData.patterns?.map((pattern) => (
+              {filterOptions.patterns?.map((pattern) => (
                 <label
                   key={pattern}
                   className="flex items-center gap-3 cursor-pointer group"
@@ -552,7 +578,7 @@ export default function Products() {
                     {pattern}
                   </span>
                   <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                    {productData?.filter((p) => p.pattern === pattern).length}
+                    {allProducts?.filter((p) => p.pattern === pattern).length}
                   </span>
                 </label>
               ))}
@@ -579,11 +605,11 @@ export default function Products() {
           </button>
           {expandedSections.color && (
             <div
-              className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
-          rounded-2xl p-6 xl:mt-2 min-w-[280px] xl:border border-[#998e8a] flex flex-wrap xl:flex-col gap-4 transition-all z-[1]"
+              className="xl:absolute top-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 xl:mt-2 min-w-[280px]
+             xl:border border-[#998e8a] flex flex-wrap xl:flex-col gap-4 transition-all z-[1]"
             >
               <h3 className="text-lg font-semibold hidden xl:block">Shade</h3>
-              {filterData.colors?.map((shade) => (
+              {filterOptions.colors?.map((shade) => (
                 <label
                   key={shade}
                   className="flex items-center gap-3 cursor-pointer group"
@@ -594,13 +620,13 @@ export default function Products() {
                       checkedFilter.color && checkedFilter.color.includes(shade)
                     }
                     onChange={() => toggleArrayFilter("color", shade)}
-                    className="w-4 h-4 rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
+                    className="w-4 h-4 accent-[#8A6A5B] rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
                   />
                   <span className="text-md xl:text-lg text-gray-700 group-hover:text-gray-900">
                     {shade}
                   </span>
                   <span className="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                    {productData?.filter((p) => p.color == shade).length}
+                    {allProducts?.filter((p) => p.color == shade).length}
                   </span>
                 </label>
               ))}
@@ -636,11 +662,11 @@ export default function Products() {
                   </label>
                   <input
                     type="number"
-                    value={filterData.priceRange[0]}
+                    value={filterOptions.priceRange[0]}
                     onChange={(e) => handlePriceChange(0, e.target.value)}
                     className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
                     min="0"
-                    max={filterData.priceRange[1]}
+                    max={filterOptions.priceRange[1]}
                   />
                 </div>
                 <span className="text-gray-400 mt-5">-</span>
@@ -650,10 +676,10 @@ export default function Products() {
                   </label>
                   <input
                     type="number"
-                    value={filterData.priceRange[1]}
+                    value={filterOptions.priceRange[1]}
                     onChange={(e) => handlePriceChange(1, e.target.value)}
                     className="w-full px-2 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
-                    min={filterData.priceRange[0]}
+                    min={filterOptions.priceRange[0]}
                     max="500"
                   />
                 </div>
@@ -662,7 +688,7 @@ export default function Products() {
                 type="range"
                 min="0"
                 max="500"
-                value={filterData.priceRange[1]}
+                value={filterOptions.priceRange[1]}
                 onChange={(e) => handlePriceChange(1, e.target.value)}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
               />
@@ -699,7 +725,7 @@ export default function Products() {
                     name="rating"
                     checked={filters.rating === rating}
                     onChange={() => {
-                      setFilterData((prev) => ({ ...prev, rating }));
+                      setFilterOptions((prev) => ({ ...prev, rating }));
                       setPage(0);
                     }}
                     className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-2 focus:ring-blue-500 cursor-pointer"
@@ -751,8 +777,7 @@ export default function Products() {
         {expandedSections.additional && (
           <div>
             <div
-              className="w-full bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
-           rounded-2xl py-6 xl:mt-2 grid grid-cols-3 justify-center items-center gap-4 transition-all z-[1]"
+              className="w-full backdrop-blur-md py-6 xl:mt-2 grid grid-cols-3 justify-center items-center gap-4 transition-all z-[1]"
             >
               <div
                 className={`relative p-3 cursor-pointer flex justify-center items-center 
@@ -770,7 +795,7 @@ export default function Products() {
                 {expandedSections.scratchresistant && (
                   <div className="absolute top-14 bg-white z-[1] rounded-lg p-6 min-w-[280px] mx-auto">
                     <div className="grid grid-cols-3 gap-5 my-3">
-                      {filterData?.scratchresistant?.map((value, index) => (
+                      {filterOptions?.scratchresistant?.map((value, index) => (
                         <div
                           key={index}
                           className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${
@@ -812,7 +837,7 @@ export default function Products() {
                 {expandedSections.waterresistant && (
                   <div className="absolute top-14 bg-white z-[1] rounded-lg p-6 min-w-[280px] mx-auto">
                     <div className="grid grid-cols-3 gap-5 my-3">
-                      {filterData?.waterresistant?.map((value, index) => (
+                      {filterOptions?.waterresistant?.map((value, index) => (
                         <div
                           key={index}
                           className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${
@@ -852,7 +877,7 @@ export default function Products() {
                 {expandedSections.petfriendly && (
                   <div className="absolute top-14 bg-white z-[1] rounded-lg p-6 min-w-[280px] mx-auto">
                     <div className="grid grid-cols-3 gap-5 my-3">
-                      {filterData?.petfriendly?.map((value, index) => (
+                      {filterOptions?.petfriendly?.map((value, index) => (
                         <div
                           key={index}
                           className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all cursor-pointer ${

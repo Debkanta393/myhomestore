@@ -24,7 +24,7 @@ import { useDispatch } from "react-redux";
 import { getProductByTypeName } from "../../slice/product-slice";
 
 export default function Product() {
-  const [selectedImage, setSelectedImage] = useState("./images/luxury1.webp");
+  const [selectedImage, setSelectedImage] = useState("");
   // const [activeTab, setActiveTab] = useState("Description");
   // const [quantity, setQuantity] = useState(1);
   // const [isWishlisted, setIsWishlisted] = useState(false);
@@ -41,7 +41,7 @@ export default function Product() {
   const [packSize, setPackSize] = useState(1.1098);
   const [openAccordion, setOpenAccordion] = useState("Description");
   const params = useParams();
-   const { pathname } = useLocation();
+  const { pathname } = useLocation();
 
   const otherImages = [
     "./images/luxury1.webp",
@@ -123,26 +123,27 @@ export default function Product() {
     },
   ];
 
-//   useEffect(() => {
-//   if (pathname.startsWith("/product")) {
-//     window.scrollTo(0, 0);
-//   }
-// }, [pathname]);
-
-
+  //   useEffect(() => {
+  //   if (pathname.startsWith("/product")) {
+  //     window.scrollTo(0, 0);
+  //   }
+  // }, [pathname]);
 
   const { id } = params;
-  const {type, productName}=params
-
+  const { type, productName } = params;
 
   useEffect(() => {
     const getProducts = async () => {
-      const response = await dispatch(getProductByTypeName({type, productName}));
+      const response = await dispatch(
+        getProductByTypeName({ type, productName }),
+      );
       setProductData(response.payload.data.data[0]);
+      setSelectedImage(response.payload.data.data[0].productImage[0].url);
     };
     getProducts();
   }, [dispatch]);
 
+  console.log(productData);
 
   const currentIndex = otherImages.indexOf(selectedImage);
 
@@ -241,8 +242,8 @@ export default function Product() {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full"
-        >
+          className="w-full sticky top-32"
+         >
           <div className="relative bg-gradient-to-br from-gray-100 to-gray-50 group shadow-xl">
             <AnimatePresence mode="wait">
               <motion.img
@@ -314,29 +315,33 @@ export default function Product() {
             transition={{ delay: 0.3 }}
             className="grid grid-cols-4 gap-4 mt-6"
           >
-            {otherImages.map((image, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.05, y: -5 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setSelectedImage(image)}
-                className={`cursor-pointer border-3 transition-all shadow-md hover:shadow-xl ${
-                  selectedImage === image
-                    ? "border-[#8A6A5A] ring-4 ring-[#8A6A5A]/20"
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
-              >
-                <img
-                  src={image}
-                  alt={`Thumbnail ${index + 1}`}
-                  className="w-full h-28 object-cover"
-                />
-              </motion.div>
+            {productData?.productImage?.map((image, index) => (
+              <>
+                {image.url != selectedImage && (
+                  <motion.div
+                    key={index}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setSelectedImage(image.url)}
+                    className={`cursor-pointer border-3 transition-all shadow-md hover:shadow-xl ${
+                      selectedImage === image
+                        ? "border-[#8A6A5A] ring-4 ring-[#8A6A5A]/20"
+                        : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <img
+                      src={image.url}
+                      alt={`Thumbnail ${index + 1}`}
+                      className="w-full h-28 object-cover"
+                    />
+                  </motion.div>
+                )}
+              </>
             ))}
           </motion.div>
 
           <AnimatePresence mode="wait">
-            <motion.img
+            {/* <motion.img
               key={selectedImage}
               src={selectedImage}
               alt="Product"
@@ -346,16 +351,16 @@ export default function Product() {
               exit="exit"
               transition={{ duration: 0.3 }}
               className="w-full h-[500px] object-cover mt-10"
-            />
+            /> */}
           </AnimatePresence>
         </motion.div>
 
-        {/* Product Details with modern styling */}
+        {/* Product Details */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full space-y-6 sticky top-10"
+          className="w-full space-y-6 sticky top-0"
         >
           {/* Badges with glassmorphism */}
           <div className="flex items-center gap-3">
@@ -518,6 +523,18 @@ export default function Product() {
             </form>
           </motion.div>
 
+          {/* Feature images */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
+            className="flex items-center gap-5"
+          >
+            {productData?.functionsImage?.map((image, index) => (
+              <img src={image.url} className="w-24 h-24" />
+            ))}
+          </motion.div>
+
           {/* Accordian section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -555,7 +572,6 @@ export default function Product() {
                         transition={{ duration: 0.3 }}
                         className="min-h-[180px] px-6 pb-6"
                       >
-
                         {tab === "Specification" && (
                           <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-6">
@@ -831,7 +847,7 @@ function Specification({ label, value }) {
   );
 }
 
-function AdditionalInformation({label, value}) {
+function AdditionalInformation({ label, value }) {
   return (
     <motion.p
       initial={{ opacity: 0, x: -10 }}

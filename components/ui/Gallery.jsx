@@ -53,7 +53,7 @@ export default function Category() {
   };
 
   return (
-    <div className="relative w-full mt-32 py-24 overflow-hidden">
+    <section className="relative w-full mt-32 py-24 overflow-hidden">
       {/* Enhanced Background with Overlay */}
       <div
         className="absolute inset-0 -z-10"
@@ -277,6 +277,6 @@ export default function Category() {
           </div>
         </motion.div>
       </div>
-    </div>
+    </section>
   );
 }
