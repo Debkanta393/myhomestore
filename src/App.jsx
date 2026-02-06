@@ -7,6 +7,7 @@ import Product from "./pages/Product";
 import Brand from "./pages/Brand";
 import ClaverChoise from "./pages/CleverChoice";
 import EngineeredOak from "./pages/EngineeredOak";
+import Payment from "./pages/Payment";
 
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/brand" element={<Brand />} />
         <Route path="/cleverchoice" element={<ClaverChoise />} />
         <Route path="/engineered-oak" element={<EngineeredOak />} />
+        <Route path="/payment" element={<Payment />} />
       </Route>
     </Routes>
   );

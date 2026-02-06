@@ -418,7 +418,7 @@ export default function Products() {
                       checkedFilter.category.includes(category)
                     }
                     onChange={() => toggleArrayFilter("category", category)}
-                    className="w-4 h-4 rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
+                    className="w-4 h-4 accent-[#8A6A5B] rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
                   />
                   <span className="text-md xl:text-lg text-gray-700 group-hover:text-gray-900">
                     {category}
@@ -473,7 +473,7 @@ export default function Products() {
                       checkedFilter.thickness.includes(thickness)
                     }
                     onChange={() => toggleArrayFilter("thickness", thickness)}
-                    className="w-4 h-4 rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
+                    className="w-4 h-4 accent-[#8A6A5B] rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
                   />
                   <span className="text-md xl:text-lg text-gray-700 group-hover:text-gray-900">
                     {thickness}
@@ -523,7 +523,7 @@ export default function Products() {
                       checkedFilter.brand && checkedFilter.brand.includes(brand)
                     }
                     onChange={() => toggleArrayFilter("brand", brand)}
-                    className="w-4 h-4 rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
+                    className="w-4 h-4 accent-[#8A6A5B] rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
                   />
                   <span className="text-md xl:text-lg text-gray-700 group-hover:text-gray-900">
                     {brand}
@@ -572,7 +572,7 @@ export default function Products() {
                       checkedFilter.pattern.includes(pattern)
                     }
                     onChange={() => toggleArrayFilter("pattern", pattern)}
-                    className="w-4 h-4 rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
+                    className="w-4 h-4 accent-[#8A6A5B] rounded border-2 border-[#8A6A5B] text-[#8A6A5B] focus:ring-2 focus:ring-[#8A6A5B] cursor-pointer"
                   />
                   <span className="text-md xl:text-lg text-gray-700 group-hover:text-gray-900">
                     {pattern}

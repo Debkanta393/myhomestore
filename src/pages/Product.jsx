@@ -243,7 +243,7 @@ export default function Product() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
           className="w-full sticky top-32"
-         >
+        >
           <div className="relative bg-gradient-to-br from-gray-100 to-gray-50 group shadow-xl">
             <AnimatePresence mode="wait">
               <motion.img
@@ -574,31 +574,20 @@ export default function Product() {
                       >
                         {tab === "Specification" && (
                           <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-6">
-                              <Specification
-                                label="Dimensions"
-                                value={productData.dimensions}
-                              />
-                              <Specification
-                                label="packsize"
-                                value={productData.packsize}
-                              />
-                              <Specification
-                                label="Pattern"
-                                value={productData.pattern}
-                              />
-                              <Specification
-                                label="Petfriendly"
-                                value={productData.petfriendly}
-                              />
-                              <Specification
-                                label="Scratch resistant"
-                                value={productData.scratchresistant}
-                              />
-                              <Specification
-                                label="Water resistant"
-                                value={productData.waterresistant}
-                              />
+                            <div className="grid grid-cols-2 gap-5">
+                              {Object.entries(
+                                productData.specifications instanceof Map
+                                  ? Object.fromEntries(
+                                      productData.specifications,
+                                    )
+                                  : productData.specifications,
+                              ).map(([key, value]) => (
+                                <Specification
+                                  key={key}
+                                  label={key}
+                                  value={value}
+                                />
+                              ))}
                             </div>
                           </div>
                         )}
@@ -610,21 +599,13 @@ export default function Product() {
                               animate={{ opacity: 1 }}
                               className="space-y-2"
                             >
-                              {/* {[
-                                { label: "SKU", value: "FTCPFCS5013" },
-                                { label: "Category", value: "Chevron" },
-                                { label: "Tag", value: "15mm" },
-                                { label: "Brand", value: "Preference Floors" },
-                              ].map((info, i) => (
-                                
-                              ))} */}
                               <AdditionalInformation
                                 label="SKU"
                                 value={productData.sku}
                               />
                               <AdditionalInformation
                                 label="Thikness"
-                                value={productData.thikness}
+                                value={productData.thickness}
                               />
                               <AdditionalInformation
                                 label="Category"
@@ -839,9 +820,9 @@ function Specification({ label, value }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="backdrop-blur-sm bg-gray-50/50 border border-gray-200/50 rounded-2xl p-4 hover:shadow-md transition-all"
+      className="backdrop-blur-sm bg-gray-50/50 flex items-center gap-5 border border-gray-200/50 rounded-2xl p-4 hover:shadow-md transition-all"
     >
-      <p className="text-sm text-gray-500 mb-1">{label}</p>
+      <p className="text-md text-gray-600 mb-1">{label}:</p>
       <p className="font-bold text-gray-900">{value}</p>
     </motion.div>
   );

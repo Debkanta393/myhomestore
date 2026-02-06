@@ -14,6 +14,7 @@ import {
   Bath,
   Microwave,
   House,
+  Trash2
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -50,27 +51,19 @@ export default function MainNav() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ${
-  //           activeTab === index
-  //             ? `
-  //               bg-gradient-to-br from-[#998e8a] via-[#8A6A5A] to-[#8A6A5A]
-  //               text-white
-  //               shadow-[0_-4px_20px_rgba(138,106,90,0.3),0_-2px_10px_rgba(138,106,90,0.2)]
-  //               border-2 border-[#8A6A5A]
-  //               border-b-0
-  //               translate-y-[2px]
-  //             `
-  //             : `
-  //               bg-white/80
-  //               text-[#8A6A5A]
-  //               border-2 border-[#D6CEC6]/50
-  //               border-b-0
-  //               hover:bg-[#f5efed]/60
-  //               hover:border-[#B8B0A7]/60
-  //               shadow-[0_-2px_12px_rgba(138,106,90,0.1)]
-  //               hover:shadow-[0_-4px_16px_rgba(138,106,90,0.2)]
-  //             `
-  //         }
+  // ========== Cart section ==============
+  const [activeCartSection, setActiveCartSection] = useState(false);
+  useEffect(() => {
+    if (activeCartSection) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [activeCartSection]);
 
   return (
     <div>
@@ -82,7 +75,7 @@ export default function MainNav() {
             ? "0 4px 20px rgba(138, 106, 90, 0.2)"
             : "0 0 0 rgba(138, 106, 90, 0)",
         }}
-       >
+      >
         <div className="w-11/12 sm:max-w-10/12 mx-auto">
           <div className="flex justify-between items-center py-4 md:py-6">
             {/* Logo */}
@@ -131,9 +124,9 @@ export default function MainNav() {
               </Link>
 
               {/* Cart */}
-              <Link
-                to="/cart"
-                className="flex items-center gap-2 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 relative group"
+              <div
+                onClick={() => setActiveCartSection(true)}
+                className="flex items-center gap-2 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 relative group cursor-pointer"
               >
                 <motion.div
                   whileHover={{ scale: 1.1 }}
@@ -145,7 +138,7 @@ export default function MainNav() {
                 <span className="absolute -top-2 -right-2 bg-[#8A6A5A] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   0
                 </span>
-              </Link>
+              </div>
 
               {/* Get Quote Button - Desktop */}
               <motion.button
@@ -176,7 +169,7 @@ export default function MainNav() {
         <div
           className="relative"
           onMouseLeave={() => {
-            setActiveNav(null)
+            setActiveNav(null);
             setMainHovered(null);
             setTabRect(null);
           }}
@@ -189,13 +182,13 @@ export default function MainNav() {
                   key={index}
                   onMouseEnter={(e) => {
                     setActiveTab(index);
-                    setActiveNav(index)
+                    setActiveNav(index);
                     dispath(setTabSelected(tab.tab));
                     setTabRect(e.currentTarget.getBoundingClientRect());
                   }}
                   onClick={(e) => {
                     setActiveTab(index);
-                    setActiveNav(index)
+                    setActiveNav(index);
                     dispath(setTabSelected(tab.tab));
                     setTabRect(e.currentTarget.getBoundingClientRect());
                   }}
@@ -204,7 +197,7 @@ export default function MainNav() {
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   whileHover={{ y: -3 }}
                   className={`hidden lg:flex justify-center items-center gap-2 py-3 rounded-t-2xl text-[12px] xl:text-sm font-bold uppercase tracking-wide
-                     ${activeTab === index ? "text-[#8A6A5A]": "text-black"} cursor-pointer relative`}
+                     ${activeTab === index ? "text-[#8A6A5A]" : "text-black"} cursor-pointer relative`}
                 >
                   {activeTab === index && (
                     <motion.span
@@ -260,7 +253,10 @@ export default function MainNav() {
                               rotate: mainHovered === item.key ? 180 : 0,
                             }}
                             transition={{ duration: 0.25 }}
-                            onClick={(e)=> {e.preventDefault(); setMainHovered(item.key)}}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setMainHovered(item.key);
+                            }}
                           >
                             <ChevronDown size={14} />
                           </motion.div>
@@ -434,6 +430,90 @@ export default function MainNav() {
               </motion.button>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Cart section */}
+      <AnimatePresence>
+        {activeCartSection && (
+          <>
+            {/* Black overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black z-[9998]"
+              onClick={() => setActiveCartSection(false)}
+            />
+
+            {/* Cart Drawer */}
+            <motion.div
+              initial={{ x: 400 }}
+              animate={{ x: 0 }}
+              exit={{ x: 400 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="fixed top-0 right-0 h-screen w-[500px] bg-white z-[9999] p-6"
+            >
+              <h2 className="font-semibold text-3xl">
+                Your Cart{" "}
+                <span className="font-normal text-[#998e8a] text-2xl">(2)</span>
+              </h2>
+              <div className="absolute top-6 right-10 hover:bg-[#f5efed] cursor-pointer p-2 hover:shadow-md rounded" onClick={()=> setActiveCartSection(false)}>
+              <X />
+              </div>
+
+              {/* Cart */}
+              <div className="border-t border-[#998e8a] mt-4 space-y-2">
+                <div className="flex gap-5 py-4  hover:shadow-xl shadow-gray-300 px-6 rounded-xl">
+                  <img src="" alt="" className="w-32 h-32 bg-gray-200" />
+                  <div className="flex-1 space-y-1">
+                    <div className="flex justify-between">
+                      <h5 className="text-xl font-medium w-2/3">Hydro Laminate Tiles</h5>
+                      <div className="flex items-center gap-2 w-1/3">
+                        <button className="p-2 hover:shadow-md rounded cursor-pointer">-</button>
+                        <p>1</p>
+                        <button className="p-2 hover:shadow-md rounded cursor-pointer">+</button>
+                      </div>
+                    </div>
+                    <p className="text-md text-gray-500">$30.00</p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-5">
+                        <p>Qty: 1</p>
+                        <p>Size: XL</p>
+                      </div>
+                      <div className="p-2 rounded hover:shadow-md cursor-pointer text-red-600">
+                      <Trash2 />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment summary */}
+              <div className="absolute bottom-6 left-6 right-6">
+                <h3 className="font-semibold text-2xl">Payment Summary</h3>
+                <div className="space-y-2 mt-3">
+                  <div className="flex justify-between">
+                    <p>Subtotal</p>
+                    <p>$30.00</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <p>Shipping</p>
+                    <p>FREE</p>
+                  </div>
+                  <div className="flex justify-between font-bold">
+                    <p>Total</p>
+                    <p>$27.00</p>
+                  </div>
+                </div>
+
+                <button className="w-full mt-4 bg-[#998e8a] text-white text-lg py-3 cursor-pointer">
+                  Check Out
+                </button>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
