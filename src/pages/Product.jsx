@@ -21,10 +21,12 @@ import WhyChooseus from "../../components/ui/WhyChooseus";
 import { useParams } from "react-router";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getProductByTypeName } from "../../slice/product-slice";
+import { getProductByTypeName } from "../../service/product";
+import {addCartItems} from "../../service/cart"
 
 export default function Product() {
   const [selectedImage, setSelectedImage] = useState("");
+  
   // const [activeTab, setActiveTab] = useState("Description");
   // const [quantity, setQuantity] = useState(1);
   // const [isWishlisted, setIsWishlisted] = useState(false);
@@ -207,7 +209,7 @@ export default function Product() {
           ? (calculatorData.totalNeeded * (calculatorData.wastage / 100)) /
             packSize
           : calculatorData.totalNeeded / packSize;
-      setCartonsNeeded(totalCartons);
+      setCartonsNeeded(Math.ceil(totalCartons));
     };
     calculatorHandler();
   }, [calculatorData.totalNeeded, calculatorData.wastage]);
@@ -441,7 +443,7 @@ export default function Product() {
           </motion.div>
 
           <motion.div className="w-full flex items-center gap-10">
-            <button className="bg-[#998E8A] py-3 text-white text-xl w-6/12 cursor-pointer">
+            <button className="bg-[#998E8A] py-3 text-white text-xl w-6/12 cursor-pointer" onClick={()=> dispatch(addCartItems(productData._id))}>
               Add to cart
             </button>
             <button className="border border-[#998E8A] text-[#998E8A] py-3 text-xl flex items-center w-6/12 justify-center gap-5 cursor-pointer">
@@ -501,11 +503,11 @@ export default function Product() {
                     <input
                       type="radio"
                       name="wastage"
-                      id="20%"
-                      value={20}
+                      id="15%"
+                      value={15}
                       onChange={(e) => calculatorDataHandler(e)}
                     />
-                    <label htmlFor="">20%</label>
+                    <label htmlFor="">15%</label>
                   </div>
                 </div>
               </div>
@@ -789,7 +791,7 @@ export default function Product() {
                     <p className="text-lg text-gray-500 line-clamp-1">
                       by Elite Floors Collection
                     </p>
-
+                      
                     <div className="flex items-baseline gap-2">
                       <span className="text-xl font-bold text-gray-900">
                         ${item.price}

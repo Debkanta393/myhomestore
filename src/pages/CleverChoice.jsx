@@ -4,10 +4,7 @@ import { Link } from "react-router";
 import {
   PhoneCall,
   Mail,
-  Gem,
-  ShieldCheck,
   Van,
-  ArrowRight,
   CircleUser,
   BrickWall,
   Award,
@@ -300,9 +297,6 @@ export default function ClaverChoise() {
 
       {/* Contact / CTA */}
       <section className="relative py-28 lg:py-36 bg-[#f5efed] overflow-hidden">
-        {/* Soft background accents */}
-        {/* <div className="absolute -top-32 -right-32 h-[400px] w-[400px] rounded-full bg-emerald-200/40 blur-3xl" />
-                <div className="absolute -bottom-32 -left-32 h-[400px] w-[400px] rounded-full bg-amber-200/40 blur-3xl" /> */}
 
         <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center px-6">
           {/* Image block */}

@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { setTabSelected } from "../../slice/slice";
+import { setTabSelected } from "../../service/slice";
 import { useDispatch } from "react-redux";
 import { mainNav, mainNavSub } from "../../data/data";
 

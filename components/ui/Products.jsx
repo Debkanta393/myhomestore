@@ -3,8 +3,9 @@ import { HeartIcon, X, SlidersHorizontal, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { category, brand, products } from "../../data/data";
-import { getAllProducts } from "../../slice/product-slice";
+import { getAllProducts } from "../../service/product";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Products() {
   const ref = useRef(null);
@@ -51,15 +52,27 @@ export default function Products() {
   });
 
   // Fetch product from database
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const response = await dispatch(getAllProducts());
-      setAllProducts(response.payload.data.products);
-      setProductData(response.payload.data.products);
-    };
-    fetchProduct();
-  }, [dispatch]);
-  console.log(productData);
+  // useEffect(() => {
+  //   const fetchProduct = async () => {
+  //     const response = await dispatch(getAllProducts());
+  //     console.log(response)
+  //     setAllProducts(response.payload.data.products);
+  //     setProductData(response.payload.data.products);
+  //   };
+  //   fetchProduct();
+  // }, [dispatch]);
+  // console.log(productData);
+
+
+  useEffect(()=>{
+    const fetchProduct=async()=>{
+      const product=await axios.get('http://localhost:5000/api/product/getallProduct/')
+      console.log(product)
+      setProductData(product.data.products)
+      setAllProducts(product.data.products)
+    }
+    fetchProduct()
+  },[])
 
   // Set filter data according to type
   useEffect(() => {
@@ -1018,7 +1031,7 @@ export default function Products() {
                     <motion.div
                       key={item._id}
                       variants={cardVariants}
-                      className="group relative bg-white overflow-hidden transition-all duration-300 ease-out 
+                      className="group relative bg-white overflow-hidden transition-all duration-300 ease-out border border-gray-300 
                       hover:-translate-y-1 border border-gray-100 cursor-pointer bg-amber-700 z-0"
                       onClick={() =>
                         navigate(`/${item.type}/${item.productName}`)
@@ -1026,7 +1039,7 @@ export default function Products() {
                     >
                       <div className="relative bg-gray-50">
                         <img
-                          src={item.image}
+                          src={item.productImage[0].url}
                           alt={item.heading}
                           loading="lazy"
                           className="block h-[220px] lg:h-[250px] 2xl:h-[400px] w-full object-cover transition-transform duration-500"
@@ -1055,13 +1068,13 @@ export default function Products() {
                           )}
                         </div>
 
-                        {!item.inStock && (
-                          <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
-                            <span className="bg-white text-gray-900 px-3 py-1 rounded-lg font-semibold text-xs">
-                              Out of Stock
-                            </span>
-                          </div>
-                        )}
+                        {/* {!item.inStock && ( */}
+                          {/* // <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
+                          //   <span className="bg-white text-gray-900 px-3 py-1 rounded-lg font-semibold text-xs">
+                          //     Out of Stock
+                          //   </span>
+                          // </div> */}
+                        {/* )} */}
                       </div>
 
                       <div className="py-5 space-y-2">
@@ -1077,7 +1090,7 @@ export default function Products() {
                           </span>
                         </div> */}
 
-                        <div className="flex flex-col items-start justify-between gap-1">
+                        <div className="flex flex-col items-start justify-between gap-1 px-5">
                           <p className="text-lg xl:text-2xl font-semibold text-gray-900 line-clamp-1">
                             {item.productName}
                           </p>
