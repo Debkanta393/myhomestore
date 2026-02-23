@@ -39,7 +39,7 @@ export default function FAQ() {
   };
 
   return (
-    <section className="w-full bg-[#D6CFC4] flex flex-col items-center justify-center py-20 px-4">
+    <section className="w-full bg-[#D6CFC4] flex flex-col items-center justify-center py-20 px-10 sm:px-20">
       {/* Title */}
       <h2 className="text-4xl font-serif text-[#2C2C2C] mb-12 tracking-wide">
         FAQs
@@ -57,7 +57,7 @@ export default function FAQ() {
                 onClick={() => toggle(index)}
                 className="w-full flex items-center justify-between gap-4 text-left group"
               >
-                <span className="text-xl font-semibold text-[#2C2C2C] leading-snug">
+                <span className="text-lg sm:text-xl font-semibold text-[#2C2C2C] leading-snug">
                   {faq.question}
                 </span>
                 <motion.span
@@ -80,7 +80,7 @@ export default function FAQ() {
                     transition={{ duration: 0.35, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <p className="pt-3 text-lg text-[#5C5550] leading-relaxed pr-8">
+                    <p className="pt-3 text-md sm:text-lg text-[#5C5550] leading-relaxed pr-8">
                       {faq.answer}
                     </p>
                   </motion.div>

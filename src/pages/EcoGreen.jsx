@@ -103,8 +103,8 @@ export default function EcoGreen() {
               transition={{ duration: 0.8 }}
               className="mb-6"
             >
-              <h1 className="text-6xl font-bold text-white mb-6 tracking-tight">
-                EcoGreen
+              <h1 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
+                Clever Choice
               </h1>
               <div className="w-32 h-1 bg-white/60 mx-auto mb-8"></div>
             </motion.div>
@@ -164,79 +164,91 @@ export default function EcoGreen() {
         </motion.div> */}
       </motion.section>
 
-      {/* About / Why Choose */}
-      <section className="relative bg-gray-100 py-24 overflow-hidden">
-        {/* Decorative background */}
-        <div className="absolute inset-0" />
-
-        <div className="relative max-w-10/12 mx-auto">
-          {/* Main content */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      {/* ── About / Why Choose ── */}
+      <section className="relative bg-[#F5F0ED] py-16 sm:py-20 lg:py-24 overflow-hidden my-20">
+        <div className="relative w-11/12 sm:w-10/12 mx-auto">
+          {/* Main grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             {/* Left content */}
             <div>
-              <h2 className="text-4xl font-bold mb-6">About EcoGreen</h2>
-              <p className="max-w-3xl mx-auto text-gray-700 text-lg leading-relaxed">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+                About Bamboo Flooring
+              </h2>
+              <p className="text-gray-700 text-base sm:text-lg leading-relaxed mb-4">
                 Since 2003, Clever Choice has been delivering premium flooring
                 solutions across Australia. From engineered timber and hybrid
                 flooring to laminate and bamboo, our products are designed to
                 combine beauty, durability, and long-term value.
               </p>
-              <h3 className="text-xl font-semibold mb-2 mt-5">
+              <h3 className="text-lg sm:text-xl font-semibold mb-2 mt-5">
                 Flooring You Can Trust
               </h3>
-              <p className="text-gray-600 leading-relaxed mb-6 text-lg">
+              <p className="text-gray-600 leading-relaxed mb-6 text-base sm:text-lg">
                 We work closely with manufacturers and suppliers to ensure every
                 Clever Choice product meets strict Australian standards. Whether
                 for residential or commercial spaces, our flooring is engineered
                 for performance, style, and everyday living.
               </p>
-
               <ul className="space-y-4">
-                <li className="flex items-start gap-3 text-lg">
-                  <span className="mt-1 text-[#8A6A5A] font-bold">✓</span>
-                  <span>Carefully selected raw materials and finishes</span>
-                </li>
-                <li className="flex items-start gap-3 text-lg">
-                  <span className="mt-1 text-[#8A6A5A] font-bold">✓</span>
-                  <span>
-                    Water-resistant and scratch-resistant technologies
-                  </span>
-                </li>
-                <li className="flex items-start gap-3 text-lg">
-                  <span className="mt-1 text-[#8A6A5A] font-bold">✓</span>
-                  <span>Designed for Australian climate conditions</span>
-                </li>
+                {[
+                  "Carefully selected raw materials and finishes",
+                  "Water-resistant and scratch-resistant technologies",
+                  "Designed for Australian climate conditions",
+                ].map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-start gap-3 text-base sm:text-lg"
+                  >
+                    <span className="mt-1 text-[#8A6A5A] font-bold">✓</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
               </ul>
             </div>
 
-            <div className="flex items-center justify-around">
-              <img src="./images/claverchoice2.png" alt="" />
-              <img src="./images/claverchoice1.png" alt="" />
-            </div>
-          </div>
-
-          <div className="mt-20">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-center justify-between gap-10">
-              {statData.map((item, index) => (
-                <div className="bg-white rounded-2xl p-5 text-center shadow w-full flex items-center gap-5">
-                  <div className="bg-[#998e8a] p-4 rounded-full text-white w-14">
-                    {item.icon}
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-[#8A6A5A]">
-                      {item.value}
-                    </div>
-                    <div className="mt-2 text-gray-600">{item.label}</div>
-                  </div>
-                </div>
-              ))}
+            {/* Right images — stack on small screens, side by side on md+ */}
+            <div className="flex flex-col sm:flex-row items-center justify-end gap-6 sm:gap-4 h-[100%]">
+              <img
+                src="./images/claverchoice2.png"
+                alt="Clever Choice product 2"
+                className="w-full sm:w-1/2 max-w-xs object-cover h-[400px] xl:h-[100%]"
+              />
+              <img
+                src="./images/claverchoice1.png"
+                alt="Clever Choice product 1"
+                className="w-full sm:w-1/2 max-w-xs object-cover h-[300px] xl:h-[80%]"
+              />
             </div>
           </div>
         </div>
       </section>
 
+      {/* Stats */}
+      <div className="w-11/12 sm:w-10/12 mx-auto mt-16 sm:mt-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          {statData.map((item) => (
+            <div
+              key={item.label}
+              className="bg-white rounded-2xl p-4 shadow w-full flex items-center gap-3"
+            >
+              <div className="bg-[#998e8a] p-3 rounded-full text-white flex-shrink-0">
+                {item.icon}
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl font-bold text-[#8A6A5A]">
+                  {item.value}
+                </div>
+                <div className="mt-1 text-sm sm:text-base text-gray-600 text-nowrap">
+                  {item.label}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Flooring ranges */}
-      <section id="products" className="w-10/12 mx-auto px-6 py-16 mb-20">
+      <section id="products" className="w-10/12 mx-auto px-6 py-16 my-20">
         <h2 className="text-4xl lg:text-5xl font-bold text-center mb-8">
           Explore Our Flooring Ranges
         </h2>
@@ -295,44 +307,45 @@ export default function EcoGreen() {
         <Products />
       </div>
 
-      {/* Contact / CTA */}
-      <section className="relative py-28 lg:py-36 bg-[#f5efed] overflow-hidden">
-
-        <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center px-6">
+      {/* ── Contact ── */}
+      <section className="relative py-20 sm:py-28 lg:py-36 bg-[#f5efed] overflow-hidden md:px-10">
+        <div className="relative w-11/12 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center px-4 sm:px-6">
           {/* Image block */}
           <div className="relative">
             <img
               src="./images/outdoor.jpg"
               alt="Outdoor flooring"
-              className="h-[520px] w-full object-cover rounded-3xl shadow-2xl"
+              className="h-64 sm:h-96 lg:h-[520px] w-full object-cover rounded-2xl sm:rounded-3xl shadow-2xl"
             />
-            <div className="absolute inset-0 rounded-3xl ring-1 ring-black/10" />
+            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl ring-1 ring-black/10" />
           </div>
 
           {/* Content */}
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl text-center mb-6 leading-tight font-bold">
-              Let’s Talk About Your Flooring Project
+            <h2 className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl text-center lg:text-left mb-6 leading-tight font-bold">
+              Let's Talk About Your Flooring Project
             </h2>
 
-            <p className="max-w-xl text-lg md:text-xl text-gray-700 mb-12 leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-gray-700 mb-10 sm:mb-12 leading-relaxed max-w-xl mx-auto lg:mx-0">
               Get expert advice, fast quotes, and product guidance from flooring
               specialists who understand quality, durability, and design.
             </p>
 
             {/* Contact cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-14">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-y-3 gap-x-3 lg:gap-x-1 xl:gap-5 mb-10 xl:mb-14">
               {/* Phone */}
               <Link
-                to={"tel:0755267399"}
-                className="group flex items-center gap-4 rounded-2xl bg-white px-6 shadow-lg hover:shadow-xl transition hover:-translate-y-1"
+                to="tel:0755267399"
+                className="group flex items-center gap-4 rounded-2xl bg-white px-4 py-4 shadow-lg hover:shadow-xl transition hover:-translate-y-1"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#998e8a]/30 text-[#8A6A5A] text-2xl">
+                <div className="flex h-12 w-12 sm:h-12 sm:w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#998e8a]/30 text-[#8A6A5A]">
                   <PhoneCall />
                 </div>
                 <div>
-                  <div className="text-sm text-gray-500 mb-1">Call Us</div>
-                  <div className="text-xl font-bold text-gray-900 group-hover:text-[#8A6A5A] transition">
+                  <div className="text-xs sm:text-sm text-gray-500 mb-1">
+                    Call Us
+                  </div>
+                  <div className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-[#8A6A5A] transition">
                     07 5526 7399
                   </div>
                 </div>
@@ -341,14 +354,16 @@ export default function EcoGreen() {
               {/* Email */}
               <Link
                 to="mailto:sales@cleverchoice.com.au"
-                className="group flex items-center gap-4 rounded-2xl bg-white p-6 shadow-lg hover:shadow-xl transition hover:-translate-y-1"
+                className="group flex items-center gap-2 rounded-2xl bg-white px-2 py-4 shadow-lg hover:shadow-xl transition hover:-translate-y-1"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#998e8a]/30 text-[#8A6A5A] text-2xl">
+                <div className="flex h-12 w-12 sm:h-12 sm:w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#998e8a]/30 text-[#8A6A5A]">
                   <Mail />
                 </div>
-                <div>
-                  <div className="text-sm text-gray-500 mb-1">Email Us</div>
-                  <div className="text-lg font-bold text-gray-900 break-all group-hover:text-[#8A6A5A] transition whitespace-no">
+                <div className="min-w-0">
+                  <div className="text-xs sm:text-sm text-gray-500 mb-1">
+                    Email Us
+                  </div>
+                  <div className="text-base font-bold text-gray-900 group-hover:text-[#8A6A5A] transition break-all text-nowrap">
                     sales@cleverchoice.com.au
                   </div>
                 </div>
@@ -356,20 +371,16 @@ export default function EcoGreen() {
             </div>
 
             {/* CTA */}
-            <div className="flex flex-col sm:flex-row gap-5">
-              <button className="relative overflow-hidden py-3 px-14 bg-white text-black text-xl font-medium group cursor-pointer">
-                <span className="relative z-10 transition-colors duration-300 group-hover:text-white">
+            <div className="flex flex-col lg:flex-row gap-4 xl:gap-5 justify-center lg:justify-start">
+              <button className="relative overflow-hidden w-full sm:w-auto py-3 px-10 sm:px-14 bg-white text-black text-lg xl:text-xl font-medium group cursor-pointer">
+                <span className="relative z-10 transition-colors duration-300 group-hover:text-white text-nowrap">
                   Call now
                 </span>
-
-                <span
-                  className="absolute inset-0 bg-black transform scale-x-0 origin-left 
-                   transition-transform duration-300 group-hover:scale-x-100"
-                ></span>
+                <span className="absolute inset-0 bg-black transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100" />
               </button>
               <a
                 href="#contact-form"
-                className="inline-flex items-center justify-center border-2 border-gray-900 px-10 py-4 text-lg font-semibold text-gray-900 hover:bg-gray-900 hover:text-white transition"
+                className="inline-flex items-center justify-center w-full sm:w-auto border-2 border-gray-900 px-8 xl:px-10 py-3 sm:py-4 text-base xl:text-lg font-semibold text-gray-900 hover:bg-gray-900 hover:text-white transition text-nowrap"
               >
                 Request a Quote
               </a>
