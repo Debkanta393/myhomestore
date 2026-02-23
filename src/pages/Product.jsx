@@ -14,6 +14,8 @@ import {
   Check,
   ChevronDown,
   HeartIcon,
+  CircleCheckBig,
+  Dot,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Reviews from "../../components/ui/Reviews";
@@ -22,11 +24,11 @@ import { useParams } from "react-router";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getProductByTypeName } from "../../service/product";
-import {addCartItems} from "../../service/cart"
+import { addCartItems } from "../../service/cart";
 
 export default function Product() {
-  const [selectedImage, setSelectedImage] = useState("");
-  
+  const [selectedImage, setSelectedImage] = useState(0);
+
   // const [activeTab, setActiveTab] = useState("Description");
   // const [quantity, setQuantity] = useState(1);
   // const [isWishlisted, setIsWishlisted] = useState(false);
@@ -38,21 +40,21 @@ export default function Product() {
   const [cartonsNeeded, setCartonsNeeded] = useState(null);
   const dispatch = useDispatch();
   const [productData, setProductData] = useState();
-  // const [proSpecification, setProductSpecification] = useState([]);
-  // const [price, setPrice] = useState(null);
+  const [productImages, setProductImages] = useState([]);
   const [packSize, setPackSize] = useState(1.1098);
   const [openAccordion, setOpenAccordion] = useState("Description");
   const params = useParams();
   const { pathname } = useLocation();
 
-  const otherImages = [
-    "./images/luxury1.webp",
-    "./images/category/indoor1.jpg",
-    "./images/category/indoor4.jpg",
-    "./images/category/indoor5.jpg",
+  const tabs = [
+    "Description",
+    "Specifications",
+    "Dimensions",
+    "Installation",
+    "Warranty",
+    "Delivery",
   ];
-
-  const tabs = ["Specification", "Additional Information"];
+  const [activeTab, setActiveTab] = useState(tabs[0]);
 
   const products = [
     {
@@ -125,12 +127,6 @@ export default function Product() {
     },
   ];
 
-  //   useEffect(() => {
-  //   if (pathname.startsWith("/product")) {
-  //     window.scrollTo(0, 0);
-  //   }
-  // }, [pathname]);
-
   const { id } = params;
   const { type, productName } = params;
 
@@ -139,26 +135,30 @@ export default function Product() {
       const response = await dispatch(
         getProductByTypeName({ type, productName }),
       );
-      setProductData(response.payload.data.data[0]);
-      setSelectedImage(response.payload.data.data[0].productImage[0].url);
+      if (response.payload.data.success) {
+        setProductData(response.payload.data.data[0]);
+        setProductImages(response.payload.data.data[0].productImage);
+      }
     };
     getProducts();
   }, [dispatch]);
 
   console.log(productData);
 
-  const currentIndex = otherImages.indexOf(selectedImage);
-
   const handlePrevImage = () => {
-    const newIndex =
-      currentIndex > 0 ? currentIndex - 1 : otherImages.length - 1;
-    setSelectedImage(otherImages[newIndex]);
+    // const newIndex =
+    //   currentIndex > 0 ? currentIndex - 1 : otherImages.length - 1;
+    // setSelectedImage(otherImages[newIndex]);
+    setSelectedImage((prev) =>
+      prev > 0 ? prev - 1 : productImages.length - 1,
+    );
   };
 
   const handleNextImage = () => {
-    const newIndex =
-      currentIndex < otherImages.length - 1 ? currentIndex + 1 : 0;
-    setSelectedImage(otherImages[newIndex]);
+    // const newIndex =
+    //   currentIndex < otherImages.length - 1 ? currentIndex + 1 : 0;
+    // setSelectedImage(otherImages[newIndex]);
+    setSelectedImage((prev) => (productImages.length - 1 ? prev + 1 : 0));
   };
 
   const imageVariants = {
@@ -214,6 +214,7 @@ export default function Product() {
     calculatorHandler();
   }, [calculatorData.totalNeeded, calculatorData.wastage]);
 
+  console.log(activeTab);
   return (
     <div className="w-full mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
       {/* Breadcrumb with glassmorphism */}
@@ -250,7 +251,7 @@ export default function Product() {
             <AnimatePresence mode="wait">
               <motion.img
                 key={selectedImage}
-                src={selectedImage}
+                src={productImages[selectedImage]?.url}
                 alt="Product"
                 variants={imageVariants}
                 initial="enter"
@@ -265,7 +266,7 @@ export default function Product() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
             {/* Navigation buttons with glassmorphism */}
-            {/* <motion.button
+            <motion.button
               whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.95 }}
               onClick={handlePrevImage}
@@ -281,10 +282,10 @@ export default function Product() {
               className="absolute top-1/2 -translate-y-1/2 right-5 backdrop-blur-md bg-white/80 hover:bg-white shadow-2xl z-20 p-4 rounded-full transition-all opacity-0 group-hover:opacity-100 border border-white/50"
             >
               <ChevronRight size={24} className="text-gray-800" />
-            </motion.button> */}
+            </motion.button>
 
             {/* Quick action buttons */}
-            {/* <div className="absolute top-5 right-5 flex flex-col gap-3 z-20">
+            <div className="absolute top-5 right-5 flex flex-col gap-3 z-20">
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 whileTap={{ scale: 0.9 }}
@@ -300,23 +301,25 @@ export default function Product() {
               >
                 <Share2 size={20} className="text-gray-700" />
               </motion.button>
-            </div> */}
+            </div>
 
             {/* Image counter */}
-            {/* <div className="absolute bottom-5 left-1/2 -translate-x-1/2 backdrop-blur-md bg-black/40 px-4 py-2 rounded-full">
-              <span className="text-white text-sm font-medium">
-                {currentIndex + 1} / {otherImages.length}
-              </span>
-            </div> */}
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center">
+              {[...Array(productData?.productImage?.length)].map((_, index) => (
+                <span className="text-white text-sm font-medium">
+                  <Dot size={30} />
+                </span>
+              ))}
+            </div>
           </div>
 
           {/* Enhanced Thumbnail Gallery */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             className="grid grid-cols-4 gap-4 mt-6"
-          >
+           >
             {productData?.productImage?.map((image, index) => (
               <>
                 {image.url != selectedImage && (
@@ -340,7 +343,7 @@ export default function Product() {
                 )}
               </>
             ))}
-          </motion.div>
+          </motion.div> */}
 
           <AnimatePresence mode="wait">
             {/* <motion.img
@@ -355,9 +358,33 @@ export default function Product() {
               className="w-full h-[500px] object-cover mt-10"
             /> */}
           </AnimatePresence>
+
+          <AnimatePresence mode="wait">
+            <h3 className="text-2xl font-semibold mt-16 mb-5">Color Options in this range</h3>
+            <div className="flex flex-wrap gap-5 text-center">
+              {[
+                "Biscayne",
+                "Rainier",
+                "Caramel",
+                "Jasper",
+                "Island Mist",
+                "Hatteras",
+                "Salt Flat",
+              ].map((color, index) => (
+                <motion.div
+                initial={{opacity: 0, y: 10}}
+                animate={{opacity: 1, y: 0}}
+                transition={{duration: 0.3, delay: index * 0.5}}
+                 key={index}>
+                  <div className="w-28 h-16 bg-[#CB9677] mb-2"></div>
+                  <span className="text-lg">{color}</span>
+                </motion.div>
+              ))}
+            </div>
+          </AnimatePresence>
         </motion.div>
 
-        {/* Product Details */}
+        {/* Product Details (right section)*/}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
@@ -425,7 +452,7 @@ export default function Product() {
           </div>
 
           {/* Price section with modern design */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.7 }}
@@ -440,16 +467,32 @@ export default function Product() {
                 $500
               </span>
             </div>
-          </motion.div>
+          </motion.div> */}
 
-          <motion.div className="w-full flex items-center gap-10">
-            <button className="bg-[#998E8A] py-3 text-white text-xl w-6/12 cursor-pointer" onClick={()=> dispatch(addCartItems(productData._id))}>
-              Add to cart
-            </button>
-            <button className="border border-[#998E8A] text-[#998E8A] py-3 text-xl flex items-center w-6/12 justify-center gap-5 cursor-pointer">
-              <Heart size={24} className="text-[#998E8A] transition-colors" />
-              Wishlist
-            </button>
+          {/* Price section */}
+          <motion.div className="flex gap-10 items-center justify-evenly my-10">
+            <div className="text-center space-y-3">
+              <h3 className="text-[#8A6A5B] text-xl font-semibold">
+                Supply + Install
+              </h3>
+              <p className="text-2xl font-extrabold ">
+                $38{" "}
+                <span className="text-lg font-normal">
+                  /m <sup>2</sup>
+                </span>
+              </p>
+            </div>
+            <div className="text-center space-y-3">
+              <h3 className="text-[#8A6A5B] text-xl font-semibold">
+                Supply Only
+              </h3>
+              <p className="text-2xl font-extrabold ">
+                $28{" "}
+                <span className="text-lg font-normal">
+                  /m <sup>2</sup>
+                </span>
+              </p>
+            </div>
           </motion.div>
 
           {/* Qualtiny calculator */}
@@ -460,11 +503,8 @@ export default function Product() {
             className="mt-10"
           >
             <h2 className="text-3xl font-semibold">Quantity Calculator</h2>
-            <p className="text-xl mt-5 text-black font-bold">
-              Pack size: 1.1098 m² per carton
-            </p>
             <form action="" className="mt-3">
-              <div className="flex xl:flex-row flex-col xl:items-start gap-x-10 gap-y-2 mt-10">
+              <div className="space-y-3 mt-10">
                 <div>
                   <label htmlFor="" className="text-xl text-[#666E7C]">
                     Total square meters needed
@@ -510,181 +550,215 @@ export default function Product() {
                     <label htmlFor="">15%</label>
                   </div>
                 </div>
-              </div>
-              <div className="mt-10">
-                <p className="text-lg">
-                  <span className="font-semibold text-[#666E7C]">
-                    Cartons Needed:
-                  </span>{" "}
-                  {cartonsNeeded}
+                <p className="text-lg mt-5 text-black font-medium">
+                  Pack size: 1.1098 m² per carton
                 </p>
-                <p className="text-lg mt-1 text-[#666E7C]">
-                  <span className="font-semibold">Total Amount:</span>
+              </div>
+              <div className="mt-10 space-y-2">
+                <p className="flex justify-between items-center font-semibold text-xl">
+                  <span className="text-lg font-normal text-[#666E7C]">
+                    Cartons Required:
+                  </span>{" "}
+                  6 cartons
+                </p>
+                <p className="flex justify-between items-center font-semibold text-xl">
+                  <span className="text-lg font-normal text-[#666E7C]">
+                    Area Supplied:
+                  </span>
+                  10.44 m²
                 </p>
               </div>
             </form>
           </motion.div>
 
+          {/* Price summery section */}
+          <motion.div className="space-y-4 mt-10">
+            <h3 className="text-2xl font-semibold">Price Summary</h3>
+            <div className="space-y-2">
+              <p className="text-lg text-[#666E7C] flex justify-between items-center">
+                Subtotal (Supply + Install):{" "}
+                <span className="text-xl font-semibold text-black">
+                  $396.81
+                </span>
+              </p>
+              <p className="text-lg text-[#666E7C] flex justify-between items-center">
+                GST (10%):{" "}
+                <span className="text-xl font-semibold text-black">$39.68</span>
+              </p>
+              <p className="text-lg text-[#666E7C] flex justify-between items-center">
+                TOTAL{" "}
+                <span className="text-xl font-semibold text-black">
+                  $436.49
+                </span>
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Buttons section */}
+          <motion.div className="w-full flex items-center gap-10 mt-20">
+            <button
+              className="border border-[#998E8A] text-[#998E8A] py-3 text-xl w-6/12 cursor-pointer"
+              onClick={() => dispatch(addCartItems(productData._id))}
+            >
+              View in showroom
+            </button>
+            <button className="bg-[#998E8A] py-3 text-white text-xl w-6/12 cursor-pointer">
+              Add to Cart
+            </button>
+          </motion.div>
+
+          <p className="text-lg font-semibold text-center">
+            Call Us on 0467 747 837 for bulk pricing
+          </p>
+
           {/* Feature images */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
             className="flex items-center gap-5"
-          >
+           >
             {productData?.functionsImage?.map((image, index) => (
               <img src={image.url} className="w-24 h-24" />
             ))}
-          </motion.div>
-
-          {/* Accordian section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-          >
-            {tabs.map((tab, index) => {
-              const isOpen = openAccordion === tab;
-
-              return (
-                <div key={index} className="overflow-hidden">
-                  {/* HEADER */}
-                  <button
-                    onClick={() => setOpenAccordion(isOpen ? null : tab)}
-                    className="w-full flex justify-between items-center py-4 text-left hover:bg-gray-50 transition"
-                  >
-                    <h3 className="text-2xl font-bold text-gray-900">{tab}</h3>
-
-                    <motion.span
-                      animate={{ rotate: isOpen ? 180 : 0 }}
-                      className="text-gray-500"
-                    >
-                      <ChevronDown size={16} />
-                    </motion.span>
-                  </button>
-
-                  {/* CONTENT */}
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        key={tab}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className="min-h-[180px] px-6 pb-6"
-                      >
-                        {tab === "Specification" && (
-                          <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-5">
-                              {Object.entries(
-                                productData.specifications instanceof Map
-                                  ? Object.fromEntries(
-                                      productData.specifications,
-                                    )
-                                  : productData.specifications,
-                              ).map(([key, value]) => (
-                                <Specification
-                                  key={key}
-                                  label={key}
-                                  value={value}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {tab === "Additional Information" && (
-                          <div className="space-y-3">
-                            <motion.div
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              className="space-y-2"
-                            >
-                              <AdditionalInformation
-                                label="SKU"
-                                value={productData.sku}
-                              />
-                              <AdditionalInformation
-                                label="Thikness"
-                                value={productData.thickness}
-                              />
-                              <AdditionalInformation
-                                label="Category"
-                                value={productData.category}
-                              />
-                              <AdditionalInformation
-                                label="Range"
-                                value={productData.range}
-                              />
-                              <AdditionalInformation
-                                label="Brand"
-                                value={productData.brand}
-                              />
-                            </motion.div>
-                          </div>
-                        )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </motion.div>
-
-          {/* Enhanced Features with icons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
-            className="grid grid-cols-3 gap-4 pt-6"
-          >
-            {[
-              {
-                icon: Truck,
-                title: "Free Shipping",
-                desc: "Orders over $100",
-                color: "blue",
-              },
-              {
-                icon: Shield,
-                title: "Warranty",
-                desc: "2 years coverage",
-                color: "green",
-              },
-              {
-                icon: RotateCcw,
-                title: "Easy Returns",
-                desc: "30 days guarantee",
-                color: "purple",
-              },
-            ].map((feature, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.1 + i * 0.1 }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="backdrop-blur-sm bg-gradient-to-br from-white to-gray-50/50 text-center transition-all group flex flex-col items-center"
-              >
-                <div className="p-3 w-fit rounded-full border border-[#8A6A5A]">
-                  <feature.icon
-                    size={36}
-                    className="text-[#8A6A5A] mx-auto group-hover:scale-110 transition-transform font-normal"
-                  />
-                </div>
-                <p className="text-md font-bold text-gray-900 mb-1">
-                  {feature.title}
-                </p>
-                <p className="text-xs text-gray-600">{feature.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
+          </motion.div> */}
         </motion.div>
       </div>
 
+      {/* Product highlights section */}
+      <motion.div className="flex justify-between gap-10 mt-20 w-10/12 mx-auto">
+        <h3 className="text-4xl font-bold">Product Highlights</h3>
+        <div className="flex items-center gap-32 mr-28">
+          <div className="space-y-2">
+            <p className="text-xl font-semibold flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+              Thickness: 8mm
+            </p>
+            <p className="text-xl font-semibold flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Board
+              Size: 1215 x 196mm
+            </p>
+            <p className="text-xl font-semibold flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Pack
+              Coverage: 1.7404m²
+            </p>
+          </div>
+          <div className="space-y-2">
+            <p className="text-xl font-semibold flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Water
+              Rating: Waterproof
+            </p>
+            <p className="text-xl font-semibold flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+              Warranty: 20 Years
+            </p>
+            <p className="text-xl font-semibold flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Wear
+              Layer: AC4
+            </p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Specification and Details section */}
+      <motion.div className="w-10/12 mx-auto mt-20">
+        <h3 className="text-4xl font-bold">Specifications & Details</h3>
+
+        {/* Tab section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
+          {/* TAB HEADERS */}
+          <div className="flex border-b border-gray-200 mt-5">
+            {tabs.map((tab, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveTab(tab)}
+                className={`px-6 py-3 text-2xl font-normal transition relative
+            ${
+              activeTab === tab
+                ? "text-[#8A6A5B] font-semibold"
+                : "text-gray-500 hover:text-black"
+            }`}
+              >
+                {tab}
+
+                {/* Active underline */}
+                {activeTab === tab && (
+                  <motion.div
+                    layoutId="underline"
+                    className="absolute left-0 right-0 -bottom-[1px] h-[2px] bg-[#8A6A5B]"
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* TAB CONTENT */}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="min-h-[180px] px-6 py-6"
+          >
+            {activeTab === "Description" && (
+              <div className="space-y-4">
+                <p>{productData?.description}</p>
+              </div>
+            )}
+
+            {activeTab === "Specifications" && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-4 gap-5">
+                  {Object.entries(
+                    productData.specifications instanceof Map
+                      ? Object.fromEntries(productData.specifications)
+                      : productData.specifications,
+                  ).map(([key, value]) => (
+                    <Specification key={key} label={key} value={value} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === "Additional Information" && (
+              <div className="space-y-3">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-2"
+                >
+                  <AdditionalInformation label="SKU" value={productData.sku} />
+                  <AdditionalInformation
+                    label="Thikness"
+                    value={productData.thickness}
+                  />
+                  <AdditionalInformation
+                    label="Category"
+                    value={productData.category}
+                  />
+                  <AdditionalInformation
+                    label="Range"
+                    value={productData.range}
+                  />
+                  <AdditionalInformation
+                    label="Brand"
+                    value={productData.brand}
+                  />
+                </motion.div>
+              </div>
+            )}
+          </motion.div>
+        </motion.div>
+      </motion.div>
+
+      {/* Reviews */}
       <Reviews />
 
+      {/* Why choose us */}
       <div className="mt-20">
         <WhyChooseus />
       </div>
@@ -791,7 +865,7 @@ export default function Product() {
                     <p className="text-lg text-gray-500 line-clamp-1">
                       by Elite Floors Collection
                     </p>
-                      
+
                     <div className="flex items-baseline gap-2">
                       <span className="text-xl font-bold text-gray-900">
                         ${item.price}
