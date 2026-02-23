@@ -360,7 +360,9 @@ export default function Product() {
           </AnimatePresence>
 
           <AnimatePresence mode="wait">
-            <h3 className="text-2xl font-semibold mt-16 mb-5">Color Options in this range</h3>
+            <h3 className="text-2xl font-semibold mt-16 mb-5">
+              Color Options in this range
+            </h3>
             <div className="flex flex-wrap gap-5 text-center">
               {[
                 "Biscayne",
@@ -372,10 +374,11 @@ export default function Product() {
                 "Salt Flat",
               ].map((color, index) => (
                 <motion.div
-                initial={{opacity: 0, y: 10}}
-                animate={{opacity: 1, y: 0}}
-                transition={{duration: 0.3, delay: index * 0.5}}
-                 key={index}>
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.5 }}
+                  key={index}
+                >
                   <div className="w-28 h-16 bg-[#CB9677] mb-2"></div>
                   <span className="text-lg">{color}</span>
                 </motion.div>
@@ -513,7 +516,7 @@ export default function Product() {
                   <input
                     type="text"
                     placeholder="Enter m²"
-                    className="w-72 border border-[#E7E9EB] p-2 mt-2 active:border-[#E7E9EB] focus:border-[#E7E9EB]"
+                    className="w-full border border-[#E7E9EB] p-3 mt-2 active:border-[#E7E9EB] focus:border-[#E7E9EB]"
                     name="totalNeeded"
                     onChange={(e) => calculatorDataHandler(e)}
                   />
@@ -522,32 +525,40 @@ export default function Product() {
                   <label htmlFor="wastage" className="text-lg text-[#666E7C]">
                     Wastage
                   </label>
-                  <div className="flex gap-3 mt-3">
-                    <input
-                      type="radio"
-                      name="wastage"
-                      id="0%"
-                      value={0}
-                      onChange={(e) => calculatorDataHandler(e)}
-                      className="text-[#8A6A5B]"
-                    />
-                    <label htmlFor="wastage">0%</label>
-                    <input
-                      type="radio"
-                      name="wastage"
-                      id="10%"
-                      value={10}
-                      onChange={(e) => calculatorDataHandler(e)}
-                    />
-                    <label htmlFor="">10%</label>
-                    <input
-                      type="radio"
-                      name="wastage"
-                      id="15%"
-                      value={15}
-                      onChange={(e) => calculatorDataHandler(e)}
-                    />
-                    <label htmlFor="">15%</label>
+                  <div className="flex gap-5 mt-3 items-center">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="wastage"
+                        id="0%"
+                        value={0}
+                        onChange={(e) => calculatorDataHandler(e)}
+                        className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
+                      />
+                      <label htmlFor="wastage">0%</label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="wastage"
+                        id="10%"
+                        value={10}
+                        onChange={(e) => calculatorDataHandler(e)}
+                        className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
+                      />
+                      <label htmlFor="">10%</label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="wastage"
+                        id="15%"
+                        value={15}
+                        onChange={(e) => calculatorDataHandler(e)}
+                        className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
+                      />
+                      <label htmlFor="">15%</label>
+                    </div>
                   </div>
                 </div>
                 <p className="text-lg mt-5 text-black font-medium">
