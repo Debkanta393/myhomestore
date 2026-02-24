@@ -43,6 +43,7 @@ export default function Product() {
   const [productImages, setProductImages] = useState([]);
   const [packSize, setPackSize] = useState(1.1098);
   const [openAccordion, setOpenAccordion] = useState("Description");
+  const [priceTag, setPriceTag] = useState(0);
   const params = useParams();
   const { pathname } = useLocation();
 
@@ -246,7 +247,7 @@ export default function Product() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
           className="w-full"
-         >
+        >
           <div className="relative bg-gradient-to-br from-gray-100 to-gray-50 group shadow-xl">
             <AnimatePresence mode="wait">
               <motion.img
@@ -313,52 +314,6 @@ export default function Product() {
             </div>
           </div>
 
-          {/* Enhanced Thumbnail Gallery */}
-          {/* <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="grid grid-cols-4 gap-4 mt-6"
-           >
-            {productData?.productImage?.map((image, index) => (
-              <>
-                {image.url != selectedImage && (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setSelectedImage(image.url)}
-                    className={`cursor-pointer border-3 transition-all shadow-md hover:shadow-xl ${
-                      selectedImage === image
-                        ? "border-[#8A6A5A] ring-4 ring-[#8A6A5A]/20"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <img
-                      src={image.url}
-                      alt={`Thumbnail ${index + 1}`}
-                      className="w-full h-28 object-cover"
-                    />
-                  </motion.div>
-                )}
-              </>
-            ))}
-          </motion.div> */}
-
-          <AnimatePresence mode="wait">
-            {/* <motion.img
-              key={selectedImage}
-              src={selectedImage}
-              alt="Product"
-              variants={imageVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.3 }}
-              className="w-full h-[500px] object-cover mt-10"
-            /> */}
-          </AnimatePresence>
-
           <AnimatePresence mode="wait">
             <h3 className="text-2xl font-semibold mt-16 mb-5">
               Color Options in this range
@@ -378,9 +333,29 @@ export default function Product() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.5 }}
                   key={index}
+                  className="hover:border p-2 border-[#E7E9EB] cursor-pointer"
                 >
                   <div className="w-28 h-16 bg-[#CB9677] mb-2"></div>
                   <span className="text-sm md:text-lg">{color}</span>
+                </motion.div>
+              ))}
+            </div>
+          </AnimatePresence>
+
+          <AnimatePresence mode="wait">
+            <h3 className="text-2xl font-semibold mt-10 mb-5">
+              Other Tickeness Options
+            </h3>
+            <div className="flex flex-wrap gap-5 text-center">
+              {["8mm", "12mm", "15mm"].map((size, index) => (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.5 }}
+                  key={index}
+                  className="p-2 w-36 border border-[#E7E9EB] hover:bg-[#E7E9EB] cursor-pointer"
+                >
+                  <p>{size}</p>
                 </motion.div>
               ))}
             </div>
@@ -395,19 +370,22 @@ export default function Product() {
           className="w-full space-y-6"
         >
           {/* Badges with glassmorphism */}
-          <div className="flex items-center gap-3">
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.3, type: "spring" }}
-              className="text-md font-bold text-black"
-            >
-              New Arrival
-            </motion.span>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.3, type: "spring" }}
+            className="text-md text-black p-2 bg-[#F5F0ED] w-fit"
+          >
+            New Arrival
+          </motion.div>
+
+          {/* Heart Icon */}
+          <div className="absolute top-0 right-10">
+            <Heart color="#998E8A"/>
           </div>
 
           {/* Title with gradient */}
-          <div>
+          <div className="mt-5">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -422,7 +400,7 @@ export default function Product() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="flex items-center gap-3 backdrop-blur-sm bg-yellow-50/50 w-fit mt-5"
+              className="flex items-center gap-3 backdrop-blur-sm w-fit mt-5"
             >
               <div className="flex gap-1">
                 {[...Array(5)].map((_, i) => (
@@ -473,8 +451,11 @@ export default function Product() {
           </motion.div> */}
 
           {/* Price section */}
-          <motion.div className="flex gap-10 items-center justify-evenly my-10">
-            <div className="text-center space-y-3">
+          <motion.div className="flex gap-5 items-center justify-evenly my-10 bg-[#FCF8F5] p-2">
+            <div
+              className={`text-center space-y-3 ${priceTag == 0 ? "bg-white" : "bg-[#FCF8F5]"} w-1/2 p-4`}
+              onClick={() => setPriceTag(0)}
+            >
               <h3 className="text-[#8A6A5B] text-xl font-semibold">
                 Supply + Install
               </h3>
@@ -485,7 +466,10 @@ export default function Product() {
                 </span>
               </p>
             </div>
-            <div className="text-center space-y-3">
+            <div
+              className={`text-center space-y-3 ${priceTag == 1 ? "bg-white" : "bg-[#FCF8F5]"} w-1/2 p-4`}
+              onClick={() => setPriceTag(1)}
+            >
               <h3 className="text-[#8A6A5B] text-xl font-semibold">
                 Supply Only
               </h3>
@@ -561,11 +545,11 @@ export default function Product() {
                     </div>
                   </div>
                 </div>
-                <p className="text-lg mt-5 text-black font-medium">
-                  Pack size: 1.1098 m² per carton
+                <p className="text-lg mt-5 text-black font-medium bg-[#FCF8F5] p-3 w-fit">
+                  Pack size: <b>1.1098 m² per carton</b>
                 </p>
               </div>
-              <div className="mt-10 space-y-2">
+              <div className="mt-5 space-y-2">
                 <p className="flex justify-between items-center font-semibold text-xl">
                   <span className="text-lg font-normal text-[#666E7C]">
                     Cartons Required:
@@ -583,7 +567,7 @@ export default function Product() {
           </motion.div>
 
           {/* Price summery section */}
-          <motion.div className="space-y-4 mt-10">
+          <motion.div className="space-y-4 mt-10 bg-[#F5F0ED] p-6">
             <h3 className="text-2xl font-semibold">Price Summary</h3>
             <div className="space-y-2">
               <p className="text-lg text-[#666E7C] flex justify-between items-center">
@@ -596,6 +580,7 @@ export default function Product() {
                 GST (10%):{" "}
                 <span className="text-xl font-semibold text-black">$39.68</span>
               </p>
+              <div className="h-[1px] w-full bg-[#E7E9EB]"></div>
               <p className="text-lg text-[#666E7C] flex justify-between items-center">
                 TOTAL{" "}
                 <span className="text-xl font-semibold text-black">
@@ -637,36 +622,38 @@ export default function Product() {
       </div>
 
       {/* Product highlights section */}
-      <motion.div className="flex flex-col lg:flex-row justify-between gap-10 mt-20 w-10/12 mx-auto">
-        <h3 className="text-4xl font-bold">Product Highlights</h3>
-        <div className="flex flex-col md:flex-row md:items-center gap-y-10 gap-x-20 lg:gap-10 xl:gap-32 xl:mr-28 md:mx-auto">
-          <div className="space-y-2">
-            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-              <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
-              Thickness: 8mm
-            </p>
-            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Board
-              Size: 1215 x 196mm
-            </p>
-            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Pack
-              Coverage: 1.7404m²
-            </p>
-          </div>
-          <div className="space-y-2">
-            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Water
-              Rating: Waterproof
-            </p>
-            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-              <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
-              Warranty: 20 Years
-            </p>
-            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Wear
-              Layer: AC4
-            </p>
+      <motion.div className=" mt-20 w-full bg-[#FCF8F5] py-24">
+        <div className="flex flex-col lg:flex-row justify-between gap-10 w-10/12 mx-auto">
+          <h3 className="text-4xl font-bold">Product Highlights</h3>
+          <div className="flex flex-col md:flex-row md:items-center gap-y-10 gap-x-20 lg:gap-10 xl:gap-32 xl:mr-28 lg:mx-auto">
+            <div className="space-y-3">
+              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
+                <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+                Thickness: 8mm
+              </p>
+              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
+                <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Board
+                Size: 1215 x 196mm
+              </p>
+              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
+                <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Pack
+                Coverage: 1.7404m²
+              </p>
+            </div>
+            <div className="space-y-3">
+              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
+                <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Water
+                Rating: Waterproof
+              </p>
+              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
+                <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+                Warranty: 20 Years
+              </p>
+              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
+                <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Wear
+                Layer: AC4
+              </p>
+            </div>
           </div>
         </div>
       </motion.div>
