@@ -14,7 +14,7 @@ import {
   Bath,
   Microwave,
   House,
-  Trash2
+  Trash2,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -196,9 +196,9 @@ export default function MainNav() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   whileHover={{ y: -3 }}
-                  className={`hidden lg:flex justify-center items-center gap-2 py-3 rounded-t-2xl text-[12px] xl:text-sm font-bold uppercase tracking-wide
+                  className={`hidden lg:flex justify-center items-center gap-1 xl:gap-2 py-3 rounded-t-2xl text-[12px] xl:text-sm font-bold uppercase tracking-wide
                      ${activeTab === index ? "text-[#8A6A5A]" : "text-black"} cursor-pointer relative`}
-                >
+                 >
                   {activeTab === index && (
                     <motion.span
                       layoutId="activeTabIndicator"
@@ -206,8 +206,11 @@ export default function MainNav() {
                     />
                   )}
 
-                  <span>{tab.icon}</span>
-                  <span>{tab.tab}</span>
+                  <span className="inline-flex items-center justify-center h-5 xl:h-10 w-5 xl:w-10 flex-shrink-0">
+                    {tab.icon}
+                  </span>
+
+                  <span className="text-nowrap">{tab.tab}</span>
 
                   <motion.div
                     animate={{ rotate: activeTab === index ? 180 : 0 }}
@@ -459,8 +462,11 @@ export default function MainNav() {
                 Your Cart{" "}
                 <span className="font-normal text-[#998e8a] text-2xl">(2)</span>
               </h2>
-              <div className="absolute top-6 right-10 hover:bg-[#f5efed] cursor-pointer p-2 hover:shadow-md rounded" onClick={()=> setActiveCartSection(false)}>
-              <X />
+              <div
+                className="absolute top-6 right-10 hover:bg-[#f5efed] cursor-pointer p-2 hover:shadow-md rounded"
+                onClick={() => setActiveCartSection(false)}
+              >
+                <X />
               </div>
 
               {/* Cart */}
@@ -469,11 +475,17 @@ export default function MainNav() {
                   <img src="" alt="" className="w-32 h-32 bg-gray-200" />
                   <div className="flex-1 space-y-1">
                     <div className="flex justify-between">
-                      <h5 className="text-xl font-medium w-2/3">Hydro Laminate Tiles</h5>
+                      <h5 className="text-xl font-medium w-2/3">
+                        Hydro Laminate Tiles
+                      </h5>
                       <div className="flex items-center gap-2 w-1/3">
-                        <button className="p-2 hover:shadow-md rounded cursor-pointer">-</button>
+                        <button className="p-2 hover:shadow-md rounded cursor-pointer">
+                          -
+                        </button>
                         <p>1</p>
-                        <button className="p-2 hover:shadow-md rounded cursor-pointer">+</button>
+                        <button className="p-2 hover:shadow-md rounded cursor-pointer">
+                          +
+                        </button>
                       </div>
                     </div>
                     <p className="text-md text-gray-500">$30.00</p>
@@ -483,7 +495,7 @@ export default function MainNav() {
                         <p>Size: XL</p>
                       </div>
                       <div className="p-2 rounded hover:shadow-md cursor-pointer text-red-600">
-                      <Trash2 />
+                        <Trash2 />
                       </div>
                     </div>
                   </div>

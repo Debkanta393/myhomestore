@@ -218,7 +218,7 @@ export default function Product() {
   return (
     <div className="w-full mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
       {/* Breadcrumb with glassmorphism */}
-      <div className="w-10/12 mx-auto mb-10 pt-6">
+      <div className="w-11/12 sm:w-10/12 mx-auto mb-10 pt-6">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -232,7 +232,7 @@ export default function Product() {
             Products
           </span>
           <ChevronRight size={14} className="text-gray-400" />
-          <span className="text-sm text-[#8A6A5A] font-medium">
+          <span className="text-sm text-[#8A6A5A] font-medium text-nowrap">
             Luxury Flooring
           </span>
         </motion.div>
@@ -245,8 +245,8 @@ export default function Product() {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full sticky top-32"
-        >
+          className="w-full"
+         >
           <div className="relative bg-gradient-to-br from-gray-100 to-gray-50 group shadow-xl">
             <AnimatePresence mode="wait">
               <motion.img
@@ -380,7 +380,7 @@ export default function Product() {
                   key={index}
                 >
                   <div className="w-28 h-16 bg-[#CB9677] mb-2"></div>
-                  <span className="text-lg">{color}</span>
+                  <span className="text-sm md:text-lg">{color}</span>
                 </motion.div>
               ))}
             </div>
@@ -392,7 +392,7 @@ export default function Product() {
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full space-y-6 sticky top-0"
+          className="w-full space-y-6"
         >
           {/* Badges with glassmorphism */}
           <div className="flex items-center gap-3">
@@ -606,14 +606,14 @@ export default function Product() {
           </motion.div>
 
           {/* Buttons section */}
-          <motion.div className="w-full flex items-center gap-10 mt-20">
+          <motion.div className="w-full flex flex-col md:flex-row items-center gap-y-5 gap-x-10 mt-20">
             <button
-              className="border border-[#998E8A] text-[#998E8A] py-3 text-xl w-6/12 cursor-pointer"
+              className="border border-[#998E8A] text-[#998E8A] py-3 text-lg xl:text-xl w-full md:w-6/12 cursor-pointer"
               onClick={() => dispatch(addCartItems(productData._id))}
             >
               View in showroom
             </button>
-            <button className="bg-[#998E8A] py-3 text-white text-xl w-6/12 cursor-pointer">
+            <button className="bg-[#998E8A] py-3 text-white text-lg xl:text-xl w-full md:w-6/12 cursor-pointer">
               Add to Cart
             </button>
           </motion.div>
@@ -637,33 +637,33 @@ export default function Product() {
       </div>
 
       {/* Product highlights section */}
-      <motion.div className="flex justify-between gap-10 mt-20 w-10/12 mx-auto">
+      <motion.div className="flex flex-col lg:flex-row justify-between gap-10 mt-20 w-10/12 mx-auto">
         <h3 className="text-4xl font-bold">Product Highlights</h3>
-        <div className="flex items-center gap-32 mr-28">
+        <div className="flex flex-col md:flex-row md:items-center gap-y-10 gap-x-20 lg:gap-10 xl:gap-32 xl:mr-28 md:mx-auto">
           <div className="space-y-2">
-            <p className="text-xl font-semibold flex items-center gap-2">
+            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
               <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
               Thickness: 8mm
             </p>
-            <p className="text-xl font-semibold flex items-center gap-2">
+            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
               <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Board
               Size: 1215 x 196mm
             </p>
-            <p className="text-xl font-semibold flex items-center gap-2">
+            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
               <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Pack
               Coverage: 1.7404m²
             </p>
           </div>
           <div className="space-y-2">
-            <p className="text-xl font-semibold flex items-center gap-2">
+            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
               <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Water
               Rating: Waterproof
             </p>
-            <p className="text-xl font-semibold flex items-center gap-2">
+            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
               <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
               Warranty: 20 Years
             </p>
-            <p className="text-xl font-semibold flex items-center gap-2">
+            <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
               <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Wear
               Layer: AC4
             </p>
@@ -682,12 +682,12 @@ export default function Product() {
           transition={{ delay: 0.8 }}
         >
           {/* TAB HEADERS */}
-          <div className="flex border-b border-gray-200 mt-5">
+          <div className="flex border-b border-gray-200 mt-5 overflow-x-scroll">
             {tabs.map((tab, index) => (
               <button
                 key={index}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 text-2xl font-normal transition relative
+                className={`px-3 lg:px-6 py-3 text-md lg:text-lg xl:text-2xl font-normal transition relative
             ${
               activeTab === tab
                 ? "text-[#8A6A5B] font-semibold"

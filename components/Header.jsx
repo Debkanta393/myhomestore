@@ -26,10 +26,10 @@ export function Header() {
       {/* Top Navigation Bar */}
       <div>
         <div className="bg-[#f5efed] w-full border-b border-[#D6CEC6]/30 relative z-40 overflow-visible">
-          <div className="max-w-10/12 mx-auto">
-            <nav className="flex justify-between items-center py-3">
+          <div className="w-full md:w-10/12 mx-auto">
+            <nav className="flex justify-center md:justify-between items-center py-3">
               {/* Left Navigation */}
-              <div className="flex gap-8 items-center">
+              <div className="flex gap-4 md:gap-8 items-center">
                 {topNavItems.map((item) => (
                   <div
                     key={item.key}
@@ -39,7 +39,7 @@ export function Header() {
                   >
                     <Link
                       to={item.path}
-                      className="flex items-center gap-1.5 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 text-lg font-medium"
+                      className="flex items-center gap-1.5 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 text-md md:text-lg font-medium text-nowrap"
                     >
                       {item.label}
                       <motion.div
@@ -84,7 +84,7 @@ export function Header() {
                 ))}
                 <Link
                   to="/contact"
-                  className="text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 text-lg font-medium"
+                  className="text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 text-md md:text-lg font-medium"
                 >
                   Contact
                 </Link>
