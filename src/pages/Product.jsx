@@ -38,6 +38,10 @@ export default function Product() {
     wastage: null,
   });
   const [cartonsNeeded, setCartonsNeeded] = useState(null);
+  const [sizeData, setSizeData] = useState({
+    cartons: "",
+    area: "",
+  });
   const dispatch = useDispatch();
   const [productData, setProductData] = useState();
   const [productImages, setProductImages] = useState([]);
@@ -210,10 +214,18 @@ export default function Product() {
           ? (calculatorData.totalNeeded * (calculatorData.wastage / 100)) /
             packSize
           : calculatorData.totalNeeded / packSize;
-      setCartonsNeeded(Math.ceil(totalCartons));
+      let areaSupplied = totalCartons * packSize;
+      // setCartonsNeeded(Math.ceil(totalCartons));
+      setSizeData((prev) => ({
+        ...prev,
+        cartons: Math.ceil(totalCartons),
+        area: areaSupplied,
+      }));
     };
     calculatorHandler();
   }, [calculatorData.totalNeeded, calculatorData.wastage]);
+
+  console.log(sizeData)
 
   console.log(activeTab);
   return (
@@ -307,14 +319,14 @@ export default function Product() {
             {/* Image counter */}
             <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center">
               {[...Array(productData?.productImage?.length)].map((_, index) => (
-                <span className="text-white text-sm font-medium">
+                <span className="text-white text-sm font-medium" key={index}>
                   <Dot size={30} />
                 </span>
               ))}
             </div>
           </div>
 
-          <AnimatePresence mode="wait">
+          <div>
             <h3 className="text-2xl font-semibold mt-16 mb-5">
               Color Options in this range
             </h3>
@@ -340,9 +352,9 @@ export default function Product() {
                 </motion.div>
               ))}
             </div>
-          </AnimatePresence>
+          </div>
 
-          <AnimatePresence mode="wait">
+          <div>
             <h3 className="text-2xl font-semibold mt-10 mb-5">
               Other Tickeness Options
             </h3>
@@ -359,7 +371,7 @@ export default function Product() {
                 </motion.div>
               ))}
             </div>
-          </AnimatePresence>
+          </div>
         </motion.div>
 
         {/* Product Details (right section)*/}
@@ -381,7 +393,7 @@ export default function Product() {
 
           {/* Heart Icon */}
           <div className="absolute top-0 right-10">
-            <Heart color="#998E8A"/>
+            <Heart color="#998E8A" />
           </div>
 
           {/* Title with gradient */}
@@ -554,13 +566,13 @@ export default function Product() {
                   <span className="text-lg font-normal text-[#666E7C]">
                     Cartons Required:
                   </span>{" "}
-                  6 cartons
+                  {sizeData.cartons}
                 </p>
                 <p className="flex justify-between items-center font-semibold text-xl">
                   <span className="text-lg font-normal text-[#666E7C]">
                     Area Supplied:
                   </span>
-                  10.44 m²
+                  {sizeData.area && `${sizeData.area} m²`} 
                 </p>
               </div>
             </form>
