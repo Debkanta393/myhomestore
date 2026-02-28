@@ -23,33 +23,32 @@ import WhyChooseus from "../../components/ui/WhyChooseus";
 import { useParams } from "react-router";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getProductByTypeName } from "../../service/product";
+import { getProductByTypeName, getProductByRange } from "../../service/product";
 import { addCartItems } from "../../service/cart";
 
 export default function Product() {
   const [selectedImage, setSelectedImage] = useState(0);
-
-  // const [activeTab, setActiveTab] = useState("Description");
-  // const [quantity, setQuantity] = useState(1);
-  // const [isWishlisted, setIsWishlisted] = useState(false);
-  // const [showZoom, setShowZoom] = useState(false);
   const [calculatorData, setCalculatorData] = useState({
     totalNeeded: 0,
-    wastage: null,
+    wastage: 10,
   });
-  const [cartonsNeeded, setCartonsNeeded] = useState(null);
   const [sizeData, setSizeData] = useState({
     cartons: "",
     area: "",
   });
+  const [priceData, setPriceData] = useState({
+    subTotal: "0",
+    gst: "10",
+    total: "0",
+  });
   const dispatch = useDispatch();
   const [productData, setProductData] = useState();
   const [productImages, setProductImages] = useState([]);
-  const [packSize, setPackSize] = useState(1.1098);
-  const [openAccordion, setOpenAccordion] = useState("Description");
+  const [packSize, setPackSize] = useState();
   const [priceTag, setPriceTag] = useState(0);
   const params = useParams();
-  const { pathname } = useLocation();
+  const [rangeProducts, setRangeProducts]=useState([])
+  const [selectedProduct, setSelectedProduct]=useState([])
 
   const tabs = [
     "Description",
@@ -132,38 +131,68 @@ export default function Product() {
     },
   ];
 
-  const { id } = params;
-  const { type, productName } = params;
+  const { range, productName } = params;
 
   useEffect(() => {
     const getProducts = async () => {
-      const response = await dispatch(
-        getProductByTypeName({ type, productName }),
-      );
-      if (response.payload.data.success) {
-        setProductData(response.payload.data.data[0]);
-        setProductImages(response.payload.data.data[0].productImage);
-      }
+      // const response = await dispatch(
+      //   getProductByTypeName({ type, productName }),
+      // );
+      // if (response.payload.data.success) {
+      //   setProductData(response.payload.data.data[0]);
+      //   setProductImages(response.payload.data.data[0].productImage);
+
+      //   // Set pack size
+      //   let packsize = parseFloat(
+      //     response.payload.data.data[0].packSize.split("-")[0],
+      //   );
+      //   setPackSize(packsize);
+      // }
     };
     getProducts();
   }, [dispatch]);
 
+
+  console.log(range," ", productName)
+
+  useEffect(() => {
+    const getRangeProduct = async () => {
+      const response = await dispatch(getProductByRange(range));
+
+      // Set app products in this range
+      setRangeProducts(response.payload.product)
+
+      // Set selected product
+      const selectedproduct=response.payload.product.find((item)=> item.productName == productName)
+      setSelectedProduct(selectedproduct)
+
+        // Set pack size
+        let packsize = parseFloat(
+          selectedproduct.packSize.split("-")[0],
+        );
+        setPackSize(packsize);
+    };
+    getRangeProduct();
+  }, [ dispatch]);
+
   console.log(productData);
+  console.log(rangeProducts);
+  console.log(selectedProduct);
 
   const handlePrevImage = () => {
     // const newIndex =
     //   currentIndex > 0 ? currentIndex - 1 : otherImages.length - 1;
     // setSelectedImage(otherImages[newIndex]);
     setSelectedImage((prev) =>
-      prev > 0 ? prev - 1 : productImages.length - 1,
-    );
+      prev > 0 ? prev - 1 : selectedProduct?.productImage?.length - 1,
+    ); 
   };
 
   const handleNextImage = () => {
     // const newIndex =
     //   currentIndex < otherImages.length - 1 ? currentIndex + 1 : 0;
     // setSelectedImage(otherImages[newIndex]);
-    setSelectedImage((prev) => (productImages.length - 1 ? prev + 1 : 0));
+    setSelectedImage((prev) => (prev < selectedProduct?.productImage?.length - 1 ? prev + 1 : 0));
   };
 
   const imageVariants = {
@@ -204,10 +233,26 @@ export default function Product() {
     }));
   };
 
+  const selectedProductHandler = (productName) => {
+  const product = rangeProducts?.find(
+    (item) => item.productName === productName
+  );
+  setSelectedProduct(product);
+
+  setTimeout(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, 0);
+};
+
+  console.log(selectedProduct)
   useEffect(() => {
-    if (!calculatorData.totalNeeded && calculatorData.wastage == null) {
+    if (!calculatorData.totalNeeded) {
       return;
     }
+    console.log(calculatorData.totalNeeded * (calculatorData.wastage / 100));
     const calculatorHandler = () => {
       let totalCartons =
         calculatorData.wastage != 0
@@ -221,11 +266,35 @@ export default function Product() {
         cartons: Math.ceil(totalCartons),
         area: areaSupplied,
       }));
+
+      // Set price data
+      let subtotal =
+        activeTab && rangeProducts == 0
+          ? areaSupplied *
+            parseInt(selectedProduct.supplyPrice ? selectedProduct.supplyPrice : 0)
+          : areaSupplied *
+            parseInt(
+              selectedProduct?.supplyInstallPrice
+                ? selectedProduct?.supplyInstallPrice
+                : 0,
+            );
+
+      console.log(subtotal);
+      //  Total Gst calculation
+      let totalGst = subtotal * (10 / 100);
+      console.log(totalGst);
+
+      setPriceData((prev) => ({
+        ...prev,
+        subTotal: subtotal,
+        gst: totalGst,
+        total: subtotal + totalGst,
+      }));
     };
     calculatorHandler();
   }, [calculatorData.totalNeeded, calculatorData.wastage]);
 
-  console.log(sizeData)
+  console.log(priceData);
 
   console.log(activeTab);
   return (
@@ -242,11 +311,11 @@ export default function Product() {
           </span>
           <ChevronRight size={14} className="text-gray-400" />
           <span className="text-sm text-gray-600 hover:text-[#8A6A5A] cursor-pointer transition">
-            Products
+            {range}
           </span>
           <ChevronRight size={14} className="text-gray-400" />
           <span className="text-sm text-[#8A6A5A] font-medium text-nowrap">
-            Luxury Flooring
+            {selectedProduct?.productName}
           </span>
         </motion.div>
       </div>
@@ -264,7 +333,7 @@ export default function Product() {
             <AnimatePresence mode="wait">
               <motion.img
                 key={selectedImage}
-                src={productImages[selectedImage]?.url}
+                src={selectedProduct?.productImage?.[selectedImage]?.url}
                 alt="Product"
                 variants={imageVariants}
                 initial="enter"
@@ -318,9 +387,9 @@ export default function Product() {
 
             {/* Image counter */}
             <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center">
-              {[...Array(productData?.productImage?.length)].map((_, index) => (
-                <span className="text-white text-sm font-medium" key={index}>
-                  <Dot size={30} />
+              {[...Array(selectedProduct?.productImage?.length)].map((_, index) => (
+                <span className={`w-10 h-10 ${selectedImage == index ? "text-white":"text-gray-400"}`} key={index}>
+                  <Dot size={50} />
                 </span>
               ))}
             </div>
@@ -330,25 +399,18 @@ export default function Product() {
             <h3 className="text-2xl font-semibold mt-16 mb-5">
               Color Options in this range
             </h3>
-            <div className="flex flex-wrap gap-5 text-center">
-              {[
-                "Biscayne",
-                "Rainier",
-                "Caramel",
-                "Jasper",
-                "Island Mist",
-                "Hatteras",
-                "Salt Flat",
-              ].map((color, index) => (
+            <div className="flex flex-wrap gap-x-3 text-center">
+              {rangeProducts.map((product, index) => (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.5 }}
                   key={index}
-                  className="hover:border p-2 border-[#E7E9EB] cursor-pointer"
+                  className="border border-white hover:border-[#E7E9EB] p-1 cursor-pointer w-32 h-fit"
+                  onClick={()=> selectedProductHandler(product.productName)}
                 >
-                  <div className="w-28 h-16 bg-[#CB9677] mb-2"></div>
-                  <span className="text-sm md:text-lg">{color}</span>
+                  <img src={product.productImage[0].url} alt="" className="w-full h-8/12"/>
+                  <p className="text-sm md:text-lg">{product.productName}</p>
                 </motion.div>
               ))}
             </div>
@@ -404,7 +466,7 @@ export default function Product() {
               transition={{ delay: 0.4 }}
               className="text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-3 leading-tight"
             >
-              {productData?.productName}
+              {selectedProduct?.productName}
             </motion.h1>
 
             {/* Enhanced Rating */}
@@ -440,7 +502,7 @@ export default function Product() {
               transition={{ delay: 0.5 }}
               className="text-gray-600 text-lg font-medium mt-5"
             >
-              {productData?.description}
+              {selectedProduct?.description}
             </motion.p>
           </div>
 
@@ -472,7 +534,7 @@ export default function Product() {
                 Supply + Install
               </h3>
               <p className="text-2xl font-extrabold ">
-                $38{" "}
+                {`$ ${selectedProduct?.supplyInstallPrice}`}
                 <span className="text-lg font-normal">
                   /m <sup>2</sup>
                 </span>
@@ -558,7 +620,10 @@ export default function Product() {
                   </div>
                 </div>
                 <p className="text-lg mt-5 text-black font-medium bg-[#FCF8F5] p-3 w-fit">
-                  Pack size: <b>1.1098 m² per carton</b>
+                  Pack size:{" "}
+                  <b>
+                    {packSize} m<sup>2</sup>
+                  </b>
                 </p>
               </div>
               <div className="mt-5 space-y-2">
@@ -572,7 +637,7 @@ export default function Product() {
                   <span className="text-lg font-normal text-[#666E7C]">
                     Area Supplied:
                   </span>
-                  {sizeData.area && `${sizeData.area} m²`} 
+                  {sizeData.area && `${sizeData.area} m²`}
                 </p>
               </div>
             </form>
@@ -585,18 +650,18 @@ export default function Product() {
               <p className="text-lg text-[#666E7C] flex justify-between items-center">
                 Subtotal (Supply + Install):{" "}
                 <span className="text-xl font-semibold text-black">
-                  $396.81
+                  {`$ ${priceData.subTotal}`}
                 </span>
               </p>
               <p className="text-lg text-[#666E7C] flex justify-between items-center">
                 GST (10%):{" "}
-                <span className="text-xl font-semibold text-black">$39.68</span>
+                <span className="text-xl font-semibold text-black">{`$ ${calculatorData.totalNeeded ? priceData.gst : 0}`}</span>
               </p>
               <div className="h-[1px] w-full bg-[#E7E9EB]"></div>
               <p className="text-lg text-[#666E7C] flex justify-between items-center">
                 TOTAL{" "}
                 <span className="text-xl font-semibold text-black">
-                  $436.49
+                  {`$ ${priceData.total}`}
                 </span>
               </p>
             </div>
@@ -606,7 +671,7 @@ export default function Product() {
           <motion.div className="w-full flex flex-col md:flex-row items-center gap-y-5 gap-x-10 mt-20">
             <button
               className="border border-[#998E8A] text-[#998E8A] py-3 text-lg xl:text-xl w-full md:w-6/12 cursor-pointer"
-              onClick={() => dispatch(addCartItems(productData._id))}
+              onClick={() => dispatch(addCartItems(selectedProduct._id))}
             >
               View in showroom
             </button>
@@ -716,7 +781,7 @@ export default function Product() {
           >
             {activeTab === "Description" && (
               <div className="space-y-4">
-                <p>{productData?.description}</p>
+                <p>{selectedProduct?.description}</p>
               </div>
             )}
 
@@ -724,9 +789,9 @@ export default function Product() {
               <div className="space-y-4">
                 <div className="grid grid-cols-4 gap-5">
                   {Object.entries(
-                    productData.specifications instanceof Map
-                      ? Object.fromEntries(productData.specifications)
-                      : productData.specifications,
+                    selectedProduct.specifications instanceof Map
+                      ? Object.fromEntries(selectedProduct.specifications)
+                      : selectedProduct.specifications,
                   ).map(([key, value]) => (
                     <Specification key={key} label={key} value={value} />
                   ))}
@@ -741,22 +806,22 @@ export default function Product() {
                   animate={{ opacity: 1 }}
                   className="space-y-2"
                 >
-                  <AdditionalInformation label="SKU" value={productData.sku} />
+                  <AdditionalInformation label="SKU" value={selectedProduct.sku} />
                   <AdditionalInformation
                     label="Thikness"
-                    value={productData.thickness}
+                    value={selectedProduct.thickness}
                   />
                   <AdditionalInformation
                     label="Category"
-                    value={productData.category}
+                    value={selectedProduct.category}
                   />
                   <AdditionalInformation
                     label="Range"
-                    value={productData.range}
+                    value={selectedProduct.range}
                   />
                   <AdditionalInformation
                     label="Brand"
-                    value={productData.brand}
+                    value={selectedProduct.brand}
                   />
                 </motion.div>
               </div>

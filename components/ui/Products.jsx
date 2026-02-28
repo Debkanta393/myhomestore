@@ -1034,7 +1034,7 @@ export default function Products() {
                       className="group relative bg-white overflow-hidden transition-all duration-300 ease-out border border-gray-300 
                       hover:-translate-y-1 border border-gray-100 cursor-pointer bg-amber-700 z-0"
                       onClick={() =>
-                        navigate(`/${item.type}/${item.productName}`)
+                        navigate(`/${item.range}/${item.productName}`)
                       }
                     >
                       <div className="relative bg-gray-50">

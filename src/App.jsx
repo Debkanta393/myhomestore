@@ -35,7 +35,7 @@ export default function App() {
       {/* Layout Route */}
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/:type/:productName" element={<Product />} />
+        <Route path="/:range/:productName" element={<Product />} />
         <Route path="/brand" element={<Brand />} />
         <Route path="/cleverchoice" element={<ClaverChoise />} />
         <Route path="/ecogreen" element={<EcoGreen />} />
