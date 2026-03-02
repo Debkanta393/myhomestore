@@ -47,8 +47,9 @@ export default function Product() {
   const [packSize, setPackSize] = useState();
   const [priceTag, setPriceTag] = useState(0);
   const params = useParams();
-  const [rangeProducts, setRangeProducts]=useState([])
-  const [selectedProduct, setSelectedProduct]=useState([])
+  const [rangeProducts, setRangeProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   const tabs = [
     "Description",
@@ -141,7 +142,6 @@ export default function Product() {
       // if (response.payload.data.success) {
       //   setProductData(response.payload.data.data[0]);
       //   setProductImages(response.payload.data.data[0].productImage);
-
       //   // Set pack size
       //   let packsize = parseFloat(
       //     response.payload.data.data[0].packSize.split("-")[0],
@@ -152,28 +152,27 @@ export default function Product() {
     getProducts();
   }, [dispatch]);
 
-
-  console.log(range," ", productName)
+  console.log(range, " ", productName);
 
   useEffect(() => {
     const getRangeProduct = async () => {
       const response = await dispatch(getProductByRange(range));
 
       // Set app products in this range
-      setRangeProducts(response.payload.product)
+      setRangeProducts(response.payload.product);
 
       // Set selected product
-      const selectedproduct=response.payload.product.find((item)=> item.productName == productName)
-      setSelectedProduct(selectedproduct)
+      const selectedproduct = response.payload.product.find(
+        (item) => item.productName == productName,
+      );
+      setSelectedProduct(selectedproduct);
 
-        // Set pack size
-        let packsize = parseFloat(
-          selectedproduct.packSize.split("-")[0],
-        );
-        setPackSize(packsize);
+      // Set pack size
+      let packsize = parseFloat(selectedproduct.packSize.split("-")[0]);
+      setPackSize(packsize);
     };
     getRangeProduct();
-  }, [ dispatch]);
+  }, [dispatch]);
 
   console.log(productData);
   console.log(rangeProducts);
@@ -185,14 +184,16 @@ export default function Product() {
     // setSelectedImage(otherImages[newIndex]);
     setSelectedImage((prev) =>
       prev > 0 ? prev - 1 : selectedProduct?.productImage?.length - 1,
-    ); 
+    );
   };
 
   const handleNextImage = () => {
     // const newIndex =
     //   currentIndex < otherImages.length - 1 ? currentIndex + 1 : 0;
     // setSelectedImage(otherImages[newIndex]);
-    setSelectedImage((prev) => (prev < selectedProduct?.productImage?.length - 1 ? prev + 1 : 0));
+    setSelectedImage((prev) =>
+      prev < selectedProduct?.productImage?.length - 1 ? prev + 1 : 0,
+    );
   };
 
   const imageVariants = {
@@ -234,20 +235,20 @@ export default function Product() {
   };
 
   const selectedProductHandler = (productName) => {
-  const product = rangeProducts?.find(
-    (item) => item.productName === productName
-  );
-  setSelectedProduct(product);
+    const product = rangeProducts?.find(
+      (item) => item.productName === productName,
+    );
+    setSelectedProduct(product);
 
-  setTimeout(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, 0);
-};
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }, 0);
+  };
 
-  console.log(selectedProduct)
+  console.log(selectedProduct);
   useEffect(() => {
     if (!calculatorData.totalNeeded) {
       return;
@@ -271,7 +272,9 @@ export default function Product() {
       let subtotal =
         activeTab && rangeProducts == 0
           ? areaSupplied *
-            parseInt(selectedProduct.supplyPrice ? selectedProduct.supplyPrice : 0)
+            parseInt(
+              selectedProduct.supplyPrice ? selectedProduct.supplyPrice : 0,
+            )
           : areaSupplied *
             parseInt(
               selectedProduct?.supplyInstallPrice
@@ -294,7 +297,17 @@ export default function Product() {
     calculatorHandler();
   }, [calculatorData.totalNeeded, calculatorData.wastage]);
 
+  // Set background fixed when modal is open
+  useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [showModal]);
+
   console.log(priceData);
+  console.log(showModal);
 
   console.log(activeTab);
   return (
@@ -387,11 +400,16 @@ export default function Product() {
 
             {/* Image counter */}
             <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center">
-              {[...Array(selectedProduct?.productImage?.length)].map((_, index) => (
-                <span className={`w-10 h-10 ${selectedImage == index ? "text-white":"text-gray-400"}`} key={index}>
-                  <Dot size={50} />
-                </span>
-              ))}
+              {[...Array(selectedProduct?.productImage?.length)].map(
+                (_, index) => (
+                  <span
+                    className={`w-10 h-10 ${selectedImage == index ? "text-white" : "text-gray-400"}`}
+                    key={index}
+                  >
+                    <Dot size={50} />
+                  </span>
+                ),
+              )}
             </div>
           </div>
 
@@ -407,9 +425,13 @@ export default function Product() {
                   transition={{ duration: 0.3, delay: index * 0.5 }}
                   key={index}
                   className="border border-white hover:border-[#E7E9EB] p-1 cursor-pointer w-32 h-fit"
-                  onClick={()=> selectedProductHandler(product.productName)}
+                  onClick={() => selectedProductHandler(product.productName)}
                 >
-                  <img src={product.productImage[0].url} alt="" className="w-full h-8/12"/>
+                  <img
+                    src={product.productImage[0].url}
+                    alt=""
+                    className="w-full h-8/12"
+                  />
                   <p className="text-sm md:text-lg">{product.productName}</p>
                 </motion.div>
               ))}
@@ -671,7 +693,7 @@ export default function Product() {
           <motion.div className="w-full flex flex-col md:flex-row items-center gap-y-5 gap-x-10 mt-20">
             <button
               className="border border-[#998E8A] text-[#998E8A] py-3 text-lg xl:text-xl w-full md:w-6/12 cursor-pointer"
-              onClick={() => dispatch(addCartItems(selectedProduct._id))}
+              onClick={() => setShowModal(true)}
             >
               View in showroom
             </button>
@@ -697,6 +719,66 @@ export default function Product() {
           </motion.div> */}
         </motion.div>
       </div>
+
+      {/* Model section */}
+      {showModal && (
+        <motion.div
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <div className="bg-white w-[90%] md:w-[600px] p-8 rounded-xl relative">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-xl"
+            >
+              ✕
+            </button>
+
+            <h3 className="text-2xl font-semibold mb-2">Book Showroom Visit</h3>
+            <p className="mb-6 text-gray-600">
+              View Premium Luxury Flooring in our showroom
+            </p>
+
+            <form className="flex flex-col gap-4">
+              <input
+                type="text"
+                placeholder="Product"
+                 className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+              />
+              <input
+                type="text"
+                placeholder="Name*"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+              />
+              <input
+                type="text"
+                placeholder="Phone*"
+                 className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+              />
+              <input
+                type="email"
+                placeholder="Email*"
+                 className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+              />
+              <input
+                type="date"
+                 className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                placeholder="Preferred Date*"
+              />
+              <input
+                type="time"
+                 className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                placeholder="Preferred Time*"
+              />
+
+              <button className="bg-[#998E8A] text-white py-3 cursor-pointer">Submit</button>
+            </form>
+          </div>
+        </motion.div>
+      )}
 
       {/* Product highlights section */}
       <motion.div className=" mt-20 w-full bg-[#FCF8F5] py-24">
@@ -781,7 +863,7 @@ export default function Product() {
           >
             {activeTab === "Description" && (
               <div className="space-y-4">
-                <p>{selectedProduct?.description}</p>
+                <p className="text-lg">{selectedProduct?.description}</p>
               </div>
             )}
 
@@ -806,7 +888,10 @@ export default function Product() {
                   animate={{ opacity: 1 }}
                   className="space-y-2"
                 >
-                  <AdditionalInformation label="SKU" value={selectedProduct.sku} />
+                  <AdditionalInformation
+                    label="SKU"
+                    value={selectedProduct.sku}
+                  />
                   <AdditionalInformation
                     label="Thikness"
                     value={selectedProduct.thickness}
