@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import Products from "../../components/ui/Products";
-import WhyChooseUs from "../../components/ui/WhyChooseus";
+import Products from "../components/products/Products";
+import WhyChooseUs from "../components/ui/WhyChooseus";
 import {
   PhoneCall,
   Mail,
@@ -9,7 +9,7 @@ import {
   BrickWall,
   Award,
 } from "lucide-react";
-import FAQ from "../../components/ui/FAQ";
+import FAQ from "../components/ui/FAQ";
 import { Link } from "react-router";
 
 const CladdingScreens = () => {

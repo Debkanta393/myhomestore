@@ -14,7 +14,7 @@ import {
   Package,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import PopularCollections from "../../components/ui/PopularCollections";
+import PopularCollections from "../components/ui/PopularCollections";
 
 export default function BrandPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");

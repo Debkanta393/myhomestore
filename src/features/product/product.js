@@ -5,8 +5,8 @@ import {
   PRODUCT_BY_ID,
   PRODUCT_BY_TYPE_NAME,
   PRODUCT_BY_RANGE
-} from "../api/apis";
-import api from "../api/axios";
+} from "../../api/apis";
+import api from "../../api/axios";
 
 const initialState = {
   upload: {
@@ -160,7 +160,7 @@ const productSlice = createSlice({
       .addCase(getAllProducts.fulfilled, (state, action) => {
         state.list.loading = false;
         state.list.fetched = true;
-        state.list.data = action.payload.data.products;
+        state.list.data = action.payload.data
       })
       .addCase(getAllProducts.rejected, (state, action) => {
         state.list.loading = false;

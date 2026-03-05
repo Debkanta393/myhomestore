@@ -1,10 +1,10 @@
-import { Button } from "./ui/Button";
+import { Button } from "../ui/Button";
 import { Link } from "react-router";
 import { ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import MainNav from "./ui/MainNav";
-import {topNavItems, topNavSubList} from "../data/data"
+import MainNav from "../ui/MainNav";
+import {topNavItems, topNavSubList} from "../../../data/data"
 
 export function Header() {
   

@@ -26,7 +26,7 @@ export const Button = React.forwardRef(function Button(
   ref
 ) {
   return (
-    <button
+    <button      
       ref={ref}
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
       {...props}

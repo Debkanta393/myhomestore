@@ -18,9 +18,9 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { setTabSelected } from "../../service/slice";
+import { setTabSelected } from "../../features/slice";
 import { useDispatch } from "react-redux";
-import { mainNav, mainNavSub } from "../../data/data";
+import { mainNav, mainNavSub } from "../../../data/data";
 
 export default function MainNav() {
   const [mainHovered, setMainHovered] = useState(null);

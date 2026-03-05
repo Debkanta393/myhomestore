@@ -9,9 +9,9 @@ import {
   BrickWall,
   Award,
 } from "lucide-react";
-import Products from "../../components/ui/Products";
-import PopularCollections from "../../components/ui/PopularCollections";
-import Whychooseus from "../../components/ui/WhyChooseus";
+import Products from "../components/products/Products";
+import PopularCollections from "../components/ui/PopularCollections";
+import Whychooseus from "../components/ui/WhyChooseus";
 
 export default function ClaverChoise() {
   const productRanges = [

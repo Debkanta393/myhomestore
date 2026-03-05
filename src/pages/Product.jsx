@@ -3,30 +3,98 @@ import {
   ChevronRight,
   ChevronLeft,
   Star,
-  Truck,
-  Shield,
-  RotateCcw,
   Heart,
   Share2,
   ZoomIn,
-  Package,
-  Award,
-  Check,
-  ChevronDown,
   HeartIcon,
   CircleCheckBig,
   Dot,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Reviews from "../../components/ui/Reviews";
-import WhyChooseus from "../../components/ui/WhyChooseus";
+import Reviews from "../components/ui/Reviews";
+import WhyChooseus from "../components/ui/WhyChooseus";
 import { useParams } from "react-router";
-import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getProductByTypeName, getProductByRange } from "../../service/product";
-import { addCartItems } from "../../service/cart";
+import { getProductByRange } from "../features/product/product";
+
+// ##################### Other products ##################### //
+const products = [
+  {
+    id: 1,
+    image: "./images/luxury1.webp",
+    heading: "Premium Oak Flooring",
+    desc: "Elegant waterproof flooring with natural wood texture",
+    category: "Luxury",
+    brand: "Elite Floors",
+    price: 100,
+    rating: 4.5,
+    inStock: true,
+    color: "Natural Oak",
+    size: "M",
+    material: "Hybrid Core",
+    isNew: true,
+    onSale: false,
+    tags: ["Premium", "Best Seller"],
+  },
+  {
+    id: 2,
+    image: "./images/luxury2.webp",
+    heading: "Walnut Heritage Series",
+    desc: "Rich walnut tones with superior durability",
+    category: "Premium",
+    brand: "Heritage Co",
+    price: 250,
+    rating: 4.8,
+    inStock: true,
+    color: "Dark Walnut",
+    size: "L",
+    material: "Engineered Wood",
+    isNew: false,
+    onSale: true,
+    tags: ["Featured"],
+  },
+  {
+    id: 3,
+    image: "./images/luxury3.webp",
+    heading: "Coastal White Pine",
+    desc: "Light and airy flooring for modern spaces",
+    category: "Contemporary",
+    brand: "Modern Living",
+    price: 150,
+    rating: 5.0,
+    inStock: false,
+    color: "White Wash",
+    size: "XL",
+    material: "Bamboo Composite",
+    isNew: true,
+    onSale: false,
+    tags: ["Eco-Friendly"],
+  },
+  {
+    id: 4,
+    image: "./images/luxury1.webp",
+    heading: "Industrial Concrete",
+    desc: "Urban style with exceptional resistance",
+    category: "Industrial",
+    brand: "Urban Floor",
+    price: 80,
+    rating: 4.2,
+    inStock: true,
+    color: "Concrete Grey",
+    size: "S",
+    material: "SPC Core",
+    isNew: false,
+    onSale: true,
+    tags: ["Budget Friendly"],
+  },
+];
 
 export default function Product() {
+  // ##################### Get Range and product name from URI ##################### //
+  const params = useParams();
+  const { range, productName } = params;
+
+  // ##################### State hooks ##################### //
   const [selectedImage, setSelectedImage] = useState(0);
   const [calculatorData, setCalculatorData] = useState({
     totalNeeded: 0,
@@ -42,15 +110,11 @@ export default function Product() {
     total: "0",
   });
   const dispatch = useDispatch();
-  const [productData, setProductData] = useState();
-  const [productImages, setProductImages] = useState([]);
   const [packSize, setPackSize] = useState();
   const [priceTag, setPriceTag] = useState(0);
-  const params = useParams();
   const [rangeProducts, setRangeProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
   const tabs = [
     "Description",
     "Specifications",
@@ -61,141 +125,46 @@ export default function Product() {
   ];
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
-  const products = [
-    {
-      id: 1,
-      image: "./images/luxury1.webp",
-      heading: "Premium Oak Flooring",
-      desc: "Elegant waterproof flooring with natural wood texture",
-      category: "Luxury",
-      brand: "Elite Floors",
-      price: 100,
-      rating: 4.5,
-      inStock: true,
-      color: "Natural Oak",
-      size: "M",
-      material: "Hybrid Core",
-      isNew: true,
-      onSale: false,
-      tags: ["Premium", "Best Seller"],
-    },
-    {
-      id: 2,
-      image: "./images/luxury2.webp",
-      heading: "Walnut Heritage Series",
-      desc: "Rich walnut tones with superior durability",
-      category: "Premium",
-      brand: "Heritage Co",
-      price: 250,
-      rating: 4.8,
-      inStock: true,
-      color: "Dark Walnut",
-      size: "L",
-      material: "Engineered Wood",
-      isNew: false,
-      onSale: true,
-      tags: ["Featured"],
-    },
-    {
-      id: 3,
-      image: "./images/luxury3.webp",
-      heading: "Coastal White Pine",
-      desc: "Light and airy flooring for modern spaces",
-      category: "Contemporary",
-      brand: "Modern Living",
-      price: 150,
-      rating: 5.0,
-      inStock: false,
-      color: "White Wash",
-      size: "XL",
-      material: "Bamboo Composite",
-      isNew: true,
-      onSale: false,
-      tags: ["Eco-Friendly"],
-    },
-    {
-      id: 4,
-      image: "./images/luxury1.webp",
-      heading: "Industrial Concrete",
-      desc: "Urban style with exceptional resistance",
-      category: "Industrial",
-      brand: "Urban Floor",
-      price: 80,
-      rating: 4.2,
-      inStock: true,
-      color: "Concrete Grey",
-      size: "S",
-      material: "SPC Core",
-      isNew: false,
-      onSale: true,
-      tags: ["Budget Friendly"],
-    },
-  ];
-
-  const { range, productName } = params;
-
-  useEffect(() => {
-    const getProducts = async () => {
-      // const response = await dispatch(
-      //   getProductByTypeName({ type, productName }),
-      // );
-      // if (response.payload.data.success) {
-      //   setProductData(response.payload.data.data[0]);
-      //   setProductImages(response.payload.data.data[0].productImage);
-      //   // Set pack size
-      //   let packsize = parseFloat(
-      //     response.payload.data.data[0].packSize.split("-")[0],
-      //   );
-      //   setPackSize(packsize);
-      // }
-    };
-    getProducts();
-  }, [dispatch]);
-
-  console.log(range, " ", productName);
-
+  // ##################### Fetch all products in the same range ##################### //
   useEffect(() => {
     const getRangeProduct = async () => {
       const response = await dispatch(getProductByRange(range));
 
-      // Set app products in this range
-      setRangeProducts(response.payload.product);
+      if (response.payload.success) {
+        // Set app products in this range
+        setRangeProducts(response.payload.product);
 
-      // Set selected product
-      const selectedproduct = response.payload.product.find(
-        (item) => item.productName == productName,
-      );
-      setSelectedProduct(selectedproduct);
+        // Set selected product
+        const selectedproduct = response.payload.product.find(
+          (item) => item.productName == productName,
+        );
+        setSelectedProduct(selectedproduct);
 
-      // Set pack size
-      let packsize = parseFloat(selectedproduct.packSize.split("-")[0]);
-      setPackSize(packsize);
+        // Set pack size
+        let packsize = parseFloat(selectedproduct.packSize.split("-")[0]);
+        setPackSize(packsize);
+      }
     };
     getRangeProduct();
   }, [dispatch]);
 
-  console.log(productData);
   console.log(rangeProducts);
-  console.log(selectedProduct);
 
+  // ##################### Previous image handler ##################### //
   const handlePrevImage = () => {
-    // const newIndex =
-    //   currentIndex > 0 ? currentIndex - 1 : otherImages.length - 1;
-    // setSelectedImage(otherImages[newIndex]);
     setSelectedImage((prev) =>
       prev > 0 ? prev - 1 : selectedProduct?.productImage?.length - 1,
     );
   };
 
+  // ##################### Next image handler ##################### //
   const handleNextImage = () => {
-    // const newIndex =
-    //   currentIndex < otherImages.length - 1 ? currentIndex + 1 : 0;
-    // setSelectedImage(otherImages[newIndex]);
     setSelectedImage((prev) =>
       prev < selectedProduct?.productImage?.length - 1 ? prev + 1 : 0,
     );
   };
 
+  // ##################### Framer motion animations ##################### //
   const imageVariants = {
     enter: { opacity: 0, scale: 0.95 },
     center: { opacity: 1, scale: 1 },
@@ -226,14 +195,7 @@ export default function Product() {
     },
   };
 
-  const calculatorDataHandler = (e) => {
-    console.log(e.target.name);
-    setCalculatorData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
+  // ##################### Change product in the same range ##################### //
   const selectedProductHandler = (productName) => {
     const product = rangeProducts?.find(
       (item) => item.productName === productName,
@@ -248,7 +210,15 @@ export default function Product() {
     }, 0);
   };
 
-  console.log(selectedProduct);
+  // ##################### Calculation handler ##################### //
+  const calculatorDataHandler = (e) => {
+    console.log(e.target.name);
+    setCalculatorData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   useEffect(() => {
     if (!calculatorData.totalNeeded) {
       return;
@@ -297,7 +267,7 @@ export default function Product() {
     calculatorHandler();
   }, [calculatorData.totalNeeded, calculatorData.wastage]);
 
-  // Set background fixed when modal is open
+  // ##################### Set background fixed when modal is open ##################### //
   useEffect(() => {
     if (showModal) {
       document.body.style.overflow = "hidden";
@@ -306,10 +276,6 @@ export default function Product() {
     }
   }, [showModal]);
 
-  console.log(priceData);
-  console.log(showModal);
-
-  console.log(activeTab);
   return (
     <div className="w-full mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
       {/* Breadcrumb with glassmorphism */}
@@ -417,8 +383,8 @@ export default function Product() {
             <h3 className="text-2xl font-semibold mt-16 mb-5">
               Color Options in this range
             </h3>
-            <div className="flex flex-wrap gap-x-3 text-center">
-              {rangeProducts.map((product, index) => (
+            <div className="flex flex-wrap gap-x-3 gap-y-2 text-center">
+              {rangeProducts?.map((product, index) => (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -439,22 +405,26 @@ export default function Product() {
           </div>
 
           <div>
-            <h3 className="text-2xl font-semibold mt-10 mb-5">
-              Other Tickeness Options
-            </h3>
-            <div className="flex flex-wrap gap-5 text-center">
-              {["8mm", "12mm", "15mm"].map((size, index) => (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.5 }}
-                  key={index}
-                  className="p-2 w-36 border border-[#E7E9EB] hover:bg-[#E7E9EB] cursor-pointer"
-                >
-                  <p>{size}</p>
-                </motion.div>
-              ))}
-            </div>
+            {selectedProduct?.thickness?.length > 1 && (
+              <>
+                <h3 className="text-2xl font-semibold mt-10 mb-5">
+                  Other Tickeness Options
+                </h3>
+                <div className="flex flex-wrap gap-5 text-center">
+                  {selectedProduct?.thickness?.map((size, index) => (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.5 }}
+                      key={index}
+                      className="p-2 w-36 border border-[#E7E9EB] hover:bg-[#E7E9EB] cursor-pointer"
+                    >
+                      <p>{size}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </motion.div>
 
@@ -527,24 +497,6 @@ export default function Product() {
               {selectedProduct?.description}
             </motion.p>
           </div>
-
-          {/* Price section with modern design */}
-          {/* <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.7 }}
-          >
-            <div className="flex items-center gap-4 flex-wrap">
-              <span className="text-xl font-bold text-black">
-                $300{" "}
-                <span className="font-normal text-[#666E7C]">/sq meter</span>
-              </span>
-              <span className="text-red-600 font-bold text-lg">- 20%</span>
-              <span className="line-through text-xl font-medium text-[#666E7C]">
-                $500
-              </span>
-            </div>
-          </motion.div> */}
 
           {/* Price section */}
           <motion.div className="flex gap-5 items-center justify-evenly my-10 bg-[#FCF8F5] p-2">
@@ -625,6 +577,7 @@ export default function Product() {
                         value={10}
                         onChange={(e) => calculatorDataHandler(e)}
                         className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
+                         checked={calculatorData.wastage === 10}
                       />
                       <label htmlFor="">10%</label>
                     </div>
@@ -705,18 +658,6 @@ export default function Product() {
           <p className="text-lg font-semibold text-center">
             Call Us on 0467 747 837 for bulk pricing
           </p>
-
-          {/* Feature images */}
-          {/* <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
-            className="flex items-center gap-5"
-           >
-            {productData?.functionsImage?.map((image, index) => (
-              <img src={image.url} className="w-24 h-24" />
-            ))}
-          </motion.div> */}
         </motion.div>
       </div>
 
@@ -746,7 +687,7 @@ export default function Product() {
               <input
                 type="text"
                 placeholder="Product"
-                 className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
               />
               <input
                 type="text"
@@ -756,25 +697,27 @@ export default function Product() {
               <input
                 type="text"
                 placeholder="Phone*"
-                 className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
               />
               <input
                 type="email"
                 placeholder="Email*"
-                 className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
               />
               <input
                 type="date"
-                 className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
                 placeholder="Preferred Date*"
               />
               <input
                 type="time"
-                 className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
                 placeholder="Preferred Time*"
               />
 
-              <button className="bg-[#998E8A] text-white py-3 cursor-pointer">Submit</button>
+              <button className="bg-[#998E8A] text-white py-3 cursor-pointer">
+                Submit
+              </button>
             </form>
           </div>
         </motion.div>
