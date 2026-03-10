@@ -1,533 +1,289 @@
 import React from "react";
 import { Link } from "react-router";
-import {
-  ChevronDown,
-  ChevronUp,
-  Search,
-  User,
-  ShoppingBag,
-  Menu,
-  X,
-  LayoutDashboard,
-  Table2,
-  TableCellsMerge,
-  Bath,
-  Microwave,
-  House,
-  Trash2,
-} from "lucide-react";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { setTabSelected } from "../../features/slice";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { mainNav, mainNavSub } from "../../../data/data";
+import { navData } from "../../../data/data";
+import * as Icons from "lucide-react";
 
-export default function MainNav() {
-  const [mainHovered, setMainHovered] = useState(null);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState(1);
-  const [activeNav, setActiveNav] = useState(null);
-  const [tabRect, setTabRect] = useState(null);
-  const dispath = useDispatch();
-
-  // Tabs in header
-  const tabs = [
-    { tab: "All Categories", icon: <LayoutDashboard />, hasMenu: true },
-    { tab: "Flooring", icon: <Table2 />, hasMenu: true },
-    { tab: "Tiles", icon: <TableCellsMerge />, hasMenu: true },
-    { tab: "Bathroom", icon: <Bath />, hasMenu: true },
-    { tab: "Kitchen & Laundry", icon: <Microwave />, hasMenu: true },
-    { tab: "Other Home Improvements", icon: <House />, hasMenu: true },
-  ];
-
-  // Handle scroll for sticky header
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // ========== Cart section ==============
-  const [activeCartSection, setActiveCartSection] = useState(false);
-  useEffect(() => {
-    if (activeCartSection) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [activeCartSection]);
-
+export default function MainNav({ activeNav }) {
   return (
-    <div>
-      {/* Main Header - Sticky */}
-      <motion.div
-        className="sticky top-0 z-30 bg-white transition-all duration-300"
-        animate={{
-          boxShadow: isScrolled
-            ? "0 4px 20px rgba(138, 106, 90, 0.2)"
-            : "0 0 0 rgba(138, 106, 90, 0)",
-        }}
-      >
-        <div className="w-11/12 sm:max-w-10/12 mx-auto">
-          <div className="flex justify-between items-center py-4 md:py-6">
-            {/* Logo */}
-            <Link to="/" className="flex items-center group">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#8A6A5A] to-[#998e8a] bg-clip-text text-transparent"
-              >
-                MyHomeStore
-              </motion.div>
-            </Link>
-
-            {/* Search Bar - Desktop */}
-            <div className="hidden lg:block flex-1 max-w-2xl mx-12">
-              <div className="relative group">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full border-2 border-[#D6CEC6] focus:border-[#8A6A5A] rounded-full py-3 pl-5 pr-12 outline-none transition-all duration-300 text-[#8A6A5A] placeholder:text-[#B8B0A7]"
-                  placeholder="Search for products..."
-                />
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#998e8a] text-white p-2 rounded-full hover:bg-[#998e8a] transition-colors duration-300"
-                >
-                  <Search size={20} />
-                </motion.button>
-              </div>
+    <div className="relative">
+      {activeNav !== null && (
+        <div className="absolute top-full hidden lg:block border-t border-[#D6CEC6]/30 bg-[#f5efed]/30 w-full bg-white shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
+        py-8 xl:py-16 nav-scroll scroll-smooth">
+          <nav className="w-10/12 transition-all mx-auto max-h-[70vh] overflow-y-auto pb-20">
+            <div className="flex items-start justify-between gap-1 xl:gap-10 w-full">
+              <NavbarLeftSection activeNav={activeNav} />
+              <NavbarRightSection activeNav={activeNav} />
             </div>
-
-            {/* Right Actions */}
-            <div className="flex items-center gap-4 md:gap-6">
-              {/* Profile */}
-              <Link
-                to="/profile"
-                className="hidden md:flex items-center gap-2 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 group"
-              >
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <User size={22} />
-                </motion.div>
-              </Link>
-
-              {/* Cart */}
-              <div
-                onClick={() => setActiveCartSection(true)}
-                className="flex items-center gap-2 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 relative group cursor-pointer"
-              >
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <ShoppingBag size={22} />
-                </motion.div>
-                {/* Cart Count Badge */}
-                <span className="absolute -top-2 -right-2 bg-[#8A6A5A] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  0
-                </span>
-              </div>
-
-              {/* Get Quote Button - Desktop */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="hidden lg:block relative overflow-hidden py-3 px-8 bg-[#998e8a] text-white font-semibold group border-2 border-[#998e8a] transition-all duration-300"
-              >
-                <span className="relative z-10 transition-colors duration-300 group-hover:text-[#8A6A5A]">
-                  Get a Quote
-                </span>
-                <span className="absolute inset-0 bg-[#f5efed] transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
-              </motion.button>
-
-              {/* Mobile Menu Toggle */}
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden text-[#8A6A5A] p-2"
-              >
-                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </motion.button>
-            </div>
-          </div>
+          </nav>
         </div>
-
-        {/* Tabs section */}
-        {/* Tabs Section */}
-        <div
-          className="relative"
-          onMouseLeave={() => {
-            setActiveNav(null);
-            setMainHovered(null);
-            setTabRect(null);
-          }}
-        >
-          {/* Tabs Section */}
-          <div className="max-w-10/12 mx-auto my-1">
-            <div className="flex justify-center xl:justify-evenly xl:items-center gap-2">
-              {tabs.map((tab, index) => (
-                <motion.li
-                  key={index}
-                  onMouseEnter={(e) => {
-                    setActiveTab(index);
-                    setActiveNav(index);
-                    dispath(setTabSelected(tab.tab));
-                    setTabRect(e.currentTarget.getBoundingClientRect());
-                  }}
-                  onClick={(e) => {
-                    setActiveTab(index);
-                    setActiveNav(index);
-                    dispath(setTabSelected(tab.tab));
-                    setTabRect(e.currentTarget.getBoundingClientRect());
-                  }}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  whileHover={{ y: -3 }}
-                  className={`hidden lg:flex justify-center items-center gap-1 xl:gap-2 py-3 rounded-t-2xl text-[12px] xl:text-sm font-bold uppercase tracking-wide
-                     ${activeTab === index ? "text-[#8A6A5A]" : "text-black"} cursor-pointer relative`}
-                 >
-                  {activeTab === index && (
-                    <motion.span
-                      layoutId="activeTabIndicator"
-                      className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8A6A5A] via-[#f5efed] to-[#998e8a] rounded-t-2xl"
-                    />
-                  )}
-
-                  <span className="inline-flex items-center justify-center h-5 xl:h-10 w-5 xl:w-10 flex-shrink-0">
-                    {tab.icon}
-                  </span>
-
-                  <span className="text-nowrap">{tab.tab}</span>
-
-                  <motion.div
-                    animate={{ rotate: activeTab === index ? 180 : 0 }}
-                    transition={{ duration: 0.25 }}
-                  >
-                    <ChevronDown size={16} />
-                  </motion.div>
-                </motion.li>
-              ))}
-            </div>
-          </div>
-
-          {/* Main Navigation */}
-          <div className="hidden lg:block border-t border-[#D6CEC6]/30 bg-[#f5efed]/30 backdrop-blur-sm">
-            <div className="max-w-10/12 mx-auto px-6 relative">
-              {activeNav !== null && tabRect && (
-                <nav
-                  style={{
-                    left: tabRect.left + tabRect.width / 2,
-                    transform: "translate(-130%, -15px)",
-                  }}
-                  className="absolute top-full mt-4 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-6 min-w-[250px] border border-[#998e8a] flex flex-col gap-4 transition-all"
-                >
-                  {/* Arrow */}
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-l border-t border-[#D6CEC6]/30 rotate-45"></div>
-
-                  {mainNav[activeNav]?.map((item, index) => (
-                    <div
-                      key={index}
-                      className="relative group"
-                      onMouseEnter={() => setMainHovered(item.key)}
-                      onMouseLeave={() => setMainHovered(null)}
-                    >
-                      <Link
-                        to={`/${item.key}`}
-                        className="flex items-center justify-between gap-2 text-[#8A6A5A] hover:text-[#998e8a] font-medium text-md whitespace-nowrap transition"
-                      >
-                        {item.label}
-
-                        {item.hasSubmenu && (
-                          <motion.div
-                            animate={{
-                              rotate: mainHovered === item.key ? 180 : 0,
-                            }}
-                            transition={{ duration: 0.25 }}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setMainHovered(item.key);
-                            }}
-                          >
-                            <ChevronDown size={14} />
-                          </motion.div>
-                        )}
-                      </Link>
-
-                      {/* SIDE SUB MENU */}
-                      <AnimatePresence>
-                        {mainHovered === item.key &&
-                          item.hasSubmenu &&
-                          mainNavSub[item.key] && (
-                            <motion.div
-                              initial={{ opacity: 0, x: 10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: 10 }}
-                              transition={{ duration: 0.2 }}
-                              className="absolute left-full top-0 ml-6 bg-white backdrop-blur-md shadow-[0_12px_40px_rgba(138,106,90,0.2)] rounded-2xl p-5 min-w-[260px] border border-[#998e8a]"
-                            >
-                              {mainNavSub[item.key].map((subItem, i) => (
-                                <motion.div
-                                  key={i}
-                                  className="hover:bg-[#f5efed] rounded-lg px-4 py-2 text-[#8A6A5A] text-md font-medium cursor-pointer hover:translate-x-1 transition"
-                                >
-                                  <Link
-                                    to={`/${item.key}/${subItem
-                                      .toLowerCase()
-                                      .replace(/\s+/g, "-")}`}
-                                  >
-                                    {subItem}
-                                  </Link>
-                                </motion.div>
-                              ))}
-                            </motion.div>
-                          )}
-                      </AnimatePresence>
-                    </div>
-                  ))}
-                </nav>
-              )}
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden bg-white border-t border-[#D6CEC6]/30"
-          >
-            <div className="max-w-7xl mx-auto px-6 py-6">
-              {/* Mobile Search */}
-              <div className="relative mb-6">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full border-2 border-[#D6CEC6] focus:border-[#8A6A5A] rounded-full py-3 pl-5 pr-12 outline-none transition-all duration-300 text-[#8A6A5A] placeholder:text-[#B8B0A7]"
-                  placeholder="Search..."
-                />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#8A6A5A] text-white p-2 rounded-full">
-                  <Search size={18} />
-                </button>
-              </div>
-
-              {/* Mobile Navigation */}
-              {tabs.map((tab, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  {/* TAB HEADER */}
-                  <li
-                    className="list-none flex justify-between items-center font-semibold text-lg text-[#8A6A5A] cursor-pointer border-b border-[#8A6A5A]/50 py-3"
-                    onClick={() =>
-                      setActiveTab(index == activeTab ? null : index)
-                    }
-                  >
-                    {tab}
-                    {activeTab === index ? <ChevronUp /> : <ChevronDown />}
-                  </li>
-
-                  {/* Showing only active tab */}
-                  {activeTab === index && (
-                    <nav className="flex flex-col gap-2 py-4 max-h-[70vh] overflow-y-auto">
-                      {mainNav[index].map((item, mainIndex) => (
-                        <div
-                          key={mainIndex}
-                          className="relative ml-6"
-                          onClick={() =>
-                            setMainHovered(
-                              mainHovered === item.key ? null : item.key,
-                            )
-                          }
-                        >
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.25 }}
-                            className="flex justify-between items-center"
-                          >
-                            <Link
-                              to={`/${item.key}`}
-                              className="text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 font-medium text-md"
-                            >
-                              {item.label}
-                            </Link>
-
-                            {item.hasSubmenu && (
-                              <motion.div
-                                animate={{
-                                  rotate: mainHovered === item.key ? 180 : 0,
-                                }}
-                                transition={{ duration: 0.3 }}
-                              >
-                                <ChevronDown size={25} color="#8A6A5A" />
-                              </motion.div>
-                            )}
-                          </motion.div>
-
-                          {/* Submenu */}
-                          <AnimatePresence>
-                            {mainHovered === item.key &&
-                              item.hasSubmenu &&
-                              mainNavSub[item.key] && (
-                                <motion.div
-                                  initial={{ opacity: 0, height: 0 }}
-                                  animate={{ opacity: 1, height: "auto" }}
-                                  exit={{ opacity: 0, height: 0 }}
-                                  transition={{ duration: 0.25 }}
-                                  className="relative mt-3 ml-4"
-                                >
-                                  {mainNavSub[item.key].map(
-                                    (subItem, subIndex) => (
-                                      <Link
-                                        key={subIndex}
-                                        to={`/${item.key}/${subItem
-                                          .toLowerCase()
-                                          .replace(/\s+/g, "-")}`}
-                                        className="block px-4 py-2 text-[#8A6A5A] text-md hover:bg-[#f5efed] rounded-lg font-semibold"
-                                      >
-                                        {subItem}
-                                      </Link>
-                                    ),
-                                  )}
-                                </motion.div>
-                              )}
-                          </AnimatePresence>
-                        </div>
-                      ))}
-                    </nav>
-                  )}
-                </motion.div>
-              ))}
-
-              {/* Mobile CTA */}
-              <motion.button
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="w-full py-3 px-6 bg-[#8A6A5A] text-white font-semibold rounded-lg mt-4"
-              >
-                Get a Quote
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Cart section */}
-      <AnimatePresence>
-        {activeCartSection && (
-          <>
-            {/* Black overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black z-[9998]"
-              onClick={() => setActiveCartSection(false)}
-            />
-
-            {/* Cart Drawer */}
-            <motion.div
-              initial={{ x: 400 }}
-              animate={{ x: 0 }}
-              exit={{ x: 400 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="fixed top-0 right-0 h-screen w-[500px] bg-white z-[9999] p-6"
-            >
-              <h2 className="font-semibold text-3xl">
-                Your Cart{" "}
-                <span className="font-normal text-[#998e8a] text-2xl">(2)</span>
-              </h2>
-              <div
-                className="absolute top-6 right-10 hover:bg-[#f5efed] cursor-pointer p-2 hover:shadow-md rounded"
-                onClick={() => setActiveCartSection(false)}
-              >
-                <X />
-              </div>
-
-              {/* Cart */}
-              <div className="border-t border-[#998e8a] mt-4 space-y-2">
-                <div className="flex gap-5 py-4  hover:shadow-xl shadow-gray-300 px-6 rounded-xl">
-                  <img src="" alt="" className="w-32 h-32 bg-gray-200" />
-                  <div className="flex-1 space-y-1">
-                    <div className="flex justify-between">
-                      <h5 className="text-xl font-medium w-2/3">
-                        Hydro Laminate Tiles
-                      </h5>
-                      <div className="flex items-center gap-2 w-1/3">
-                        <button className="p-2 hover:shadow-md rounded cursor-pointer">
-                          -
-                        </button>
-                        <p>1</p>
-                        <button className="p-2 hover:shadow-md rounded cursor-pointer">
-                          +
-                        </button>
-                      </div>
-                    </div>
-                    <p className="text-md text-gray-500">$30.00</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex gap-5">
-                        <p>Qty: 1</p>
-                        <p>Size: XL</p>
-                      </div>
-                      <div className="p-2 rounded hover:shadow-md cursor-pointer text-red-600">
-                        <Trash2 />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Payment summary */}
-              <div className="absolute bottom-6 left-6 right-6">
-                <h3 className="font-semibold text-2xl">Payment Summary</h3>
-                <div className="space-y-2 mt-3">
-                  <div className="flex justify-between">
-                    <p>Subtotal</p>
-                    <p>$30.00</p>
-                  </div>
-                  <div className="flex justify-between">
-                    <p>Shipping</p>
-                    <p>FREE</p>
-                  </div>
-                  <div className="flex justify-between font-bold">
-                    <p>Total</p>
-                    <p>$27.00</p>
-                  </div>
-                </div>
-
-                <button className="w-full mt-4 bg-[#998e8a] text-white text-lg py-3 cursor-pointer">
-                  Check Out
-                </button>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      )}
     </div>
   );
 }
+
+// ── Reusable Nav Link Item ──────────────────────────────────────────────────
+function NavItem({ item }) {
+  const Icon = Icons[item.icon];
+  return (
+    <Link
+      to={`/${item.heading}`}
+      className="flex hover:bg-[#f5efed] py-2 px-2 w-full"
+    >
+      <motion.div transition={{ duration: 0.25 }} className="flex items-start gap-2 w-full">
+        {Icon && <Icon size={19} className="text-[#B2873C] shrink-0 mt-0.5" />}   
+        <div className="flex items-start gap-3 flex-wrap min-w-0">
+          <div className="space-y-2 min-w-0">
+            <p className="text-md lg:text-sm 2xl:text-lg text-[#666E7C] m-0 leading-tight">{item.heading}</p>
+            {item.subHeading && (
+              <p className="text-sm lg:text-xs 2xl:text-md text-[#666E7C] leading-tight">{item.subHeading}</p>
+            )}
+          </div>
+          {item.soon && (
+            <button className="bg-[#EFE8DA] text-xs text-[#B2873C] px-2 py-0.5 h-fit shrink-0">
+              Soon
+            </button>
+          )}
+        </div>
+      </motion.div>
+    </Link>
+  );
+}
+
+// ── Reusable Section Block ──────────────────────────────────────────────────
+function NavSection({ title, items, borderBottom, borderTop }) {
+  return (
+    <div className={`h-fit ${borderBottom ? "pb-4 border-b border-[#E7E9EB]" : ""} ${borderTop ? "pt-4" : ""}`}>
+      <p className="text-base xl:text-lg text-black font-medium">{title}</p>
+      <div className="mt-3 flex flex-col gap-1">
+        {items?.map((item, index) => <NavItem key={index} item={item} />)}
+      </div>
+    </div>
+  );
+}
+
+// ── Left Section ───────────────────────────────────────────────────────────
+function NavbarLeftSection({ activeNav }) {
+  switch (activeNav) {
+    case 0:
+      return (
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 w-full lg:w-9/12">
+          <NavSection title="By Room" items={navData["By Room"]} />
+          <NavSection title="By Category" items={navData["By Category"]} />
+          <div className="col-span-2 lg:col-span-1">
+            <NavSection title="Shop By Brands" items={navData["Shop By Brands"]} />
+          </div>
+        </div>
+      );
+
+    case 1:
+      return (
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 w-full lg:w-9/12">
+          <div className="space-y-4">
+            <NavSection title="Resilient & Modern" items={navData["Resilient & Modern"]} borderBottom />
+            <NavSection title="Accessories" items={navData["Accessories"]} borderBottom borderTop />
+            <NavSection title="Brands" items={navData["Brands"]} borderTop />
+          </div>
+          <div className="space-y-4">
+            <NavSection title="Natural Timber" items={navData["Natural Timber"]} borderBottom />
+            <NavSection title="By Species" items={navData["By Species"]} borderTop />
+          </div>
+          <div className="space-y-4 col-span-2 lg:col-span-1">
+            <NavSection title="Eco - Friendly" items={navData["Eco - Friendly"]} borderBottom />
+            <NavSection title="Need Help?" items={navData["Need Help?"]} borderTop />
+          </div>
+        </div>
+      );
+
+    case 2:
+      return (
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 w-full lg:w-9/12">
+          <div className="space-y-4">
+            <NavSection title="Decking" items={navData["Decking"]} />
+            <div className="bg-[#F5F0ED] p-4 border-l border-[#8A6A5B] space-y-1">
+              <p className="text-sm font-semibold text-black">🔥 BAL 29 Rated Decking</p>
+              <p className="text-sm text-[#666E7C]">Blackbutt approved for bushfire zones</p>
+            </div>
+          </div>
+          <NavSection title="Cladding & Screening" items={navData["Cladding & Screening"]} />
+          <div className="space-y-4 col-span-2 lg:col-span-1">
+            <NavSection title="Fencing & Benchtops" items={navData["Fencing & Benchtops"]} borderBottom />
+            <NavSection title="Outdoor Benchtops" items={navData["Outdoor Benchtops"]} borderTop />
+          </div>
+        </div>
+      );
+
+    case 3:
+      return (
+        <div className="grid grid-cols-2 xl:grid-cols-3 gap-6 w-full lg:w-9/12">
+          <NavSection title="Bamboo Products" items={navData["Bamboo Products"]} />
+          <NavSection title="Sustainable Timber" items={navData["Sustainable Timber"]} />
+          <div className="col-span-2 lg:col-span-1">
+            <NavSection title="Eco Brands" items={navData["Eco Brands"]} />
+          </div>
+        </div>
+      );
+
+    case 4:
+      return (
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 w-full lg:w-9/12">
+          <NavSection title="Bathroom" items={navData["Bathroom"]} />
+          <NavSection title="Kitchen" items={navData["Kitchen"]} />
+          <div className="space-y-4 col-span-2 lg:col-span-1">
+            <NavSection title="Brands" items={navData["Brands"]} borderBottom />
+            <NavSection title="Services" items={navData["Services"]} borderTop />
+          </div>
+        </div>
+      );
+
+    case 5:
+      return (
+        <div className="grid grid-cols-2 gap-6 w-full xl:w-6/12">
+          <NavSection title="Indoor Tiles" items={navData["Indoor Tiles"]} />
+          <div className="space-y-4">
+            <NavSection title="Outdoor & Commercial" items={navData["Outdoor & Commercial"]} />
+            <NavSection title="DW Tiles" items={navData["DW Tiles"]} borderBottom />
+          </div>
+        </div>
+      );
+
+    case 6:
+      return (
+        <div className="grid grid-cols-2 gap-6 w-full lg:w-6/12">
+          <NavSection title="Installation" items={navData["Installation"]} />
+          <NavSection title="Consultation" items={navData["Consultation"]} />
+        </div>
+      );
+
+    case 7:
+      return (
+        <div className="grid grid-cols-2 gap-6 w-full lg:w-6/12">
+          <NavSection title="Current Offers" items={navData["Current Offers"]} />
+          <NavSection title="Trade & Volume" items={navData["Trade & Volume"]} />
+        </div>
+      );
+  }
+}
+
+// ── Right Section ──────────────────────────────────────────────────────────
+function NavbarRightSection({ activeNav }) {
+  const narrowCard = "bg-[#8A6A5B] p-4 xl:p-5 space-y-3 w-full lg:w-3/12 shrink-0";
+  const wideCard = "w-full lg:w-5/12 xl:w-6/12 shrink-0";
+
+  switch (activeNav) {
+    case 0:
+      return (
+        <div className={narrowCard}>
+          <img src="./images/bathroom.webp" alt="" className="w-full object-cover" />
+          <p className="text-white text-base xl:text-lg font-semibold">Laverton Display Centre</p>
+          <p className="text-white text-sm">See Products in person</p>
+          <button className="bg-white text-[#998E8A] text-sm xl:text-md font-medium px-6 xl:px-8 py-3 xl:py-4 w-full sm:w-auto">
+            Book a time
+          </button>
+        </div>
+      );
+
+    case 1:
+      return (
+        <div className={narrowCard}>
+          <img src="./images/bathroom.webp" alt="" className="w-full object-cover" />
+          <p className="text-white text-base xl:text-lg font-semibold">Blackbutt 130×14mm Select Flooring</p>
+          <p className="text-white text-sm">Australia's most popular hardwood. Janka 9kN, BAL 29, PEFC certified.</p>
+          <button className="bg-white text-[#998E8A] text-sm font-medium px-6 xl:px-8 py-3 xl:py-4 w-full sm:w-auto">Shop Now</button>
+          <div className="bg-white p-4 space-y-2">
+            <p className="text-sm font-semibold">🎯 Not sure what floor suits you?</p>
+            <p className="text-sm">5 quick questions → matched to the right floor for your home and subfloor.</p>
+            <p className="text-[#998E8A] text-sm font-semibold">Take the Floor Finder Quiz →</p>
+          </div>
+        </div>
+      );
+
+    case 2:
+      return (
+        <div className={narrowCard}>
+          <img src="./images/bathroom.webp" alt="" className="w-full object-cover" />
+          <p className="text-white text-base xl:text-lg font-semibold">Blackbutt Cladding & Decking</p>
+          <p className="text-white text-sm">BAL 29 rated. Class 1 durability. The premium Australian hardwood for outdoor use.</p>
+          <button className="bg-white text-[#998E8A] text-sm font-medium px-6 xl:px-8 py-3 xl:py-4 w-full sm:w-auto">Explore Outdoor</button>
+          <div className="bg-white p-4 space-y-2">
+            <p className="text-sm font-semibold">📐 Free Measure & Quote</p>
+            <p className="text-sm">Supply + install for decking & cladding in Melbourne. Quote within 48hrs.</p>
+            <p className="text-[#998E8A] text-sm font-semibold">Book a free quote →</p>
+          </div>
+        </div>
+      );
+
+    case 3:
+      return (
+        <div className={narrowCard}>
+          <img src="./images/bathroom.webp" alt="" className="w-full object-cover" />
+          <p className="text-white text-base xl:text-lg font-semibold">Bamboo — Nature's Hardest Grass</p>
+          <p className="text-white text-sm">Harder than most hardwoods, grows back in 5 years. FSC certified and independently tested.</p>
+          <button className="bg-white text-[#998E8A] text-sm font-medium px-6 xl:px-8 py-3 xl:py-4 w-full sm:w-auto font-semibold">Shop Bamboo →</button>
+        </div>
+      );
+
+    case 4:
+      return (
+        <div className={narrowCard}>
+          <img src="./images/bathroom.webp" alt="" className="w-full object-cover" />
+          <p className="text-white text-base xl:text-lg font-semibold">Complete Bathroom Packages</p>
+          <p className="text-white text-sm">Vanity + basin + tapware + mirror. Curated from Pfienza and AVIA.</p>
+          <button className="bg-white text-[#998E8A] text-sm font-medium px-6 xl:px-8 py-3 xl:py-4 w-full sm:w-auto">Shop Packages</button>
+          <div className="bg-white p-4 space-y-2">
+            <p className="text-sm font-semibold">🛁 Renovating your bathroom?</p>
+            <p className="text-sm">Visit our Laverton display centre — see Pfienza and AVIA in person.</p>
+            <p className="text-[#998E8A] text-sm font-semibold">Book a visit →</p>
+          </div>
+        </div>
+      );
+
+    case 5:
+      return (
+        <div className={`space-y-6 ${wideCard}`}>
+          <div className="bg-[#8A6A5B] p-4 xl:p-5 w-full space-y-3">
+            <p className="text-base xl:text-lg text-white font-semibold">Tiles</p>
+            <p className="text-base xl:text-lg text-white font-semibold">Coming Soon</p>
+            <p className="text-white text-sm">Our full DW Tiles range is launching soon. Be the first to know.</p>
+            <button className="text-[#998E8A] text-sm px-6 xl:px-8 py-3 xl:py-4 bg-white font-semibold w-full sm:w-auto">Notify Me</button>
+          </div>
+          <div className="bg-[#F5F0ED] border-l border-[#8A6A5B] p-4 space-y-2">
+            <p className="text-sm text-black font-semibold">Need tiles now?</p>
+            <p className="text-sm text-[#666E7C] font-semibold">Call us — we source from DW Tiles and organise supply + install in Melbourne.</p>
+            <p>📞 1300 000 000</p>
+          </div>
+        </div>
+      );
+
+    case 6:
+      return (
+        <div className={`bg-[#8A6A5B] p-4 xl:p-5 space-y-6 ${wideCard}`}>
+          <div className="w-full space-y-3">
+            <p className="text-base xl:text-lg text-white font-semibold">One call.</p>
+            <p className="text-base xl:text-lg text-white font-semibold">Complete renovation.</p>
+            <p className="text-white text-sm">Floor selection to final install — our team handles everything.</p>
+            <button className="text-[#998E8A] text-sm px-6 xl:px-8 py-3 xl:py-4 bg-white font-semibold w-full sm:w-auto">Book a consult</button>
+          </div>
+          <div className="bg-[#F5F0ED] p-4 space-y-2">
+            <p className="text-sm text-black font-semibold">Display Center</p>
+            <p className="text-sm text-[#666E7C] font-semibold">📍 Laverton, Melbourne VIC</p>
+            <p>Mon–Sat 9am–5pm · Sun by appt</p>
+          </div>
+        </div>
+      );
+
+    case 7:
+      return (
+        <div className={`bg-[#8A6A5B] p-4 xl:p-5 ${wideCard} space-y-2`}>
+          <p className="text-base xl:text-lg text-white font-semibold">Up to</p>
+          <p className="text-base xl:text-lg text-white font-semibold">20% Off</p>
+          <p className="text-white text-sm">Selected flooring, outdoor products & bathware. Limited stock.</p>
+          <button className="text-[#998E8A] text-sm px-6 xl:px-8 py-3 xl:py-4 bg-white font-semibold w-full sm:w-auto">Shop Sale</button>
+        </div>
+      );
+  }
+}
+
+

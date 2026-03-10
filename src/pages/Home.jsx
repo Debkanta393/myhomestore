@@ -189,7 +189,7 @@ function Home() {
             src="./images/abstract_image1.png"
             height={350}
             width={350}
-            className="absolute -right-10 -bottom-10 opacity-35 rotate-6"
+            className="absolute right-10 -bottom-10 opacity-35 rotate-6"
           />
           <motion.div className="flex md:flex-row flex-col gap-10 justify-between items-center w-10/12 mt-20">
             <motion.div
@@ -329,130 +329,123 @@ function Home() {
       <Testimonials />
 
       {/******************* Brand section *******************/}
-      <section className="relative w-full px-6 md:px-10 py-24 md:py-32 mt-20 overflow-hidden">
-        {/* Layered Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#FBF8F6] via-[#f5efed] to-[#D6CEC6] -z-10" />
+      <section className="relative w-full px-4 sm:px-6 md:px-10 py-16 sm:py-20 md:py-28 lg:py-32 mt-12 md:mt-20 overflow-hidden">
+  {/* Layered Background */}
+  <div className="absolute inset-0 bg-gradient-to-br from-[#FBF8F6] via-[#f5efed] to-[#D6CEC6] -z-10" />
 
-        {/* Organic Decorative Elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#B8B0A7] rounded-full blur-[130px] opacity-20 -translate-y-1/2 translate-x-1/3 -z-10" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#8A6A5A] rounded-full blur-[140px] opacity-15 translate-y-1/3 -translate-x-1/4 -z-10" />
+  {/* Organic Decorative Elements */}
+  <div className="absolute top-0 right-0 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-[#B8B0A7] rounded-full blur-[130px] opacity-20 -translate-y-1/2 translate-x-1/3 -z-10" />
+  <div className="absolute bottom-0 left-0 w-[350px] h-[350px] md:w-[600px] md:h-[600px] bg-[#8A6A5A] rounded-full blur-[140px] opacity-15 translate-y-1/3 -translate-x-1/4 -z-10" />
 
-        {/* Subtle Pattern Overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.02] -z-10"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
-        />
-        <div className="max-w-9/12 mx-auto">
-          <div className="">
-            {/* TEXT SECTION */}
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="order-2 lg:order-1"
-            >
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight mb-6 text-center">
-                Built on Trust. Driven by Quality.
-              </h2>
-              <p className="text-lg md:text-xl leading-relaxed font-light text-center">
-                We believe great brands are built with integrity, craftsmanship,
-                and consistency. Every project we deliver re flects our
-                commitment to quality, reliability, and long-lasting value.
-              </p>
+  {/* Subtle Pattern Overlay */}
+  <div
+    className="absolute inset-0 opacity-[0.02] -z-10"
+    style={{
+      backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C%2Fg%3E%3C%2Fsvg%3E")`,
+    }}
+  />
 
-              {/* Trust Indicators */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                viewport={{ once: true }}
-                className="grid grid-cols-3 gap-6 mt-12"
-              >
-                {[
-                  { number: "15+", label: "Years" },
-                  { number: "500+", label: "Projects" },
-                  { number: "98%", label: "Satisfaction" },
-                ].map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-3xl md:text-4xl font-bold text-[#8A6A5A] mb-1">
-                      {stat.number}
-                    </div>
-                    <div className="text-sm text-[#998e8a] font-medium tracking-wide">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            </motion.div>
+  <div className="w-full max-w-10/12 mx-auto px-0">
+    <div className="flex flex-col gap-12 lg:gap-16">
 
-            {/* LOGO GRID SECTION */}
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              className="order-1 lg:order-2 relative"
-            >
-              {/* Background Glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#8A6A5A]/5 to-[#B8B0A7]/10 rounded-3xl blur-3xl" />
+      {/* TEXT SECTION */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
+        className="order-2 lg:order-1"
+      >
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight mb-4 md:mb-6 text-center">
+          Built on Trust. Driven by Quality.
+        </h2>
+        <p className="text-base sm:text-lg md:text-xl leading-relaxed font-light text-center max-w-3xl mx-auto px-2">
+          We believe great brands are built with integrity, craftsmanship,
+          and consistency. Every project we deliver reflects our
+          commitment to quality, reliability, and long-lasting value.
+        </p>
 
-              <div className="relative flex justify-center items-center gap-10 mt-20">
-                {brand?.map((image, index) => (
-                  <motion.div
-                    key={index}
-                    variants={logoVariants}
-                    whileHover={{
-                      y: -8,
-                      scale: 1.05,
-                      transition: { duration: 0.3 },
-                    }}
-                    className="group relative aspect-square transition-all duration-500"
-                  >
-                    {/* Gradient overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#D6CEC6]/0 to-[#B8B0A7]/0 transition-all duration-500" />
-
-                    <img
-                      src={image}
-                      alt={`Brand partner ${index + 1}`}
-                      className="relative z-10 object-contain h-32 w-60 filter grayscale group-hover:grayscale-0 transition-all duration-500"
-                    />
-
-                    {/* Corner Accent */}
-                    <div className="absolute top-2 -right-5 w-8 h-8 border-t-2 border-r-2 border-[#8A6A5A]/0 group-hover:border-[#8A6A5A]/30 rounded-tr-xl transition-all duration-500" />
-                  </motion.div>
-                ))}
+        {/* Trust Indicators */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="grid grid-cols-3 gap-4 sm:gap-6 mt-8 md:mt-12 max-w-md sm:max-w-lg mx-auto"
+        >
+          {[
+            { number: "15+", label: "Years" },
+            { number: "500+", label: "Projects" },
+            { number: "98%", label: "Satisfaction" },
+          ].map((stat, index) => (
+            <div key={index} className="text-center">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#8A6A5A] mb-1">
+                {stat.number}
               </div>
+              <div className="text-xs sm:text-sm text-[#998e8a] font-medium tracking-wide">
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </motion.div>
 
-              {/* Decorative Elements */}
-              <motion.div
-                animate={{
-                  rotate: [0, 360],
-                }}
-                transition={{
-                  duration: 20,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-                className="absolute -top-10 -right-10 w-40 h-40 border-2 border-[#D6CEC6]/20 rounded-full -z-10"
+      {/* LOGO GRID SECTION */}
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        className="order-1 lg:order-2 relative"
+      >
+        {/* Background Glow */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#8A6A5A]/5 to-[#B8B0A7]/10 rounded-3xl blur-3xl" />
+
+        {/* Brand Logos — wrapping flex on mobile, single row on large */}
+        <div className="relative flex flex-wrap justify-center items-center gap-x-6 sm:gap-x-8 gap-y-2 mt-4 lg:mt-8">
+          {brand?.map((image, index) => (
+            <motion.div
+              key={index}
+              variants={logoVariants}
+              whileHover={{
+                y: -8,
+                scale: 1.05,
+                transition: { duration: 0.3 },
+              }}
+              className="group relative  transition-all duration-500 h-fit"
+            >
+              {/* Gradient overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#D6CEC6]/0 to-[#B8B0A7]/0 transition-all duration-500 h-auto" />
+
+              <img
+                src={image}
+                alt={`Brand partner ${index + 1}`}
+                className="relative z-10 object-contain h-16 w-28 sm:h-20 sm:w-36 md:h-24 md:w-40 lg:h-32 lg:w-32 xl:h-32 xl:w-48 2xl:h-32 2xl:w-60 filter grayscale group-hover:grayscale-0 transition-all duration-500"
               />
-              <motion.div
-                animate={{
-                  rotate: [360, 0],
-                }}
-                transition={{
-                  duration: 25,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-                className="absolute bottom-14 -left-10 w-48 h-48 border-2 border-[#B8B0A7]/20 rounded-full -z-10"
-              />
+
+              {/* Corner Accent */}
+              <div className="absolute top-2 -right-5 w-8 h-8 border-t-2 border-r-2 border-[#8A6A5A]/0 group-hover:border-[#8A6A5A]/30 rounded-tr-xl transition-all duration-500" />
             </motion.div>
-          </div>
+          ))}
         </div>
-      </section>
+
+        {/* Decorative Rotating Rings */}
+        <motion.div
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="absolute -top-6 -right-6 md:-top-10 md:-right-10 w-24 h-24 md:w-40 md:h-40 border-2 border-[#D6CEC6]/20 rounded-full -z-10"
+        />
+        <motion.div
+          animate={{ rotate: [360, 0] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          className="absolute bottom-10 -left-6 md:bottom-14 md:-left-10 w-32 h-32 md:w-48 md:h-48 border-2 border-[#B8B0A7]/20 rounded-full -z-10"
+        />
+      </motion.div>
+
+    </div>
+  </div>
+</section>
+
 
       {/******************* Newsletter Section *******************/}
       <motion.div
@@ -462,8 +455,8 @@ function Home() {
         viewport={{ once: true, margin: "-100px" }}
         className="relative border-b border-stone-800  px-6 py-16 gap-20 bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950 w-full"
       >
-        <div className="w-8/12 mx-auto flex items-start justify-between gap-20">
-          <div className="w-1/2">
+        <div className="w-10/12 lg:w-8/12 mx-auto flex flex-col md:flex-row items-start justify-between gap-20">
+          <div className="w-full md:w-1/2">
             <h2 className="text-4xl text-white">
               Let’s bring your vision to life without the stress.
             </h2>
@@ -472,7 +465,7 @@ function Home() {
               from our team.
             </p>
           </div>
-          <form action="" className="flex flex-col gap-3 bg-white p-10 w-1/2">
+          <form action="" className="flex flex-col gap-3 bg-white p-10 w-full md:w-1/2">
             <input
               type="text"
               name="name"

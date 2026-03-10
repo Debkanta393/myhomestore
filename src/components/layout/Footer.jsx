@@ -47,7 +47,7 @@ export function Footer() {
         viewport={{ once: true, margin: "-100px" }}
         className="relative max-w-10/12 mx-auto px-6 py-16"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 justify-center items-center gap-12 lg:gap-8">
           {/* Brand Column */}
           <motion.div variants={itemVariants} className="lg:col-span-2">
             <h4 className="text-3xl font-bold text-white mb-4 bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">

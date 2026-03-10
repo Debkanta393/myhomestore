@@ -44,7 +44,7 @@ const Testimonials = () => {
   };
 
   return (
-    <section ref={ref} className="section">
+    <section ref={ref} className="section p-10">
       <motion.h2
         className="text-4xl md:text-5xl text-center font-bold text-black"
         initial={{ opacity: 0, y: 30 }}

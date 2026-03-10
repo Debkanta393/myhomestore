@@ -53,7 +53,7 @@ export default function Category() {
   };
 
   return (
-    <section className="relative w-full mt-32 py-24 overflow-hidden">
+    <section className="relative w-full mt-32 py-24 overflow-hidden px-5">
       {/* Enhanced Background with Overlay */}
       <div
         className="absolute inset-0 -z-10"

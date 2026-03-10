@@ -1,7 +1,7 @@
 // Top nav
 export const topNavItems = [
-  { label: "Ideas & Advice", path: "/ideas-advice", key: "ideas" },
-  { label: "About", path: "/about", key: "about" },
+  { label: "Ideas & Advice", key: "ideas" },
+  { label: "About", key: "about" },
 ];
 
 // Top nav sublist
@@ -15,8 +15,6 @@ export const topNavSubList = {
     "Delivery & Returns",
   ],
 };
-
-
 
 // Main nav under tab
 export const mainNav = [
@@ -455,32 +453,29 @@ export const category = {
 };
 
 // Filter brand data
-export const brand={
-    flooring:[
-        "Clever Choice",
-        "Preference Floors",
-        "Herford Flooring",
-        "Signature Flooring",
-        "Terra Mater",
-        "Create Floors"
-    ],
-    tiles:[
-        "Elegance Collection",
-        "Masa Imports",
-        "DW Tiles",
-        "Designer Stone & Tiles"
-
-    ],
-    bathroom:[
-        "Fienza",
-        "Bella Vista",
-        "Evia Bathware",
-        "Nero Bathware",
-        "Kuroma"
-
-    ]
-}
-
+export const brand = {
+  flooring: [
+    "Clever Choice",
+    "Preference Floors",
+    "Herford Flooring",
+    "Signature Flooring",
+    "Terra Mater",
+    "Create Floors",
+  ],
+  tiles: [
+    "Elegance Collection",
+    "Masa Imports",
+    "DW Tiles",
+    "Designer Stone & Tiles",
+  ],
+  bathroom: [
+    "Fienza",
+    "Bella Vista",
+    "Evia Bathware",
+    "Nero Bathware",
+    "Kuroma",
+  ],
+};
 
 // Products data
 export const products = [
@@ -638,3 +633,1471 @@ export const products = [
     tags: ["New Arrival"],
   },
 ];
+
+// export const navData = [
+//   [
+//     {
+//       "By Room": [
+//         {
+//           icon: "Sofa",
+//           heading: "Living Room",
+//           subHeading: "Flooring, rugs, feature walls",
+//           soon: false,
+//         },
+//         {
+//           icon: "CookingPot",
+//           heading: "Kitchen",
+//           subHeading: "Benchtops, splashbacks, flooring",
+//           soon: false,
+//         },
+//         {
+//           icon: "Bath",
+//           heading: "Bathroom",
+//           subHeading: "Tiles, vanities, tapware",
+//           soon: false,
+//         },
+//         {
+//           icon: "Fence",
+//           heading: "Outdoor Living",
+//           subHeading: "Decking, cladding, screening",
+//           soon: false,
+//         },
+//         {
+//           icon: "TowelRack",
+//           heading: "",
+//           subHeading: "Laundry",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       "By Category": [
+//         {
+//           icon: "BrickWall",
+//           heading: "Flooring",
+//           subHeading: "Hybrid, engineered, solid, bamboo",
+//           soon: false,
+//         },
+//         {
+//           icon: "Fence",
+//           heading: "Outdoor Living",
+//           subHeading: "Decking, cladding, fencing",
+//           soon: false,
+//         },
+//         {
+//           icon: "Sprout",
+//           heading: "Bamboo & Eco",
+//           subHeading: "Benchtops, screening, flooring",
+//           soon: false,
+//         },
+//         {
+//           icon: "ShowerHead",
+//           heading: "Bathroom",
+//           subHeading: "Vanities, tapware, baths",
+//           soon: false,
+//         },
+//         {
+//           icon: "InspectionPanel",
+//           heading: "",
+//           subHeading: "Tiles",
+//           soon: true,
+//         },
+//         {
+//           icon: "CookingPot",
+//           heading: "",
+//           subHeading: "Kitchen",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       "Shop By Brands": [
+//         {
+//           icon: "Sparkle",
+//           heading: "Clever Choice",
+//           subHeading: "Hybrid, engineered, laminate",
+//           soon: false,
+//         },
+//         {
+//           icon: "Sparkle",
+//           heading: "Preference Floors",
+//           subHeading: "Hybrid, vinyl, laminate",
+//           soon: false,
+//         },
+//         {
+//           icon: "Sparkle",
+//           heading: "Hurford Wholesale",
+//           subHeading: "Solid timber & engineered oak",
+//           soon: false,
+//         },
+//         {
+//           icon: "Sparkle",
+//           heading: "Fienza",
+//           subHeading: "Premium bathware",
+//           soon: false,
+//         },
+//         {
+//           icon: "Sparkle",
+//           heading: "AVAI Bathware",
+//           subHeading: "Vanities, baths, tapware",
+//           soon: false,
+//         },
+//         {
+//           icon: "Sparkle",
+//           heading: "DW Tiles",
+//           subHeading: "Designer tiles",
+//           soon: true,
+//         },
+//         {
+//           icon: "Sparkle",
+//           heading: "RS Brand",
+//           subHeading: "Our own range",
+//           soon: true,
+//         },
+//       ],
+//     },
+//   ],
+//   [
+//     {
+//       "Resilient & Modern": [
+//         {
+//           icon: "Diamond",
+//           heading: "Hybrid / SPC Flooring",
+//           subHeading: "Waterproof · click install · #1 seller",
+//           soon: false,
+//         },
+//         {
+//           icon: "Droplet",
+//           heading: "Hydro Laminate",
+//           subHeading: "Water resistant laminate",
+//           soon: false,
+//         },
+//         {
+//           icon: "Book",
+//           heading: "Vinyl Plank (LVP)",
+//           subHeading: "Flexible, durable, easy install",
+//           soon: false,
+//         },
+//         {
+//           icon: "StickyNote",
+//           heading: "Laminate Flooring",
+//           subHeading: "Affordable timber-look",
+//           soon: false,
+//         },
+//       ],
+//     },
+//     {
+//       "Natural Timber": [
+//         {
+//           icon: "TreeDeciduous",
+//           heading: "Solid Hardwood Flooring",
+//           subHeading: "Ultra10 | Fourteen | Traditional",
+//           soon: false,
+//         },
+//         {
+//           icon: "Pickaxe",
+//           heading: "Engineered Oak Flooring",
+//           subHeading: "Stable | Direct Stick | Wide Board",
+//           soon: false,
+//         },
+//         {
+//           icon: "SquaresExclude",
+//           heading: "Timber Parquetry",
+//           subHeading: "XL & Classic Patterns",
+//           soon: false,
+//         },
+//         {
+//           icon: "Recycle",
+//           heading: "",
+//           subHeading: "Recycled Timber",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       "Eco - Friendly": [
+//         {
+//           icon: "Sprout",
+//           heading: "Bamboo Flooring",
+//           subHeading: "Natural | Durable | Sustainable",
+//           soon: false,
+//         },
+//         {
+//           icon: "Stone",
+//           heading: "",
+//           subHeading: "Cork Flooring",
+//           soon: true,
+//         },
+//         {
+//           icon: "Volleyball",
+//           heading: "",
+//           subHeading: "Wool Carpet",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       Accessories: [
+//         {
+//           icon: "Package",
+//           heading: "Underlay",
+//           subHeading: "",
+//           soon: false,
+//         },
+//         {
+//           icon: "Wrench",
+//           heading: "Trims & Scotia",
+//           subHeading: "",
+//           soon: false,
+//         },
+//         {
+//           icon: "BottleWine",
+//           heading: "Care Products",
+//           subHeading: "",
+//           soon: false,
+//         },
+//       ],
+//     },
+//     {
+//       Brands: [
+//         {
+//           icon: "CircleDot",
+//           heading: "Clever Choice",
+//           subHeading: "",
+//           soon: false,
+//         },
+//         {
+//           icon: "CircleDot",
+//           heading: "Preference Floors",
+//           subHeading: "",
+//           soon: false,
+//         },
+//         {
+//           icon: "CircleDot",
+//           heading: "Hurford Wholesale",
+//           subHeading: "",
+//           soon: false,
+//         },
+//         {
+//           icon: "CircleDot",
+//           heading: "RS Brands",
+//           subHeading: "",
+//           soon: false,
+//         },
+//       ],
+//     },
+//     {
+//       "By Species": [
+//         {
+//           icon: "Leaf",
+//           heading: "Blackbutt",
+//           subHeading: "Janka 9kN · BAL 29",
+//           soon: false,
+//         },
+//         {
+//           icon: "Leaf",
+//           heading: "Spotted Gum",
+//           subHeading: "Janka 11kN · dramatic grain",
+//           soon: false,
+//         },
+//         {
+//           icon: "Leaf",
+//           heading: "European Oak",
+//           subHeading: "20+ stain colours",
+//           soon: false,
+//         },
+//         {
+//           icon: "Leaf",
+//           heading: "Grey Ironbark",
+//           subHeading: "Janka 14kN · premium",
+//           soon: false,
+//         },
+//       ],
+//     },
+//     {
+//       "Need Help?": [
+//         {
+//           icon: "Sparkle",
+//           heading: "Floor Finder Quiz",
+//           subHeading: "5 Questions → Perfect Match",
+//           soon: false,
+//         },
+//         {
+//           icon: "Flower",
+//           heading: "Species Guide",
+//           subHeading: "Compare Hardness, Colour, Durability",
+//           soon: false,
+//         },
+//         {
+//           icon: "TriangleRight",
+//           heading: "How to Measure Up",
+//           subHeading: "Calculator + video guide",
+//           soon: false,
+//         },
+//         {
+//           icon: "BookOpen",
+//           heading: "Installation Guides",
+//           subHeading: "DIY step-by-step resources",
+//           soon: false,
+//         },
+//         {
+//           icon: "Sparkle",
+//           heading: "Care & Maintenance",
+//           subHeading: "",
+//           soon: false,
+//         },
+//         {
+//           icon: "MessageCircleQuestionMark",
+//           heading: "Ask a Specialist",
+//           subHeading: "",
+//           soon: false,
+//         },
+//       ],
+//     },
+//   ],
+//   [
+//     {
+//       Decking: [
+//         {
+//           icon: "Trees",
+//           heading: "Hardwood Timber Decking",
+//           subHeading: "Blackbutt · Merbau · Class 1",
+//           soon: false,
+//         },
+//         {
+//           icon: "Sprout",
+//           heading: "Bamboo Decking",
+//           subHeading: "Eco-friendly · durable",
+//           soon: false,
+//         },
+//         {
+//           icon: "Recycle",
+//           heading: "",
+//           subHeading: "Composite Decking",
+//           soon: true,
+//         },
+//         {
+//           icon: "SquareDot",
+//           heading: "",
+//           subHeading: "Deck Tiles",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       "Cladding & Screening": [
+//         {
+//           icon: "BrickWallShield",
+//           heading: "Hardwood Timber Cladding",
+//           subHeading: "Blackbutt · exterior · BAL 29",
+//           soon: false,
+//         },
+//         {
+//           icon: "ChevronsLeftRightEllipsis",
+//           heading: "Bamboo Cladding",
+//           subHeading: "Interior & exterior panels",
+//           soon: false,
+//         },
+//         {
+//           icon: "SquareSquare",
+//           heading: "Interior Timber Lining",
+//           subHeading: "Feature walls · ceilings",
+//           soon: false,
+//         },
+//         {
+//           icon: "SquareSquare",
+//           heading: "Bamboo Screening",
+//           subHeading: "Privacy screens & panels",
+//           soon: false,
+//         },
+//         {
+//           icon: "BrickWall",
+//           heading: "",
+//           subHeading: "Composite Cladding",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       "Fencing & Benchtops": [
+//         {
+//           icon: "DoorOpen",
+//           heading: "Bamboo Fencing & Gates",
+//           subHeading: "Natural privacy solutions",
+//           soon: false,
+//         },
+//         {
+//           icon: "Fence",
+//           heading: "",
+//           subHeading: "Timber Fencing",
+//           soon: true,
+//         },
+//         {
+//           icon: "Weight",
+//           heading: "",
+//           subHeading: "Industrial Metal Fencing",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       "Outdoor Benchtops": [
+//         {
+//           icon: "Armchair",
+//           heading: "Bamboo Benchtops",
+//           subHeading: "Kitchen & outdoor · popular!",
+//           soon: false,
+//         },
+//         {
+//           icon: "Cuboid",
+//           heading: "",
+//           subHeading: "Stone & Porcelain",
+//           soon: true,
+//         },
+//       ],
+//     },
+//   ],
+//   [
+//     {
+//       "Bamboo Products": [
+//         {
+//           icon: "Cuboid",
+//           heading: "Bamboo Flooring",
+//           subHeading: "Natural hardness · eco certified",
+//           soon: true,
+//         },
+//         {
+//           icon: "Cuboid",
+//           heading: "Bamboo Decking",
+//           subHeading: "Outdoor · durable",
+//           soon: true,
+//         },
+//         {
+//           icon: "Cuboid",
+//           heading: "Bamboo Cladding",
+//           subHeading: "Interior & exterior",
+//           soon: true,
+//         },
+//         {
+//           icon: "Cuboid",
+//           heading: "Bamboo Benchtops",
+//           subHeading: "Kitchen & outdoor · popular!",
+//           soon: true,
+//         },
+//         {
+//           icon: "Cuboid",
+//           heading: "Bamboo Screening & Fencing",
+//           subHeading: "Privacy panels & gates",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       "Sustainable Timber": [
+//         {
+//           icon: "Shield",
+//           heading: "PEFC Certified Flooring",
+//           subHeading: "Hurford — sustainably sourced",
+//         },
+//         {
+//           icon: "Layers",
+//           heading: "Solid Timber Flooring",
+//           subHeading: "Plantation & certified hardwoods",
+//         },
+//         {
+//           icon: "Tools",
+//           heading: "Engineered Oak",
+//           subHeading: "Less timber · same beauty",
+//         },
+//         {
+//           icon: "Recycle",
+//           heading: "Recycled Timber",
+//           soon: true,
+//         },
+//         {
+//           icon: "Leaf",
+//           heading: "Our Sustainability Story",
+//         },
+//         {
+//           icon: "Medal",
+//           heading: "PEFC Certification Guide",
+//         },
+//       ],
+//     },
+//     {
+//       "Eco Brands": [
+//         {
+//           icon: "Sparkle",
+//           heading: "Hurfords Wholesale",
+//           subHeading: "PEFC certified Australian hardwood",
+//         },
+//       ],
+//     },
+//   ],
+//   [
+//     {
+//       Bathroom: [
+//         {
+//           icon: "Sink",
+//           heading: "Basins",
+//           subHeading: "Counter top, wall hung, under counter",
+//         },
+//         {
+//           icon: "Cabinet",
+//           heading: "Vanities & Storage",
+//           subHeading: "Freestanding & wall mounted",
+//         },
+//         {
+//           icon: "Bath",
+//           heading: "Baths & Freestanding",
+//           subHeading: "Soaker, clawfoot & built-in",
+//         },
+//         {
+//           icon: "Shower",
+//           heading: "Shower Screens",
+//           subHeading: "Frameless, semi, framed",
+//         },
+//         {
+//           icon: "Tap",
+//           heading: "Tapware",
+//           subHeading: "Mixers, shower sets, bath fillers",
+//         },
+//         {
+//           icon: "Toilet",
+//           heading: "Toilets & Suites",
+//         },
+//         {
+//           icon: "Mirror",
+//           heading: "Mirrors & Cabinets",
+//         },
+//         {
+//           icon: "Package",
+//           heading: "Accessories",
+//         },
+//       ],
+//     },
+//     {
+//       Kitchen: [
+//         {
+//           icon: "Counter",
+//           heading: "Bamboo Benchtops",
+//           subHeading: "Available now · popular!",
+//         },
+//         {
+//           icon: "Cube",
+//           heading: "Stone Benchtops",
+//           soon: true,
+//         },
+//         {
+//           icon: "Sink",
+//           heading: "Kitchen Sinks",
+//           soon: true,
+//         },
+//         {
+//           icon: "Droplet",
+//           heading: "Kitchen Tapware",
+//           soon: true,
+//         },
+//         {
+//           icon: "Waves",
+//           heading: "Splashbacks",
+//           soon: true,
+//         },
+//         {
+//           icon: "Fridge",
+//           heading: "Appliances",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       Brands: [
+//         {
+//           icon: "Sparkle",
+//           heading: "Pfienza",
+//           subHeading: "Hybrid, engineered, laminate",
+//         },
+//         {
+//           icon: "Sparkle",
+//           heading: "AVIA Bathware",
+//           subHeading: "Hybrid, engineered, laminate",
+//         },
+//       ],
+//     },
+//     {
+//       Services: [
+//         {
+//           icon: "Wrench",
+//           heading: "Bathroom Renovation",
+//           subHeading: "Full supply + install packages",
+//         },
+//         {
+//           icon: "Measure",
+//           heading: "Free Measure & Quote",
+//         },
+//       ],
+//     },
+//   ],
+//   [
+//     {
+//       "Indoor Tiles": [
+//         {
+//           icon: "Square",
+//           heading: "Floor Tiles",
+//           subHeading: "Porcelain, ceramic, stone look",
+//           soon: true,
+//         },
+//         {
+//           icon: "SquareOutline",
+//           heading: "Wall Tiles",
+//           subHeading: "Bathroom, kitchen, feature walls",
+//           soon: true,
+//         },
+//         {
+//           icon: "Layers",
+//           heading: "Feature Tiles",
+//           subHeading: "Encaustic, patterned, textured",
+//           soon: true,
+//         },
+//         {
+//           icon: "DotSquare",
+//           heading: "Mosaic Tiles",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       "Outdoor & Commercial": [
+//         {
+//           icon: "ExternalLink",
+//           heading: "Outdoor Tiles",
+//           soon: true,
+//         },
+//         {
+//           icon: "Pool",
+//           heading: "Pool Tiles",
+//           soon: true,
+//         },
+//         {
+//           icon: "Grid",
+//           heading: "Commercial Tiles",
+//           soon: true,
+//         },
+//         {
+//           icon: "SquareGrid",
+//           heading: "Porcelain Pavers",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       "DW Tiles": [
+//         {
+//           icon: "GridPlus",
+//           heading: "DW Tiles",
+//           subHeading: "Flooring, rugs, feature walls",
+//         },
+//       ],
+//     },
+//   ],
+//   [
+//     {
+//       Installation: [
+//         {
+//           icon: "Download",
+//           heading: "Flooring Installation",
+//           subHeading: "All floor types · licensed · Melbourne",
+//         },
+//         {
+//           icon: "Home",
+//           heading: "Cladding Installation",
+//           subHeading: "External & internal · supply + install",
+//         },
+//         {
+//           icon: "Deck",
+//           heading: "Decking Installation",
+//           subHeading: "Timber & composite · measure & quote",
+//         },
+//         {
+//           icon: "Bathtub",
+//           heading: "Bathroom Renovation",
+//           subHeading: "Full project management",
+//         },
+//         {
+//           icon: "Kitchen",
+//           heading: "Kitchen Renovation",
+//           soon: true,
+//         },
+//       ],
+//     },
+//     {
+//       Consultation: [
+//         {
+//           icon: "Location",
+//           heading: "Visit Display Centre",
+//           subHeading: "Laverton VIC · Mon–Sat 9am–5pm",
+//         },
+//         {
+//           icon: "HomeSearch",
+//           heading: "In-Home Consultation",
+//           subHeading: "Free for Melbourne metro",
+//         },
+//         {
+//           icon: "Tag",
+//           heading: "Free Measure & Quote",
+//           subHeading: "Obligation free · 48hr turnaround",
+//         },
+//         {
+//           icon: "Video",
+//           heading: "Video Consultation",
+//           subHeading: "Zoom call with our specialists",
+//         },
+//       ],
+//     },
+//   ],
+//   [
+//     {
+//       "Current Offers": [
+//         {
+//           icon: "Grid",
+//           heading: "Flooring Sale",
+//           subHeading: "Up to 20% off selected hybrid & timber",
+//         },
+//         {
+//           icon: "DollarCircle",
+//           heading: "Outdoor Clearance",
+//           subHeading: "Decking & cladding end-of-line",
+//         },
+//         {
+//           icon: "Tap",
+//           heading: "Bathware Specials",
+//           subHeading: "Selected Pfienza & AVIA",
+//         },
+//         {
+//           icon: "Box",
+//           heading: "Free Sample Packs",
+//           subHeading: "Timber samples delivered free",
+//         },
+//       ],
+//     },
+//     {
+//       "Trade & Volume": [
+//         {
+//           icon: "Ruler",
+//           heading: "100m²+ Trade Pricing",
+//           subHeading: "Call us — we beat any written quote",
+//         },
+//         {
+//           icon: "Document",
+//           heading: "Builder & Trade Account",
+//           subHeading: "Apply for ongoing trade rates",
+//         },
+//         {
+//           icon: "Palette",
+//           heading: "Designer Program",
+//           subHeading: "Interior designers — contact us",
+//         },
+//       ],
+//     },
+//   ],
+// ];
+
+
+
+export const navData=
+{
+  "By Room": [
+        {
+          icon: "Sofa",
+          heading: "Living Room",
+          subHeading: "Flooring, rugs, feature walls",
+          soon: false,
+        },
+        {
+          icon: "CookingPot",
+          heading: "Kitchen",
+          subHeading: "Benchtops, splashbacks, flooring",
+          soon: false,
+        },
+        {
+          icon: "Bath",
+          heading: "Bathroom",
+          subHeading: "Tiles, vanities, tapware",
+          soon: false,
+        },
+        {
+          icon: "Fence",
+          heading: "Outdoor Living",
+          subHeading: "Decking, cladding, screening",
+          soon: false,
+        },
+        {
+          icon: "TowelRack",
+          heading: "",
+          subHeading: "Laundry",
+          soon: true,
+        },
+      ],
+
+      "By Category": [
+        {
+          icon: "BrickWall",
+          heading: "Flooring",
+          subHeading: "Hybrid, engineered, solid, bamboo",
+          soon: false,
+        },
+        {
+          icon: "Fence",
+          heading: "Outdoor Living",
+          subHeading: "Decking, cladding, fencing",
+          soon: false,
+        },
+        {
+          icon: "Sprout",
+          heading: "Bamboo & Eco",
+          subHeading: "Benchtops, screening, flooring",
+          soon: false,
+        },
+        {
+          icon: "ShowerHead",
+          heading: "Bathroom",
+          subHeading: "Vanities, tapware, baths",
+          soon: false,
+        },
+        {
+          icon: "InspectionPanel",
+          heading: "",
+          subHeading: "Tiles",
+          soon: true,
+        },
+        {
+          icon: "CookingPot",
+          heading: "",
+          subHeading: "Kitchen",
+          soon: true,
+        },
+      ],
+      "Shop By Brands": [
+        {
+          icon: "Sparkle",
+          heading: "Clever Choice",
+          subHeading: "Hybrid, engineered, laminate",
+          soon: false,
+        },
+        {
+          icon: "Sparkle",
+          heading: "Preference Floors",
+          subHeading: "Hybrid, vinyl, laminate",
+          soon: false,
+        },
+        {
+          icon: "Sparkle",
+          heading: "Hurford Wholesale",
+          subHeading: "Solid timber & engineered oak",
+          soon: false,
+        },
+        {
+          icon: "Sparkle",
+          heading: "Fienza",
+          subHeading: "Premium bathware",
+          soon: false,
+        },
+        {
+          icon: "Sparkle",
+          heading: "AVAI Bathware",
+          subHeading: "Vanities, baths, tapware",
+          soon: false,
+        },
+        {
+          icon: "Sparkle",
+          heading: "DW Tiles",
+          subHeading: "Designer tiles",
+          soon: true,
+        },
+        {
+          icon: "Sparkle",
+          heading: "RS Brand",
+          subHeading: "Our own range",
+          soon: true,
+        },
+      ],
+      "Resilient & Modern": [
+        {
+          icon: "Diamond",
+          heading: "Hybrid / SPC Flooring",
+          subHeading: "Waterproof · click install · #1 seller",
+          soon: false,
+        },
+        {
+          icon: "Droplet",
+          heading: "Hydro Laminate",
+          subHeading: "Water resistant laminate",
+          soon: false,
+        },
+        {
+          icon: "Book",
+          heading: "Vinyl Plank (LVP)",
+          subHeading: "Flexible, durable, easy install",
+          soon: false,
+        },
+        {
+          icon: "StickyNote",
+          heading: "Laminate Flooring",
+          subHeading: "Affordable timber-look",
+          soon: false,
+        },
+      ],
+      "Natural Timber": [
+        {
+          icon: "TreeDeciduous",
+          heading: "Solid Hardwood Flooring",
+          subHeading: "Ultra10 | Fourteen | Traditional",
+          soon: false,
+        },
+        {
+          icon: "Pickaxe",
+          heading: "Engineered Oak Flooring",
+          subHeading: "Stable | Direct Stick | Wide Board",
+          soon: false,
+        },
+        {
+          icon: "SquaresExclude",
+          heading: "Timber Parquetry",
+          subHeading: "XL & Classic Patterns",
+          soon: false,
+        },
+        {
+          icon: "Recycle",
+          heading: "",
+          subHeading: "Recycled Timber",
+          soon: true,
+        },
+      ],
+      "Eco - Friendly": [
+        {
+          icon: "Sprout",
+          heading: "Bamboo Flooring",
+          subHeading: "Natural | Durable | Sustainable",
+          soon: false,
+        },
+        {
+          icon: "Stone",
+          heading: "",
+          subHeading: "Cork Flooring",
+          soon: true,
+        },
+        {
+          icon: "Volleyball",
+          heading: "",
+          subHeading: "Wool Carpet",
+          soon: true,
+        },
+      ],
+      Accessories: [
+        {
+          icon: "Package",
+          heading: "Underlay",
+          subHeading: "",
+          soon: false,
+        },
+        {
+          icon: "Wrench",
+          heading: "Trims & Scotia",
+          subHeading: "",
+          soon: false,
+        },
+        {
+          icon: "BottleWine",
+          heading: "Care Products",
+          subHeading: "",
+          soon: false,
+        },
+      ],
+      Brands: [
+        {
+          icon: "CircleDot",
+          heading: "Clever Choice",
+          subHeading: "",
+          soon: false,
+        },
+        {
+          icon: "CircleDot",
+          heading: "Preference Floors",
+          subHeading: "",
+          soon: false,
+        },
+        {
+          icon: "CircleDot",
+          heading: "Hurford Wholesale",
+          subHeading: "",
+          soon: false,
+        },
+        {
+          icon: "CircleDot",
+          heading: "RS Brands",
+          subHeading: "",
+          soon: false,
+        },
+      ],
+      "By Species": [
+        {
+          icon: "Leaf",
+          heading: "Blackbutt",
+          subHeading: "Janka 9kN · BAL 29",
+          soon: false,
+        },
+        {
+          icon: "Leaf",
+          heading: "Spotted Gum",
+          subHeading: "Janka 11kN · dramatic grain",
+          soon: false,
+        },
+        {
+          icon: "Leaf",
+          heading: "European Oak",
+          subHeading: "20+ stain colours",
+          soon: false,
+        },
+        {
+          icon: "Leaf",
+          heading: "Grey Ironbark",
+          subHeading: "Janka 14kN · premium",
+          soon: false,
+        },
+      ],
+      "Need Help?": [
+        {
+          icon: "Sparkle",
+          heading: "Floor Finder Quiz",
+          subHeading: "5 Questions → Perfect Match",
+          soon: false,
+        },
+        {
+          icon: "Flower",
+          heading: "Species Guide",
+          subHeading: "Compare Hardness, Colour, Durability",
+          soon: false,
+        },
+        {
+          icon: "TriangleRight",
+          heading: "How to Measure Up",
+          subHeading: "Calculator + video guide",
+          soon: false,
+        },
+        {
+          icon: "BookOpen",
+          heading: "Installation Guides",
+          subHeading: "DIY step-by-step resources",
+          soon: false,
+        },
+        {
+          icon: "Sparkle",
+          heading: "Care & Maintenance",
+          subHeading: "",
+          soon: false,
+        },
+        {
+          icon: "MessageCircleQuestionMark",
+          heading: "Ask a Specialist",
+          subHeading: "",
+          soon: false,
+        },
+      ],
+      Decking: [
+        {
+          icon: "Trees",
+          heading: "Hardwood Timber Decking",
+          subHeading: "Blackbutt · Merbau · Class 1",
+          soon: false,
+        },
+        {
+          icon: "Sprout",
+          heading: "Bamboo Decking",
+          subHeading: "Eco-friendly · durable",
+          soon: false,
+        },
+        {
+          icon: "Recycle",
+          heading: "",
+          subHeading: "Composite Decking",
+          soon: true,
+        },
+        {
+          icon: "SquareDot",
+          heading: "",
+          subHeading: "Deck Tiles",
+          soon: true,
+        },
+      ],
+      "Cladding & Screening": [
+        {
+          icon: "BrickWallShield",
+          heading: "Hardwood Timber Cladding",
+          subHeading: "Blackbutt · exterior · BAL 29",
+          soon: false,
+        },
+        {
+          icon: "ChevronsLeftRightEllipsis",
+          heading: "Bamboo Cladding",
+          subHeading: "Interior & exterior panels",
+          soon: false,
+        },
+        {
+          icon: "SquareSquare",
+          heading: "Interior Timber Lining",
+          subHeading: "Feature walls · ceilings",
+          soon: false,
+        },
+        {
+          icon: "SquareSquare",
+          heading: "Bamboo Screening",
+          subHeading: "Privacy screens & panels",
+          soon: false,
+        },
+        {
+          icon: "BrickWall",
+          heading: "",
+          subHeading: "Composite Cladding",
+          soon: true,
+        },
+      ],
+      "Fencing & Benchtops": [
+        {
+          icon: "DoorOpen",
+          heading: "Bamboo Fencing & Gates",
+          subHeading: "Natural privacy solutions",
+          soon: false,
+        },
+        {
+          icon: "Fence",
+          heading: "",
+          subHeading: "Timber Fencing",
+          soon: true,
+        },
+        {
+          icon: "Weight",
+          heading: "",
+          subHeading: "Industrial Metal Fencing",
+          soon: true,
+        },
+      ],
+      "Outdoor Benchtops": [
+        {
+          icon: "Armchair",
+          heading: "Bamboo Benchtops",
+          subHeading: "Kitchen & outdoor · popular!",
+          soon: false,
+        },
+        {
+          icon: "Cuboid",
+          heading: "",
+          subHeading: "Stone & Porcelain",
+          soon: true,
+        },
+      ],
+      "Bamboo Products": [
+        {
+          icon: "SquaresUnite",
+          heading: "Bamboo Flooring",
+          subHeading: "Natural hardness · eco certified",
+          soon: true,
+        },
+        {
+          icon: "SquareArrowOutUpRight",
+          heading: "Bamboo Decking",
+          subHeading: "Outdoor · durable",
+          soon: true,
+        },
+        {
+          icon: "ChevronsLeftRightEllipsis",
+          heading: "Bamboo Cladding",
+          subHeading: "Interior & exterior",
+          soon: true,
+        },
+        {
+          icon: "Armchair",
+          heading: "Bamboo Benchtops",
+          subHeading: "Kitchen & outdoor · popular!",
+          soon: true,
+        },
+        {
+          icon: "DoorOpen",
+          heading: "Bamboo Screening & Fencing",
+          subHeading: "Privacy panels & gates",
+          soon: true,
+        },
+      ],
+      "Sustainable Timber": [
+        {
+          icon: "ShieldCheck",
+          heading: "PEFC Certified Flooring",
+          subHeading: "Hurford — sustainably sourced",
+        },
+        {
+          icon: "Rows4",
+          heading: "Solid Timber Flooring",
+          subHeading: "Plantation & certified hardwoods",
+        },
+        {
+          icon: "PencilRuler",
+          heading: "Engineered Oak",
+          subHeading: "Less timber · same beauty",
+        },
+        {
+          icon: "Recycle",
+          heading: "Recycled Timber",
+          soon: true,
+        },
+        {
+          icon: "Earth",
+          heading: "Our Sustainability Story",
+        },
+        {
+          icon: "Medal",
+          heading: "PEFC Certification Guide",
+        },
+      ],
+      "Eco Brands": [
+        {
+          icon: "Sparkle",
+          heading: "Hurfords Wholesale",
+          subHeading: "PEFC certified Australian hardwood",
+        },
+      ],
+      Bathroom: [
+        {
+          icon: "SoapDispenserDroplet",
+          heading: "Basins",
+          subHeading: "Counter top, wall hung, under counter",
+        },
+        {
+          icon: "MirrorRound",
+          heading: "Vanities & Storage",
+          subHeading: "Freestanding & wall mounted",
+        },
+        {
+          icon: "Bath",
+          heading: "Baths & Freestanding",
+          subHeading: "Soaker, clawfoot & built-in",
+        },
+        {
+          icon: "ShowerHead",
+          heading: "Shower Screens",
+          subHeading: "Frameless, semi, framed",
+        },
+        {
+          icon: "Bubbles",
+          heading: "Tapware",
+          subHeading: "Mixers, shower sets, bath fillers",
+        },
+        {
+          icon: "Toilet",
+          heading: "Toilets & Suites",
+        },
+        {
+          icon: "MirrorRectangular",
+          heading: "Mirrors & Cabinets",
+        },
+        {
+          icon: "TowelRack",
+          heading: "Accessories",
+        },
+      ],
+      Kitchen: [
+        {
+          icon: "Armchair",
+          heading: "Bamboo Benchtops",
+          subHeading: "Available now · popular!",
+        },
+        {
+          icon: "Cuboid",
+          heading: "Stone Benchtops",
+          soon: true,
+        },
+        {
+          icon: "Anvil",
+          heading: "Kitchen Sinks",
+          soon: true,
+        },
+        {
+          icon: "Droplet",
+          heading: "Kitchen Tapware",
+          soon: true,
+        },
+        {
+          icon: "ZodiacAquarius",
+          heading: "Splashbacks",
+          soon: true,
+        },
+        {
+          icon: "Refrigerator",
+          heading: "Appliances",
+          soon: true,
+        },
+      ],
+      Brands: [
+        {
+          icon: "Sparkle",
+          heading: "Pfienza",
+          subHeading: "Hybrid, engineered, laminate",
+        },
+        {
+          icon: "Sparkle",
+          heading: "AVIA Bathware",
+          subHeading: "Hybrid, engineered, laminate",
+        },
+      ],
+      Services: [
+        {
+          icon: "Wrench",
+          heading: "Bathroom Renovation",
+          subHeading: "Full supply + install packages",
+        },
+        {
+          icon: "Toolbox",
+          heading: "Free Measure & Quote",
+        },
+      ],
+      "Indoor Tiles": [
+        {
+          icon: "Square",
+          heading: "Floor Tiles",
+          subHeading: "Porcelain, ceramic, stone look",
+          soon: true,
+        },
+        {
+          icon: "SquareSquare",
+          heading: "Wall Tiles",
+          subHeading: "Bathroom, kitchen, feature walls",
+          soon: true,
+        },
+        {
+          icon: "SquareStack",
+          heading: "Feature Tiles",
+          subHeading: "Encaustic, patterned, textured",
+          soon: true,
+        },
+        {
+          icon: "DotSquare",
+          heading: "Mosaic Tiles",
+          soon: true,
+        },
+      ],
+      "Outdoor & Commercial": [
+        {
+          icon: "ExternalLink",
+          heading: "Outdoor Tiles",
+          soon: true,
+        },
+        {
+          icon: "WavesLadder",
+          heading: "Pool Tiles",
+          soon: true,
+        },
+        {
+          icon: "Grid",
+          heading: "Commercial Tiles",
+          soon: true,
+        },
+        {
+          icon: "Table2",
+          heading: "Porcelain Pavers",
+          soon: true,
+        },
+      ],
+      "DW Tiles": [
+        {
+          icon: "Grid2x2Check",
+          heading: "DW Tiles",
+          subHeading: "Flooring, rugs, feature walls",
+        },
+      ],
+      Installation: [
+        {
+          icon: "Download",
+          heading: "Flooring Installation",
+          subHeading: "All floor types · licensed · Melbourne",
+        },
+        {
+          icon: "Home",
+          heading: "Cladding Installation",
+          subHeading: "External & internal · supply + install",
+        },
+        {
+          icon: "SquareMousePointer",
+          heading: "Decking Installation",
+          subHeading: "Timber & composite · measure & quote",
+        },
+        {
+          icon: "Bath",
+          heading: "Bathroom Renovation",
+          subHeading: "Full project management",
+        },
+        {
+          icon: "Soup",
+          heading: "Kitchen Renovation",
+          soon: true,
+        },
+      ],
+      Consultation: [
+        {
+          icon: "MapPinCheck",
+          heading: "Visit Display Centre",
+          subHeading: "Laverton VIC · Mon–Sat 9am–5pm",
+        },
+        {
+          icon: "MapPinHouse",
+          heading: "In-Home Consultation",
+          subHeading: "Free for Melbourne metro",
+        },
+        {
+          icon: "BadgePercent",
+          heading: "Free Measure & Quote",
+          subHeading: "Obligation free · 48hr turnaround",
+        },
+        {
+          icon: "Video",
+          heading: "Video Consultation",
+          subHeading: "Zoom call with our specialists",
+        },
+      ],
+      "Current Offers": [
+        {
+          icon: "LayoutGrid",
+          heading: "Flooring Sale",
+          subHeading: "Up to 20% off selected hybrid & timber",
+        },
+        {
+          icon: "BadgeDollarSign",
+          heading: "Outdoor Clearance",
+          subHeading: "Decking & cladding end-of-line",
+        },
+        {
+          icon: "SoapDispenserDroplet",
+          heading: "Bathware Specials",
+          subHeading: "Selected Pfienza & AVIA",
+        },
+        {
+          icon: "SwatchBook",
+          heading: "Free Sample Packs",
+          subHeading: "Timber samples delivered free",
+        },
+      ],
+      "Trade & Volume": [
+        {
+          icon: "ChartCandlestick",
+          heading: "100m²+ Trade Pricing",
+          subHeading: "Call us — we beat any written quote",
+        },
+        {
+          icon: "Building2",
+          heading: "Builder & Trade Account",
+          subHeading: "Apply for ongoing trade rates",
+        },
+        {
+          icon: "Palette",
+          heading: "Designer Program",
+          subHeading: "Interior designers — contact us",
+        },
+      ],
+    }

@@ -14,8 +14,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Reviews from "../components/ui/Reviews";
 import WhyChooseus from "../components/ui/WhyChooseus";
 import { useParams } from "react-router";
-import { useDispatch } from "react-redux";
 import { getProductByRange } from "../features/product/product";
+import { useDispatch, useSelector } from "react-redux";
+import { addCartItems } from "../features/cart/cart";
 
 // ##################### Other products ##################### //
 const products = [
@@ -89,6 +90,51 @@ const products = [
   },
 ];
 
+const willWork = [
+  {
+    heading: "Concrete Slab",
+    subHeading:
+      "Use 15mm plywood subfloor. Slab moisture must be under 5.5%. Apply flexible polyurethane adhesive and secret nail fix. Finished height: 26mm.",
+    btnText: "✓ SUITABLE",
+    btnType: "success",
+  },
+  {
+    heading: "Timber Joists",
+    subHeading:
+      "Install 15mm ply or 19mm particleboard. Fix sheeting to joists with screws and adhesive. Use 14mm Blackbutt perpendicular to joists. Recommended: full trowel adhesive + secret nail.",
+    btnText: "✓ SUITABLE",
+    btnType: "success",
+  },
+  {
+    heading: "Underfloor Heating",
+    subHeading:
+      "Solid timber works with underfloor heating but needs care. Max temp 27°C. Heat slowly. Contact us; engineered Blackbutt may suit heated slabs better.",
+    btnText: "⚠ CHECK FIRST",
+    btnType: "warning",
+  },
+  {
+    heading: "Apartments",
+    subHeading:
+      "Solid Blackbutt 14mm is great for concrete slabs. Check strata requirements for acoustic ratings — an underlay or direct-stick may be needed. We can advise on compliant solutions.",
+    btnText: "✓ SUITABLE",
+    btnType: "success",
+  },
+  {
+    heading: "Pets & Kids",
+    subHeading:
+      "Janka 9 kN makes Blackbutt resistant to claws and foot traffic. The 14mm construction can be re-sanded when scratches accumulate.",
+    btnText: "✓ SUITABLE",
+    btnType: "success",
+  },
+  {
+    heading: "Wet Areas",
+    subHeading:
+      "Solid timber isn't suitable for wet areas. For adjacent spaces, maintain expansion gaps and treat with penetrating oil. Consider Supacore Hybrid.",
+    btnText: "⚠ NOT RECOMMENDED",
+    btnType: "warning",
+  },
+];
+
 export default function Product() {
   // ##################### Get Range and product name from URI ##################### //
   const params = useParams();
@@ -124,6 +170,12 @@ export default function Product() {
     "Delivery",
   ];
   const [activeTab, setActiveTab] = useState(tabs[0]);
+  const { loading } = useSelector((state) => state.cart);
+  console.log(loading);
+
+  // Check if user is authenticated from your auth slice
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  console.log(isAuthenticated);
 
   // ##################### Fetch all products in the same range ##################### //
   useEffect(() => {
@@ -276,6 +328,13 @@ export default function Product() {
     }
   }, [showModal]);
 
+  // ##################### Add to cart selected product ##################### //
+  const handleAddToCart = () => {
+    let productId = selectedProduct?._id;
+    dispatch(addCartItems({ productId, isAuthenticated }));
+  };
+  console.log(selectedProduct._id);
+
   return (
     <div className="w-full mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
       {/* Breadcrumb with glassmorphism */}
@@ -383,7 +442,7 @@ export default function Product() {
             <h3 className="text-2xl font-semibold mt-16 mb-5">
               Color Options in this range
             </h3>
-            <div className="flex flex-wrap gap-x-3 gap-y-2 text-center">
+            <div className="flex flex-wrap gap-x-1 xl:gap-x-3 gap-y-2 text-center">
               {rangeProducts?.map((product, index) => (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -404,27 +463,98 @@ export default function Product() {
             </div>
           </div>
 
-          <div>
-            {selectedProduct?.thickness?.length > 1 && (
-              <>
-                <h3 className="text-2xl font-semibold mt-10 mb-5">
-                  Other Tickeness Options
-                </h3>
-                <div className="flex flex-wrap gap-5 text-center">
-                  {selectedProduct?.thickness?.map((size, index) => (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.5 }}
-                      key={index}
-                      className="p-2 w-36 border border-[#E7E9EB] hover:bg-[#E7E9EB] cursor-pointer"
-                    >
-                      <p>{size}</p>
-                    </motion.div>
-                  ))}
+          {/* Product highlights section */}
+          <motion.div className=" mt-20 w-full bg-[#FCF8F5] p-5 md:p-10 border-l-3 border-[#8A6A5B]">
+            <div className="space-y-8">
+              <h3 className="text-3xl md:text-4xl font-bold text-nowrap">Product Highlights</h3>
+              <div className="flex flex-col md:flex-row lg:flex-col xl:flex-row xl:items-center justify-between gap-y-10 lg:mx-auto">
+                <div className="space-y-3">
+                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
+                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+                    Thickness: 8mm
+                  </p>
+                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
+                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+                    Board Size: 1215 x 196mm
+                  </p>
+                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
+                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+                    Pack Coverage: 1.7404m²
+                  </p>
                 </div>
-              </>
-            )}
+                <div className="space-y-3">
+                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
+                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+                    Water Rating: Waterproof
+                  </p>
+                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
+                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+                    Warranty: 20 Years
+                  </p>
+                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
+                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+                    Wear Layer: AC4
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <div>
+            {/* {selectedProduct?.thickness?.length > 1 && (
+              <> */}
+            <h3 className="text-2xl font-semibold mt-10 mb-5">
+              Other Tickeness Options
+            </h3>
+            <div className="flex flex-wrap gap-5 text-center">
+              {selectedProduct?.thickness?.map((size, index) => (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.5 }}
+                  key={index}
+                  className="p-2 w-36 border border-[#998E8A] bg-[#FCF8F5] hover:bg-[#E7E9EB] cursor-pointer"
+                >
+                  <p>{size}</p>
+                </motion.div>
+              ))}
+            </div>
+            {/* </>
+            )} */}
+          </div>
+
+          {/* Grade sections */}
+          <div>
+            <h3 className="text-2xl font-semibold mt-10 mb-5">Grade</h3>
+            <div className="flex flex-wrap gap-5 text-center w-full">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="p-2 border border-[#998E8A] bg-[#FCF8F5] hover:bg-[#E7E9EB] cursor-pointer text-nowrap"
+              >
+                <p className="text-lg">Select</p>
+                <p className="text-[#666E7C] text-sm">Clean · contemporary</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="p-2 w-36 border border-[#998E8A] hover:bg-[#E7E9EB] cursor-pointer text-nowrap"
+              >
+                <p className="text-lg">Standard</p>
+                <p className="text-[#666E7C] text-sm">Most Popular</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="p-2 w-36 border border-[#998E8A] hover:bg-[#E7E9EB] cursor-pointer text-nowrap"
+              >
+                <p className="text-lg">Feature</p>
+                <p className="text-[#666E7C] text-sm">Maximum Character</p>
+              </motion.div>
+            </div>
           </div>
         </motion.div>
 
@@ -440,15 +570,19 @@ export default function Product() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring" }}
-            className="text-md text-black p-2 bg-[#F5F0ED] w-fit"
+            className="text-md text-black p-2 flex flex-wrap items-center gap-2"
           >
-            New Arrival
+            <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
+              SKU: SF-BB-130x14-SEL
+            </div>
+            <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
+              🔥 BAL 29
+            </div>
+            <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">✓ PEFC</div>
+            <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
+              Solid Hardwood
+            </div>
           </motion.div>
-
-          {/* Heart Icon */}
-          <div className="absolute top-0 right-10">
-            <Heart color="#998E8A" />
-          </div>
 
           {/* Title with gradient */}
           <div className="mt-5">
@@ -498,10 +632,21 @@ export default function Product() {
             </motion.p>
           </div>
 
+          {/* CTA */}
+          <motion.div className="bg-[#D7CEC5] p-5 flex flex-col xl:flex-row items-center gap-10">
+            <p className="text-lg text-black">
+              Ordering 100m² or more? Call us — we'll beat any written quote and
+              offer you a trade price most retailers can't match.
+            </p>
+            <button className="text-nowrap text-black bg-white px-8 py-3">
+              Call Now
+            </button>
+          </motion.div>
+
           {/* Price section */}
-          <motion.div className="flex gap-5 items-center justify-evenly my-10 bg-[#FCF8F5] p-2">
+          <motion.div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 grid-flow-row-dense gap-3 items-center justify-evenly my-10 bg-[#FCF8F5] p-1">
             <div
-              className={`text-center space-y-3 ${priceTag == 0 ? "bg-white" : "bg-[#FCF8F5]"} w-1/2 p-4`}
+              className={`text-center space-y-3 ${priceTag == 0 ? "bg-white" : "bg-[#FCF8F5]"} p-4`}
               onClick={() => setPriceTag(0)}
             >
               <h3 className="text-[#8A6A5B] text-xl font-semibold">
@@ -515,7 +660,7 @@ export default function Product() {
               </p>
             </div>
             <div
-              className={`text-center space-y-3 ${priceTag == 1 ? "bg-white" : "bg-[#FCF8F5]"} w-1/2 p-4`}
+              className={`text-center space-y-3 ${priceTag == 1 ? "bg-white" : "bg-[#FCF8F5]"} p-4`}
               onClick={() => setPriceTag(1)}
             >
               <h3 className="text-[#8A6A5B] text-xl font-semibold">
@@ -528,18 +673,41 @@ export default function Product() {
                 </span>
               </p>
             </div>
+            <div
+              className={`text-center space-y-3 ${priceTag == 2 ? "bg-white" : "bg-[#FCF8F5]"} p-4 col-span-1 lg:col-span-2 xl:col-span-1`}
+              onClick={() => setPriceTag(2)}
+            >
+              <h3 className="text-[#8A6A5B] text-xl font-semibold">
+                Request Quote
+              </h3>
+              <p className="text-2xl font-extrabold ">POA</p>
+            </div>
           </motion.div>
+
+          {/* Selected price */}
+          <div className="space-y-2">
+            <p>
+              <span className="text-3xl font-extrabold ">$28 </span>
+              <span className="text-md font-normal text-[#666E7C]">
+                /m <sup>2</sup> + GST
+              </span>
+            </p>
+            <p className="text-[#666E7C] text-lg">
+              Supply + Install pricing includes professional installation by our
+              licensed Melbourne team.
+            </p>
+          </div>
 
           {/* Qualtiny calculator */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
-            className="mt-10"
+            className="mt-10 border border-[#E7E9EB] p-5"
           >
-            <h2 className="text-3xl font-semibold">Quantity Calculator</h2>
-            <form action="" className="mt-3">
-              <div className="space-y-3 mt-10">
+            <h2 className="text-xl font-semibold">Coverage Calculator</h2>
+            <form action="" className="">
+              <div className="space-y-3 mt-5">
                 <div>
                   <label htmlFor="" className="text-xl text-[#666E7C]">
                     Total square meters needed
@@ -577,7 +745,7 @@ export default function Product() {
                         value={10}
                         onChange={(e) => calculatorDataHandler(e)}
                         className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
-                         checked={calculatorData.wastage === 10}
+                        checked={calculatorData.wastage === 10}
                       />
                       <label htmlFor="">10%</label>
                     </div>
@@ -597,7 +765,7 @@ export default function Product() {
                 <p className="text-lg mt-5 text-black font-medium bg-[#FCF8F5] p-3 w-fit">
                   Pack size:{" "}
                   <b>
-                    {packSize} m<sup>2</sup>
+                    {packSize} m<sup>2</sup> per carton
                   </b>
                 </p>
               </div>
@@ -650,13 +818,18 @@ export default function Product() {
             >
               View in showroom
             </button>
-            <button className="bg-[#998E8A] py-3 text-white text-lg xl:text-xl w-full md:w-6/12 cursor-pointer">
-              Add to Cart
+            <button
+              onClick={handleAddToCart}
+              disabled={loading}
+              className="bg-[#998E8A] py-3 text-white text-lg xl:text-xl w-full md:w-6/12 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Adding..." : "Add to Cart"}
             </button>
           </motion.div>
 
-          <p className="text-lg font-semibold text-center">
-            Call Us on 0467 747 837 for bulk pricing
+          <p className="text-lg font-semibold text-center text-[#998E8A] flex items-center justify-center gap-2 mt-10">
+            <HeartIcon />
+            Save to wishlist
           </p>
         </motion.div>
       </div>
@@ -722,43 +895,6 @@ export default function Product() {
           </div>
         </motion.div>
       )}
-
-      {/* Product highlights section */}
-      <motion.div className=" mt-20 w-full bg-[#FCF8F5] py-24">
-        <div className="flex flex-col lg:flex-row justify-between gap-10 w-10/12 mx-auto">
-          <h3 className="text-4xl font-bold">Product Highlights</h3>
-          <div className="flex flex-col md:flex-row md:items-center gap-y-10 gap-x-20 lg:gap-10 xl:gap-32 xl:mr-28 lg:mx-auto">
-            <div className="space-y-3">
-              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-                <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
-                Thickness: 8mm
-              </p>
-              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-                <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Board
-                Size: 1215 x 196mm
-              </p>
-              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-                <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Pack
-                Coverage: 1.7404m²
-              </p>
-            </div>
-            <div className="space-y-3">
-              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-                <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Water
-                Rating: Waterproof
-              </p>
-              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-                <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
-                Warranty: 20 Years
-              </p>
-              <p className="text-lg xl:text-xl font-semibold flex items-center gap-2 text-nowrap">
-                <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Wear
-                Layer: AC4
-              </p>
-            </div>
-          </div>
-        </div>
-      </motion.div>
 
       {/* Specification and Details section */}
       <motion.div className="w-10/12 mx-auto mt-20">
@@ -856,6 +992,30 @@ export default function Product() {
             )}
           </motion.div>
         </motion.div>
+      </motion.div>
+
+      <motion.div className="bg-[#FCF8F5] w-full p-10 py-20 md:p-24 mt-20">
+        <div className="w-full md:w-11/12 mx-auto">
+        <h2 className="text-4xl font-semibold mb-10">Will this work in your home?</h2>
+        <AnimatePresence mode="wait">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+          {willWork.map((item, index) => (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.5 }}
+              key={index}
+              className="p-10 bg-white border-t-2 border-[#8A6A5B] space-y-4"
+            >
+              <CircleCheckBig color="#8A6A5B"/>
+              <p className="text-xl">{item.heading}</p>
+              <span className={`p-2 text-xs ${item.btnType == "success" ? "bg-[#E3E4DD] text-[#4C6647]":"bg-[#EFE8DA] text-[#B2873C]"}`}>{item.btnText}</span>
+              <p className="text-lg mt-5">{item.subHeading}</p>
+            </motion.div>
+          ))}
+          </div>
+        </AnimatePresence>
+        </div>
       </motion.div>
 
       {/* Reviews */}

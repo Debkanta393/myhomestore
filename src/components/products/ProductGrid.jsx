@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { HeartIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const cardVariants = {
   hidden: (direction) => ({ opacity: 0, x: direction === "right" ? 80 : -80 }),
@@ -14,8 +16,14 @@ const containerVariants = {
     opacity: 0,
   }),
   show: {
-    x: 0, opacity: 1,
-    transition: { duration: 0.6, staggerChildren: 0.12, delayChildren: 0.1, ease: "easeInOut" },
+    x: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      staggerChildren: 0.12,
+      delayChildren: 0.1,
+      ease: "easeInOut",
+    },
   },
   exit: (direction) => ({
     x: direction === "right" ? 300 : -300,
@@ -24,11 +32,22 @@ const containerVariants = {
   }),
 };
 
-export default function ProductGrid({ sortedProducts, productData, page, navigateTo }) {
+export default function ProductGrid({
+  sortedProducts,
+  productData,
+  page,
+  navigateTo,
+}) {
   const navigate = useNavigate();
+  const [visibleCount, setVisibleCount] = useState(8);
+  const [loadedImages, setLoadedImages] = useState({});
 
+  const loadMore = () => {
+    console.log("Loadmore clicked");
+    setVisibleCount((prev) => prev + 8);
+  };
   return (
-    <>
+    <div>
       {sortedProducts?.length === 0 && (
         <AnimatePresence mode="wait">
           <motion.div
@@ -40,7 +59,7 @@ export default function ProductGrid({ sortedProducts, productData, page, navigat
             exit="exit"
             className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 relative mt-6 z-0"
           >
-            {productData?.slice(0, 8).map((item) => (
+            {productData?.slice(0, visibleCount).map((item) => (
               <motion.div
                 key={item._id}
                 variants={cardVariants}
@@ -49,14 +68,14 @@ export default function ProductGrid({ sortedProducts, productData, page, navigat
                 onClick={() => navigate(`/${item.range}/${item.productName}`)}
               >
                 {/* Image */}
-                <div className="relative bg-gray-50">
-                  <img
+                <div className="relative">
+                  <LazyLoadImage
                     src={item.productImage[0].url}
                     alt={item.heading}
-                    loading="lazy"
+                    effect="blur"
                     className="block h-[220px] lg:h-[250px] 2xl:h-[400px] w-full object-cover transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute top-0 h-[98%] inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                   {/* Wishlist */}
                   <button
@@ -90,10 +109,12 @@ export default function ProductGrid({ sortedProducts, productData, page, navigat
                     </p>
                     <div className="flex items-center gap-20">
                       <p className="text-md xl:text-lg text-gray-500 line-clamp-1">
-                        <span className="font-semibold">Type:</span> {item.category}
+                        <span className="font-semibold">Type:</span>{" "}
+                        {item.category}
                       </p>
                       <p className="text-md xl:text-lg text-gray-500 line-clamp-1">
-                        <span className="font-semibold">Brand:</span> {item.brand}
+                        <span className="font-semibold">Brand:</span>{" "}
+                        {item.brand}
                       </p>
                     </div>
                   </div>
@@ -104,9 +125,14 @@ export default function ProductGrid({ sortedProducts, productData, page, navigat
         </AnimatePresence>
       )}
 
-      <button className="bg-[#998E8A] px-10 py-3 text-white flex justify-center items-center mx-auto mt-10 text-lg">
-        View All
-      </button>
-    </>
+      {visibleCount < productData?.length && (
+        <button
+          onClick={loadMore}
+          className="bg-[#998E8A] px-10 py-3 text-white flex justify-center items-center mx-auto mt-10 text-lg cursor-pointer"
+        >
+          View More
+        </button>
+      )}
+    </div>
   );
 }
