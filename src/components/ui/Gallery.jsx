@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import LazyLoader from "./LazyLoader";
 
 export default function Category() {
   const ref = useRef(null);
@@ -242,7 +243,6 @@ export default function Category() {
                     alt={`Gallery image ${j + 1}`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  
                   {/* Hover overlay */}
                   <div className="absolute inset-0 bg-gradient-to-br from-[#8A6A5A]/0 to-[#998e8a]/0 group-hover:from-[#8A6A5A]/40 group-hover:to-[#998e8a]/40 transition-all duration-500" />
                   

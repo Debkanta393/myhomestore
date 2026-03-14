@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { collections } from "../../data/data";
+import LazyLoader from "./LazyLoader";
 
 const Categories = () => {
   const selectedTab = useSelector(
@@ -26,11 +27,12 @@ const Categories = () => {
             {/* Black Overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80"></div>
 
-            <img
+            {/* <img
               src={collection.image}
               alt=""
               className="w-full h-[220px] lg:h-[280px] 2xl:h-[400px]"
-            />
+            /> */}
+            <LazyLoader image={collection.image} alt={collection.title} style={"w-full h-[220px] lg:h-[280px] 2xl:h-[400px]"} />
             <p className="font-normal text-center text-2xl absolute bottom-5 text-white z-10">
               {collection.title}
             </p>

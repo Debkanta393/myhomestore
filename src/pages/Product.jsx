@@ -17,6 +17,7 @@ import { useParams } from "react-router";
 import { getProductByRange } from "../features/product/product";
 import { useDispatch, useSelector } from "react-redux";
 import { addCartItems } from "../features/cart/cart";
+import LazyLoader from "../components/ui/LazyLoader";
 
 // ##################### Other products ##################### //
 const products = [
@@ -157,7 +158,27 @@ export default function Product() {
   });
   const dispatch = useDispatch();
   const [packSize, setPackSize] = useState();
-  const [priceTag, setPriceTag] = useState(0);
+  // const [priceTab, setPriceTab] = useState(0);
+  const [priceTab, setPriceTab] = useState([
+    {
+      id: 1,
+      heading: "Supply + Install",
+      desc: "",
+      active: true,
+    },
+    {
+      id: 2,
+      heading: "Supply Only",
+      desc: "",
+      active: false,
+    },
+    {
+      id: 3,
+      heading: "Request Quote",
+      desc: "POA",
+      active: false,
+    },
+  ]);
   const [rangeProducts, setRangeProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -177,23 +198,38 @@ export default function Product() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   console.log(isAuthenticated);
 
+  // ##################### Deslugify range and product data before fetching ##################### //
+
+  const deslugify = (slug) => {
+  return slug
+    .split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+console.log(deslugify(productName))
+
   // ##################### Fetch all products in the same range ##################### //
   useEffect(() => {
     const getRangeProduct = async () => {
-      const response = await dispatch(getProductByRange(range));
-
+      const deslugifyRange=deslugify(range)
+      const deslugifyName=deslugify(productName)
+      const response = await dispatch(getProductByRange(deslugifyRange));
+      console.log(response.payload.product)
       if (response.payload.success) {
         // Set app products in this range
         setRangeProducts(response.payload.product);
 
         // Set selected product
         const selectedproduct = response.payload.product.find(
-          (item) => item.productName == productName,
-        );
+        (item) =>
+          item.productName?.toLowerCase().trim() ===
+          deslugifyName.toLowerCase().trim()
+      );
+        console.log(selectedproduct)
         setSelectedProduct(selectedproduct);
 
         // Set pack size
-        let packsize = parseFloat(selectedproduct.packSize.split("-")[0]);
+        let packsize = parseFloat(selectedproduct?.packSize.split("-")[0]);
         setPackSize(packsize);
       }
     };
@@ -333,7 +369,15 @@ export default function Product() {
     let productId = selectedProduct?._id;
     dispatch(addCartItems({ productId, isAuthenticated }));
   };
-  console.log(selectedProduct._id);
+
+  // ##################### Product price tab ##################### //
+  const priceTabHandler = (id) => {
+    const updatedTab = priceTab.map((price) => ({
+      ...price,
+      active: price.id === id,
+    }));
+    setPriceTab(updatedTab);
+  };
 
   return (
     <div className="w-full mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
@@ -369,7 +413,7 @@ export default function Product() {
         >
           <div className="relative bg-gradient-to-br from-gray-100 to-gray-50 group shadow-xl">
             <AnimatePresence mode="wait">
-              <motion.img
+              {/* <motion.img
                 key={selectedImage}
                 src={selectedProduct?.productImage?.[selectedImage]?.url}
                 alt="Product"
@@ -379,7 +423,13 @@ export default function Product() {
                 exit="exit"
                 transition={{ duration: 0.3 }}
                 className="w-full h-[500px] object-cover"
-              />
+              /> */}
+              <motion.div key={selectedImage} variants={imageVariants} initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.3 }}>
+                <LazyLoader image={selectedProduct?.productImage?.[selectedImage]?.url} alt={"Product image"} style={"w-full h-[500px] object-cover"}/>
+              </motion.div>
             </AnimatePresence>
 
             {/* Gradient overlays */}
@@ -452,11 +502,12 @@ export default function Product() {
                   className="border border-white hover:border-[#E7E9EB] p-1 cursor-pointer w-32 h-fit"
                   onClick={() => selectedProductHandler(product.productName)}
                 >
-                  <img
+                  {/* <img
                     src={product.productImage[0].url}
                     alt=""
                     className="w-full h-8/12"
-                  />
+                  /> */}
+                  <LazyLoader image={product.productImage[0].url} alt={product.productName} style={"w-full h-8/12"} />
                   <p className="text-sm md:text-lg">{product.productName}</p>
                 </motion.div>
               ))}
@@ -466,7 +517,9 @@ export default function Product() {
           {/* Product highlights section */}
           <motion.div className=" mt-20 w-full bg-[#FCF8F5] p-5 md:p-10 border-l-3 border-[#8A6A5B]">
             <div className="space-y-8">
-              <h3 className="text-3xl md:text-4xl font-bold text-nowrap">Product Highlights</h3>
+              <h3 className="text-3xl md:text-4xl font-bold text-nowrap">
+                Product Highlights
+              </h3>
               <div className="flex flex-col md:flex-row lg:flex-col xl:flex-row xl:items-center justify-between gap-y-10 lg:mx-auto">
                 <div className="space-y-3">
                   <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
@@ -565,12 +618,11 @@ export default function Product() {
           transition={{ duration: 0.6 }}
           className="w-full space-y-6"
         >
-          {/* Badges with glassmorphism */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring" }}
-            className="text-md text-black p-2 flex flex-wrap items-center gap-2"
+            className="text-md text-black p-2 flex flex-wrap items-center gap-2 m-0"
           >
             <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
               SKU: SF-BB-130x14-SEL
@@ -578,22 +630,35 @@ export default function Product() {
             <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
               🔥 BAL 29
             </div>
-            <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">✓ PEFC</div>
+            <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
+              ✓ PEFC
+            </div>
             <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
               Solid Hardwood
             </div>
           </motion.div>
 
-          {/* Title with gradient */}
-          <div className="mt-5">
+          {/* Title, rating and description */}
+          <div className="mt-2">
+            {/* Product heading */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-3 leading-tight"
+              className="text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight"
             >
               {selectedProduct?.productName}
             </motion.h1>
+
+            {/* Product description */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="text-gray-600 text-lg font-medium mt-3"
+            >
+              {selectedProduct?.description}
+            </motion.p>
 
             {/* Enhanced Rating */}
             <motion.div
@@ -621,90 +686,78 @@ export default function Product() {
                 <span className="text-md text-gray-600">(200 reviews)</span>
               </span>
             </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="text-gray-600 text-lg font-medium mt-5"
-            >
-              {selectedProduct?.description}
-            </motion.p>
           </div>
 
-          {/* CTA */}
-          <motion.div className="bg-[#D7CEC5] p-5 flex flex-col xl:flex-row items-center gap-10">
-            <p className="text-lg text-black">
-              Ordering 100m² or more? Call us — we'll beat any written quote and
-              offer you a trade price most retailers can't match.
-            </p>
-            <button className="text-nowrap text-black bg-white px-8 py-3">
-              Call Now
-            </button>
+          <motion.div className="grid lg:grid-cols-4 grid-cols-2 divide-x divide-[#E7E9EB] border border-[#E7E9EB] justify-between">
+            {[
+              { title: "14mm", desc: "Thickness" },
+              { title: "130mm", desc: "Width" },
+              { title: "9 kN", desc: "Janka" },
+              { title: "6mm", desc: "Wear Layer" },
+            ].map((item, index) => (
+              <motion.div className="text-center p-5">
+                <p className="text-xl text-black font-medium">{item.title}</p>
+                <p className="text-lg text-[#666E7C]">{item.desc}</p>
+              </motion.div>
+            ))}
           </motion.div>
 
           {/* Price section */}
-          <motion.div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 grid-flow-row-dense gap-3 items-center justify-evenly my-10 bg-[#FCF8F5] p-1">
-            <div
-              className={`text-center space-y-3 ${priceTag == 0 ? "bg-white" : "bg-[#FCF8F5]"} p-4`}
-              onClick={() => setPriceTag(0)}
-            >
-              <h3 className="text-[#8A6A5B] text-xl font-semibold">
-                Supply + Install
-              </h3>
-              <p className="text-2xl font-extrabold ">
-                {`$ ${selectedProduct?.supplyInstallPrice}`}
-                <span className="text-lg font-normal">
-                  /m <sup>2</sup>
-                </span>
-              </p>
-            </div>
-            <div
-              className={`text-center space-y-3 ${priceTag == 1 ? "bg-white" : "bg-[#FCF8F5]"} p-4`}
-              onClick={() => setPriceTag(1)}
-            >
-              <h3 className="text-[#8A6A5B] text-xl font-semibold">
-                Supply Only
-              </h3>
-              <p className="text-2xl font-extrabold ">
-                $28{" "}
-                <span className="text-lg font-normal">
-                  /m <sup>2</sup>
-                </span>
-              </p>
-            </div>
-            <div
-              className={`text-center space-y-3 ${priceTag == 2 ? "bg-white" : "bg-[#FCF8F5]"} p-4 col-span-1 lg:col-span-2 xl:col-span-1`}
-              onClick={() => setPriceTag(2)}
-            >
-              <h3 className="text-[#8A6A5B] text-xl font-semibold">
-                Request Quote
-              </h3>
-              <p className="text-2xl font-extrabold ">POA</p>
-            </div>
-          </motion.div>
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 grid-flow-row-dense gap-3 items-center justify-evenly border
+          border-[#866053] p-1"
+          >
+            {priceTab.map((price, index) => (
+              <div
+                key={index}
+                className={`text-center space-y-3 ${price.active ? "bg-[#866053] text-white" : "bg-white"} p-4 col-span-1 lg:col-span-2 xl:col-span-1`}
+                onClick={() => priceTabHandler(price.id)}
+              >
+                <h3
+                  className={`${price.active ? "text-white" : "text-[#8A6A5B]"} text-xl font-semibold`}
+                >
+                  {price.heading}
+                </h3>
 
-          {/* Selected price */}
-          <div className="space-y-2">
-            <p>
-              <span className="text-3xl font-extrabold ">$28 </span>
-              <span className="text-md font-normal text-[#666E7C]">
-                /m <sup>2</sup> + GST
-              </span>
-            </p>
-            <p className="text-[#666E7C] text-lg">
-              Supply + Install pricing includes professional installation by our
-              licensed Melbourne team.
-            </p>
-          </div>
+                <p className="text-2xl font-extrabold ">
+                  {price.id == 3 ? (
+                    "POA"
+                  ) : (
+                    <>
+                      {price.id === 1
+                        ? selectedProduct?.supplyInstallPrice
+                        : "28"}
+                      <span className="text-lg font-normal">
+                        /m <sup>2</sup>
+                      </span>
+                    </>
+                  )}
+                </p>
+              </div>
+            ))}
+          </motion.div>
 
           {/* Qualtiny calculator */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
-            className="mt-10 border border-[#E7E9EB] p-5"
+            className="border border-[#E7E9EB] p-5"
           >
+            {/* Selected price */}
+            <div className="space-y-2 mb-8">
+              <p>
+                <span className="text-3xl font-extrabold ">$28 </span>
+                <span className="text-md font-normal text-[#666E7C]">
+                  /m <sup>2</sup> + GST
+                </span>
+              </p>
+              <p className="text-[#666E7C] text-lg">
+                Supply + Install pricing includes professional installation by
+                our licensed Melbourne team.
+              </p>
+            </div>
+
             <h2 className="text-xl font-semibold">Coverage Calculator</h2>
             <form action="" className="">
               <div className="space-y-3 mt-5">
@@ -784,34 +837,44 @@ export default function Product() {
                 </p>
               </div>
             </form>
+            {/* Price summery section */}
+            <motion.div className="space-y-4 mt-10 bg-[#F5F0ED] p-6">
+              <h3 className="text-2xl font-semibold">Price Summary</h3>
+              <div className="space-y-2">
+                <p className="text-lg text-[#666E7C] flex justify-between items-center">
+                  Subtotal (Supply + Install):{" "}
+                  <span className="text-xl font-semibold text-black">
+                    {`$ ${priceData.subTotal}`}
+                  </span>
+                </p>
+                <p className="text-lg text-[#666E7C] flex justify-between items-center">
+                  GST (10%):{" "}
+                  <span className="text-xl font-semibold text-black">{`$ ${calculatorData.totalNeeded ? priceData.gst : 0}`}</span>
+                </p>
+                <div className="h-[1px] w-full bg-[#E7E9EB]"></div>
+                <p className="text-lg text-[#666E7C] flex justify-between items-center">
+                  TOTAL{" "}
+                  <span className="text-xl font-semibold text-black">
+                    {`$ ${priceData.total}`}
+                  </span>
+                </p>
+              </div>
+            </motion.div>
           </motion.div>
 
-          {/* Price summery section */}
-          <motion.div className="space-y-4 mt-10 bg-[#F5F0ED] p-6">
-            <h3 className="text-2xl font-semibold">Price Summary</h3>
-            <div className="space-y-2">
-              <p className="text-lg text-[#666E7C] flex justify-between items-center">
-                Subtotal (Supply + Install):{" "}
-                <span className="text-xl font-semibold text-black">
-                  {`$ ${priceData.subTotal}`}
-                </span>
-              </p>
-              <p className="text-lg text-[#666E7C] flex justify-between items-center">
-                GST (10%):{" "}
-                <span className="text-xl font-semibold text-black">{`$ ${calculatorData.totalNeeded ? priceData.gst : 0}`}</span>
-              </p>
-              <div className="h-[1px] w-full bg-[#E7E9EB]"></div>
-              <p className="text-lg text-[#666E7C] flex justify-between items-center">
-                TOTAL{" "}
-                <span className="text-xl font-semibold text-black">
-                  {`$ ${priceData.total}`}
-                </span>
-              </p>
-            </div>
+          {/* CTA */}
+          <motion.div className="bg-[#D7CEC5] p-5 flex flex-col xl:flex-row items-center gap-10">
+            <p className="text-lg text-black">
+              Ordering 100m² or more? Call us — we'll beat any written quote and
+              offer you a trade price most retailers can't match.
+            </p>
+            <button className="text-nowrap text-black bg-white px-8 py-3">
+              Call Now
+            </button>
           </motion.div>
 
           {/* Buttons section */}
-          <motion.div className="w-full flex flex-col md:flex-row items-center gap-y-5 gap-x-10 mt-20">
+          <motion.div className="w-full flex flex-col md:flex-row items-center gap-y-5 gap-x-10">
             <button
               className="border border-[#998E8A] text-[#998E8A] py-3 text-lg xl:text-xl w-full md:w-6/12 cursor-pointer"
               onClick={() => setShowModal(true)}
@@ -827,7 +890,7 @@ export default function Product() {
             </button>
           </motion.div>
 
-          <p className="text-lg font-semibold text-center text-[#998E8A] flex items-center justify-center gap-2 mt-10">
+          <p className="text-lg font-semibold text-center text-[#998E8A] flex items-center justify-center gap-2 mt-6">
             <HeartIcon />
             Save to wishlist
           </p>
@@ -996,25 +1059,31 @@ export default function Product() {
 
       <motion.div className="bg-[#FCF8F5] w-full p-10 py-20 md:p-24 mt-20">
         <div className="w-full md:w-11/12 mx-auto">
-        <h2 className="text-4xl font-semibold mb-10">Will this work in your home?</h2>
-        <AnimatePresence mode="wait">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {willWork.map((item, index) => (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.5 }}
-              key={index}
-              className="p-10 bg-white border-t-2 border-[#8A6A5B] space-y-4"
-            >
-              <CircleCheckBig color="#8A6A5B"/>
-              <p className="text-xl">{item.heading}</p>
-              <span className={`p-2 text-xs ${item.btnType == "success" ? "bg-[#E3E4DD] text-[#4C6647]":"bg-[#EFE8DA] text-[#B2873C]"}`}>{item.btnText}</span>
-              <p className="text-lg mt-5">{item.subHeading}</p>
-            </motion.div>
-          ))}
-          </div>
-        </AnimatePresence>
+          <h2 className="text-4xl font-semibold mb-10">
+            Will this work in your home?
+          </h2>
+          <AnimatePresence mode="wait">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              {willWork.map((item, index) => (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.5 }}
+                  key={index}
+                  className="p-10 bg-white border-t-2 border-[#8A6A5B] space-y-4"
+                >
+                  <CircleCheckBig color="#8A6A5B" />
+                  <p className="text-xl">{item.heading}</p>
+                  <span
+                    className={`p-2 text-xs ${item.btnType == "success" ? "bg-[#E3E4DD] text-[#4C6647]" : "bg-[#EFE8DA] text-[#B2873C]"}`}
+                  >
+                    {item.btnText}
+                  </span>
+                  <p className="text-lg mt-5">{item.subHeading}</p>
+                </motion.div>
+              ))}
+            </div>
+          </AnimatePresence>
         </div>
       </motion.div>
 

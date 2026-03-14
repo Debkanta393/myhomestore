@@ -26,6 +26,8 @@ import { setTabSelected } from "../../features/slice";
 import MainNav from "../ui/MainNav";
 import { navData } from "../../../data/data";
 import * as Icons from "lucide-react";
+import { searchProduct } from "../../features/product/product";
+import { useNavigate } from "react-router-dom";
 
 {
   /* ─── Put this map ABOVE the mobile menu, inside your component ─── */
@@ -66,6 +68,9 @@ export function Header() {
   const dispatch = useDispatch();
   const mobileMenuRef = useRef(null);
   const [menuScrolled, setMenuScrolled] = useState(false);
+  const [searchResult, setSearchResult] = useState(false);
+  const searchRef = useRef();
+  const navigate = useNavigate();
 
   // Handle scroll for sticky header
   useEffect(() => {
@@ -113,6 +118,35 @@ export function Header() {
       setMenuScrolled(mobileMenuRef.current.scrollTop > 100);
     }
   };
+
+  const handleSearchProduct = (e) => {
+    console.log(e.target.value);
+    let name = e.target.value;
+    setSearchQuery(name);
+    setSearchResult(true);
+    dispatch(searchProduct(name));
+  };
+  const searchResults = useSelector((state) => state.product.list.searchResults);
+  console.log(searchResults);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setSearchResult(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+
+  // ##################### Modify product name ##################### //
+  const slugify = (text) =>
+  text.toLowerCase().replace(/\s+/g, "-");
 
   return (
     <header className="bg-white w-full sticky top-0 z-30">
@@ -242,12 +276,15 @@ export function Header() {
               </Link>
 
               {/* Search Bar - Desktop only */}
-              <div className="hidden lg:block flex-1 max-w-2xl mx-8 xl:mx-12">
+              <div
+                className="hidden lg:block flex-1 max-w-2xl mx-8 xl:mx-12"
+                ref={searchRef}
+              >
                 <div className="relative group">
                   <input
                     type="text"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => handleSearchProduct(e)}
                     className="w-full border-2 border-[#E7E9EB] focus:border-[#8A6A5A] py-3 pl-5 pr-12 outline-none transition-all duration-300
                      text-[#8A6A5A] placeholder:text-[#B8B0A7]"
                     placeholder="Search for products..."
@@ -259,6 +296,29 @@ export function Header() {
                   >
                     <Search size={20} />
                   </motion.button>
+                  {searchResults && searchResult && (
+                    <div
+                      className="absolute top-full left-0 bg-white p-5 z-50 w-full list-none space-y-1 rounded"
+                      onClick={() => setSearchResult(false)}
+                    >
+                      {searchResults.map((list, index) => (
+                        <motion.li
+                          key={index}
+                          initial={{ x: -10, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          transition={{
+                            delay: 0.1 * index,
+                            duration: 0.5,
+                            ease: "easeInOut",
+                          }}
+                          className="p-2 rounded hover:bg-[#f5efed] cursor-pointer font-md font-medium"
+                          onClick={() => navigate(`/${list.range.toLowerCase()}/${slugify(list.productName)}`)}
+                        >
+                          {list.productName}
+                        </motion.li>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 

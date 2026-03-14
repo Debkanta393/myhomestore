@@ -4,7 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import LazyLoader from "../ui/LazyLoader";
+import { useEffect } from "react";
 
+// ##################### Animation ##################### //
 const cardVariants = {
   hidden: (direction) => ({ opacity: 0, x: direction === "right" ? 80 : -80 }),
   show: { opacity: 1, x: 0, transition: { duration: 0.5, ease: "easeOut" } },
@@ -38,14 +41,20 @@ export default function ProductGrid({
   page,
   navigateTo,
 }) {
+  // ##################### Hooks ##################### //
   const navigate = useNavigate();
   const [visibleCount, setVisibleCount] = useState(8);
   const [loadedImages, setLoadedImages] = useState({});
 
+
+  // ##################### View more button handler ##################### //
   const loadMore = () => {
-    console.log("Loadmore clicked");
     setVisibleCount((prev) => prev + 8);
   };
+
+  // ##################### Modify product name ##################### //
+  const slugify = (text) =>
+  text.toLowerCase().replace(/\s+/g, "-");
   return (
     <div>
       {sortedProducts?.length === 0 && (
@@ -65,16 +74,17 @@ export default function ProductGrid({
                 variants={cardVariants}
                 className="group relative bg-white overflow-hidden transition-all duration-300 ease-out
                   border border-gray-300 hover:-translate-y-1 cursor-pointer z-0"
-                onClick={() => navigate(`/${item.range}/${item.productName}`)}
+                onClick={() => navigate(`/${item.range.toLowerCase()}/${slugify(item.productName)}`)}
               >
                 {/* Image */}
                 <div className="relative">
-                  <LazyLoadImage
+                  {/* <LazyLoadImage
                     src={item.productImage[0].url}
-                    alt={item.heading}
+                    alt={item.heading}     
                     effect="blur"
                     className="block h-[220px] lg:h-[250px] 2xl:h-[400px] w-full object-cover transition-transform duration-500"
-                  />
+                  /> */}
+                  <LazyLoader image={item.productImage[0].url} alt={item.heading} style={"block h-[220px] lg:h-[250px] 2xl:h-[400px] w-full object-cover transition-transform duration-500"}/>
                   <div className="absolute top-0 h-[98%] inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                   {/* Wishlist */}

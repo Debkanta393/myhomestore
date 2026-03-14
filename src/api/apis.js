@@ -7,6 +7,7 @@ export const PRODUCT_BY_ID="api/product/getProductById"
 export const PRODUCT_FOR_CARTS="api/product/getProductForCarts"
 export const PRODUCT_BY_TYPE_NAME="/api/product/getProductbyTypeName"
 export const PRODUCT_BY_RANGE="/api/product/getProductbyRange"
+export const SEARCH_PRODUCT="/api/product/search-product"
 
 
 

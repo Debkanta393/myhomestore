@@ -4,7 +4,8 @@ import {
   ALL_PRODUCT,
   PRODUCT_BY_ID,
   PRODUCT_BY_TYPE_NAME,
-  PRODUCT_BY_RANGE
+  PRODUCT_BY_RANGE,
+  SEARCH_PRODUCT
 } from "../../api/apis";
 import api from "../../api/axios";
 
@@ -17,6 +18,7 @@ const initialState = {
   list: {
     loading: false,
     data: [],
+    searchResults: [],
     error: null,
     fetched: false,
   },
@@ -133,6 +135,21 @@ export const getProductByRange = createAsyncThunk(
   },
 );
 
+
+export const searchProduct=createAsyncThunk(
+  "product/searchProduct",
+  async(name, {rejectWithValue})=>{
+    try {
+      console.log(name)
+      const res=await api.post(SEARCH_PRODUCT, {name: name})
+      console.log(res)
+      return res.data
+    } catch (error) {
+      return rejectWithValue(error)
+    }
+  }
+)
+
 const productSlice = createSlice({
   name: "product",
   initialState,
@@ -203,6 +220,19 @@ const productSlice = createSlice({
         state.list.data = action.payload.data;
       })
       .addCase(getProductByRange.rejected, (state, action) => {
+        state.list.loading = false;
+        state.list.error = action.payload;
+      });
+
+      builder
+      .addCase(searchProduct.pending, (state) => {
+        state.list.loading = true;
+      })
+      .addCase(searchProduct.fulfilled, (state, action) => {
+        state.list.loading = false;
+        state.list.searchResults = action.payload;
+      })
+      .addCase(searchProduct.rejected, (state, action) => {
         state.list.loading = false;
         state.list.error = action.payload;
       });
