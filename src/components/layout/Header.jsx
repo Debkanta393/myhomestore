@@ -399,12 +399,6 @@ export function Header() {
                 {tabs.map((tab, index) => (
                   <motion.li
                     key={index}
-                    onMouseEnter={(e) => {
-                      setActiveTab(index);
-                      setActiveNav(index);
-                      dispatch(setTabSelected(tab.tab));
-                      setTabRect(e.currentTarget.getBoundingClientRect());
-                    }}
                     onClick={(e) => {
                       setActiveTab(index);
                       setActiveNav(index);

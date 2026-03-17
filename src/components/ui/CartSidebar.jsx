@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchCartItems,
+  selectCartCount,
   selectCartItems,
-  selectTotalQuantity,
+  selectTotalPrice,
 } from "../../features/cart/cart";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { X, Trash2 } from "lucide-react";
 import { addCartItems, removeCartItems } from "../../features/cart/cart";
@@ -12,8 +13,10 @@ import { addCartItems, removeCartItems } from "../../features/cart/cart";
 const CartSidebar = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems);
-  const totalQty = useSelector(selectTotalQuantity);
+  const totalPrice = useSelector(selectTotalPrice);
+  const totalCart = useSelector(selectCartCount);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  // const [totalPrice, setTotalPrice]=useState(0)
 
   useEffect(() => {
     if (isOpen) dispatch(fetchCartItems({ isAuthenticated }));
@@ -27,53 +30,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
   const shipping = subtotal > 500 ? 0 : 50;
   const total = subtotal - shipping;
 
-  console.log(cartItems)
-
   return (
-    // <div className={`fixed top-0 right-0 h-screen w-[500px] bg-white z-[9999] p-6 ${isOpen ? "translate-x-0" : "translate-x-full"} transition-transform`}>
-
-    //   {/* Header */}
-    //   <div className="flex justify-between items-center p-4 border-b">
-    //     <h2 className="text-2xl font-bold">
-    //       Your Cart <span className="text-gray-500 font-normal">({totalQty})</span>
-    //     </h2>
-    //     <button onClick={onClose} className="text-xl font-bold">✕</button>
-    //   </div>
-
-    //   {/* Cart Items */}
-    //   <div className="flex-1 overflow-y-auto p-4 space-y-4">
-    //     {cartItems.length === 0 ? (
-    //       <p className="text-center text-gray-400 mt-10">Your cart is empty</p>
-    //     ) : (
-    //       cartItems.map((item) => (
-    //         <CartItem key={item.productId} item={item} />
-    //       ))
-    //     )}
-    //   </div>
-
-    //   {/* Payment Summary */}
-    //   <div className="border-t p-4 space-y-2">
-    //     <h3 className="text-lg font-bold mb-3">Payment Summary</h3>
-    //     <div className="flex justify-between text-sm">
-    //       <span>Subtotal</span>
-    //       <span>${subtotal.toFixed(2)}</span>
-    //     </div>
-    //     <div className="flex justify-between text-sm">
-    //       <span>Shipping</span>
-    //       <span className={shipping === 0 ? "text-green-500" : ""}>
-    //         {shipping === 0 ? "FREE" : `$${shipping}`}
-    //       </span>
-    //     </div>
-    //     <div className="flex justify-between font-bold text-base border-t pt-2">
-    //       <span>Total</span>
-    //       <span>${(subtotal + shipping).toFixed(2)}</span>
-    //     </div>
-    //     <button className="w-full bg-[#998E8A] text-white py-3 mt-2 text-lg cursor-pointer">
-    //       Check Out
-    //     </button>
-    //   </div>
-    // </div>
-
     <motion.div
       initial={{ x: 400 }}
       animate={{ x: 0 }}
@@ -84,7 +41,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
       <h2 className="font-semibold text-3xl">
         Your Cart{" "}
         <span className="font-normal text-[#998e8a] text-2xl">
-          ({totalQty})
+          ({totalCart})
         </span>
       </h2>
       <div
@@ -99,17 +56,22 @@ const CartSidebar = ({ isOpen, onClose }) => {
         {cartItems?.length === 0 ? (
           <p className="text-center text-gray-400 mt-10">Your cart is empty</p>
         ) : (
-          cartItems?.map((item) => <CartItem key={item.productId} item={item} />)
+          cartItems?.map((item) => (
+            <CartItem key={item.productId} item={item} />
+          ))
         )}
       </div>
 
       {/* Payment summary */}
-      <div className="absolute bottom-0 left-6 right-6 h-3/12 bg-white" style={{zIndex: 10}}>
+      <div
+        className="absolute bottom-0 left-6 right-6 h-3/12 bg-white"
+        style={{ zIndex: 10 }}
+      >
         <h3 className="font-semibold text-2xl">Payment Summary</h3>
         <div className="space-y-2 mt-3">
           <div className="flex justify-between">
             <p>Subtotal</p>
-            <p>$30.00</p>
+            <p>$ {totalPrice}</p>
           </div>
           <div className="flex justify-between">
             <p>Shipping</p>
@@ -117,7 +79,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
           </div>
           <div className="flex justify-between font-bold">
             <p>Total</p>
-            <p>$27.00</p>
+            <p>$ {totalPrice}</p>
           </div>
         </div>
 
@@ -150,9 +112,9 @@ const CartItem = ({ item }) => {
   //   }
   // };
 
-  const handleRemove = () => {
-    dispatch(removeCartItems({ productId: item.productId, isAuthenticated }));
-    dispatch(fetchCartItems({ isAuthenticated }))
+  const handleRemove = ({productId, quantity, wastage}) => {
+    dispatch(removeCartItems({ productId, isAuthenticated, quantity, wastage }));
+    dispatch(fetchCartItems({ isAuthenticated }));
   };
 
   return (
@@ -178,7 +140,10 @@ const CartItem = ({ item }) => {
               <p>Qty: {item?.quantity}</p>
               <p>Size: XL</p>
             </div>
-            <div className="p-2 rounded hover:shadow-md cursor-pointer text-red-600" onClick={handleRemove}>
+            <div
+              className="p-2 rounded hover:shadow-md cursor-pointer text-red-600"
+              onClick={()=> handleRemove({productId: item.productId, quantity: item.quantity, wastage: item.wastage})}
+            >
               <Trash2 />
             </div>
           </div>

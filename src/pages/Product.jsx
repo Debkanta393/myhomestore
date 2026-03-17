@@ -9,6 +9,7 @@ import {
   HeartIcon,
   CircleCheckBig,
   Dot,
+  Phone,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Reviews from "../components/ui/Reviews";
@@ -192,6 +193,7 @@ export default function Product() {
   ];
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const { loading } = useSelector((state) => state.cart);
+  const [message, setMessage] = useState("");
   console.log(loading);
 
   // Check if user is authenticated from your auth slice
@@ -201,31 +203,31 @@ export default function Product() {
   // ##################### Deslugify range and product data before fetching ##################### //
 
   const deslugify = (slug) => {
-  return slug
-    .split("-")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-};
-console.log(deslugify(productName))
+    return slug
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+  console.log(deslugify(productName));
 
   // ##################### Fetch all products in the same range ##################### //
   useEffect(() => {
     const getRangeProduct = async () => {
-      const deslugifyRange=deslugify(range)
-      const deslugifyName=deslugify(productName)
+      const deslugifyRange = deslugify(range);
+      const deslugifyName = deslugify(productName);
       const response = await dispatch(getProductByRange(deslugifyRange));
-      console.log(response.payload.product)
+      console.log(response.payload.product);
       if (response.payload.success) {
         // Set app products in this range
         setRangeProducts(response.payload.product);
 
         // Set selected product
         const selectedproduct = response.payload.product.find(
-        (item) =>
-          item.productName?.toLowerCase().trim() ===
-          deslugifyName.toLowerCase().trim()
-      );
-        console.log(selectedproduct)
+          (item) =>
+            item.productName?.toLowerCase().trim() ===
+            deslugifyName.toLowerCase().trim(),
+        );
+        console.log(selectedproduct);
         setSelectedProduct(selectedproduct);
 
         // Set pack size
@@ -327,18 +329,17 @@ console.log(deslugify(productName))
       }));
 
       // Set price data
-      let subtotal =
-        activeTab && rangeProducts == 0
-          ? areaSupplied *
-            parseInt(
-              selectedProduct.supplyPrice ? selectedProduct.supplyPrice : 0,
-            )
-          : areaSupplied *
-            parseInt(
-              selectedProduct?.supplyInstallPrice
-                ? selectedProduct?.supplyInstallPrice
-                : 0,
-            );
+      let subtotal = priceTab[0].active
+        ? areaSupplied *
+          parseInt(
+            selectedProduct?.supplyInstallPrice
+              ? selectedProduct?.supplyInstallPrice
+              : 0,
+          )
+        : areaSupplied *
+          parseInt(
+            selectedProduct.supplyPrice ? selectedProduct.supplyPrice : 28,
+          );
 
       console.log(subtotal);
       //  Total Gst calculation
@@ -353,7 +354,7 @@ console.log(deslugify(productName))
       }));
     };
     calculatorHandler();
-  }, [calculatorData.totalNeeded, calculatorData.wastage]);
+  }, [calculatorData.totalNeeded, calculatorData.wastage, priceTab]);
 
   // ##################### Set background fixed when modal is open ##################### //
   useEffect(() => {
@@ -366,8 +367,30 @@ console.log(deslugify(productName))
 
   // ##################### Add to cart selected product ##################### //
   const handleAddToCart = () => {
-    let productId = selectedProduct?._id;
-    dispatch(addCartItems({ productId, isAuthenticated }));
+    const productId = selectedProduct?._id;
+    const totalMeterSquare = calculatorData.totalNeeded;
+    const wastage = calculatorData.wastage;
+    const totalPrice = priceData.total;
+
+    if (!calculatorData.totalNeeded) {
+      setMessage("Total size can't be empty");
+      setTimeout(() => {
+        window.scrollTo({
+          top: 500,
+          behavior: "smooth",
+        });
+      }, 0);
+    } else {
+      dispatch(
+        addCartItems({
+          productId,
+          isAuthenticated,
+          totalMeterSquare,
+          wastage,
+          totalPrice,
+        }),
+      );
+    }
   };
 
   // ##################### Product price tab ##################### //
@@ -378,6 +401,10 @@ console.log(deslugify(productName))
     }));
     setPriceTab(updatedTab);
   };
+
+
+  console.log(selectedProduct.features)
+  console.log(rangeProducts)
 
   return (
     <div className="w-full mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
@@ -411,7 +438,7 @@ console.log(deslugify(productName))
           transition={{ duration: 0.6 }}
           className="w-full"
         >
-          <div className="relative bg-gradient-to-br from-gray-100 to-gray-50 group shadow-xl">
+          <div className="relative group shadow-xl">
             <AnimatePresence mode="wait">
               {/* <motion.img
                 key={selectedImage}
@@ -424,16 +451,25 @@ console.log(deslugify(productName))
                 transition={{ duration: 0.3 }}
                 className="w-full h-[500px] object-cover"
               /> */}
-              <motion.div key={selectedImage} variants={imageVariants} initial="enter"
+              <motion.div
+                key={selectedImage}
+                variants={imageVariants}
+                initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.3 }}>
-                <LazyLoader image={selectedProduct?.productImage?.[selectedImage]?.url} alt={"Product image"} style={"w-full h-[500px] object-cover"}/>
+                transition={{ duration: 0.3 }}
+                className="w-full h-full"
+              >
+                <LazyLoader
+                  image={selectedProduct?.productImage?.[selectedImage]?.url}
+                  alt={"Product image"}
+                  style={"w-full h-full object-cover"}
+                />
               </motion.div>
             </AnimatePresence>
 
             {/* Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="h-full absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
             {/* Navigation buttons with glassmorphism */}
             <motion.button
@@ -489,7 +525,7 @@ console.log(deslugify(productName))
           </div>
 
           <div>
-            <h3 className="text-2xl font-semibold mt-16 mb-5">
+            <h3 className="text-2xl font-semibold mt-10 mb-5">
               Color Options in this range
             </h3>
             <div className="flex flex-wrap gap-x-1 xl:gap-x-3 gap-y-2 text-center">
@@ -497,18 +533,22 @@ console.log(deslugify(productName))
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.5 }}
+                  transition={{ duration: 0.3, delay: index * 0.2 }} // also reduced delay (0.5 feels slow)
                   key={index}
-                  className="border border-white hover:border-[#E7E9EB] p-1 cursor-pointer w-32 h-fit"
+                  className="border border-white hover:border-[#E7E9EB] p-1 cursor-pointer w-32 h-36 flex flex-col"
                   onClick={() => selectedProductHandler(product.productName)}
                 >
-                  {/* <img
-                    src={product.productImage[0].url}
-                    alt=""
-                    className="w-full h-8/12"
-                  /> */}
-                  <LazyLoader image={product.productImage[0].url} alt={product.productName} style={"w-full h-8/12"} />
-                  <p className="text-sm md:text-lg">{product.productName}</p>
+                  <div className="w-full h-3/4 overflow-hidden">
+                    <LazyLoader
+                      image={product.productImage[0].url}
+                      alt={product.productName}
+                      style="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <p className="text-sm md:text-lg h-1/4 truncate">
+                    {product.productName}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -625,7 +665,7 @@ console.log(deslugify(productName))
             className="text-md text-black p-2 flex flex-wrap items-center gap-2 m-0"
           >
             <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
-              SKU: SF-BB-130x14-SEL
+              SKU: {selectedProduct.sku}
             </div>
             <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
               🔥 BAL 29
@@ -710,7 +750,8 @@ console.log(deslugify(productName))
             {priceTab.map((price, index) => (
               <div
                 key={index}
-                className={`text-center space-y-3 ${price.active ? "bg-[#866053] text-white" : "bg-white"} p-4 col-span-1 lg:col-span-2 xl:col-span-1`}
+                className={`text-center space-y-3 h-full ${price.active ? "bg-[#866053] text-white" : "bg-white"} p-4 col-span-1 lg:col-span-2 xl:col-span-1 flex
+                flex-col items-center justify-center`}
                 onClick={() => priceTabHandler(price.id)}
               >
                 <h3
@@ -719,19 +760,26 @@ console.log(deslugify(productName))
                   {price.heading}
                 </h3>
 
-                <p className="text-2xl font-extrabold ">
-                  {price.id == 3 ? (
-                    "POA"
-                  ) : (
-                    <>
-                      {price.id === 1
-                        ? selectedProduct?.supplyInstallPrice
-                        : "28"}
-                      <span className="text-lg font-normal">
-                        /m <sup>2</sup>
-                      </span>
-                    </>
-                  )}
+                <p className="text-2xl font-extrabold text-center">
+                  {price.id == 1
+                    ? selectedProduct?.supplyInstallPrice != null && (
+                        <>
+                          {selectedProduct?.supplyInstallPrice}
+                          <span className="text-lg font-normal">
+                            /m <sup>2</sup>
+                          </span>
+                        </>
+                      )
+                    : price.id == 2
+                      ? selectedProduct?.supplyPrice && (
+                          <>
+                            {selectedProduct?.supplyPrice}
+                            <span className="text-lg font-normal">
+                              /m <sup>2</sup>
+                            </span>
+                          </>
+                        )
+                      : price.id == 3 && "POA"}
                 </p>
               </div>
             ))}
@@ -745,121 +793,185 @@ console.log(deslugify(productName))
             className="border border-[#E7E9EB] p-5"
           >
             {/* Selected price */}
-            <div className="space-y-2 mb-8">
-              <p>
-                <span className="text-3xl font-extrabold ">$28 </span>
-                <span className="text-md font-normal text-[#666E7C]">
-                  /m <sup>2</sup> + GST
-                </span>
-              </p>
-              <p className="text-[#666E7C] text-lg">
-                Supply + Install pricing includes professional installation by
-                our licensed Melbourne team.
-              </p>
-            </div>
+            {selectedProduct?.supplyInstallPrice && selectedProduct?.supplyPrice ? (
+              <div>
+                <div className="space-y-2 mb-8">
+                  <p>
+                    <span className="text-3xl font-extrabold ">
+                      {priceTab[0].active
+                        ? selectedProduct?.supplyInstallPrice
+                        : 28}
+                    </span>
+                    <span className="text-md font-normal text-[#666E7C]">
+                      /m <sup>2</sup> + GST
+                    </span>
+                  </p>
+                  <p className="text-[#666E7C] text-lg">
+                    Supply + Install pricing includes professional installation
+                    by our licensed Melbourne team.
+                  </p>
+                </div>
 
-            <h2 className="text-xl font-semibold">Coverage Calculator</h2>
-            <form action="" className="">
-              <div className="space-y-3 mt-5">
-                <div>
-                  <label htmlFor="" className="text-xl text-[#666E7C]">
-                    Total square meters needed
-                  </label>
-                  <br />
-                  <input
-                    type="text"
-                    placeholder="Enter m²"
-                    className="w-full border border-[#E7E9EB] p-3 mt-2 active:border-[#E7E9EB] focus:border-[#E7E9EB]"
-                    name="totalNeeded"
-                    onChange={(e) => calculatorDataHandler(e)}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="wastage" className="text-lg text-[#666E7C]">
-                    Wastage
-                  </label>
-                  <div className="flex gap-5 mt-3 items-center">
-                    <div className="flex items-center gap-2">
+                <h2 className="text-xl font-semibold">Coverage Calculator</h2>
+                <form action="" className="">
+                  <div className="space-y-3 mt-5">
+                    <div>
+                      <label htmlFor="" className="text-xl text-[#666E7C]">
+                        Total square meters needed
+                      </label>
+                      <br />
                       <input
-                        type="radio"
-                        name="wastage"
-                        id="0%"
-                        value={0}
+                        type="text"
+                        placeholder="Enter m²"
+                        className="w-full border border-[#E7E9EB] p-3 mt-2 active:border-[#E7E9EB] focus:border-[#E7E9EB]"
+                        name="totalNeeded"
                         onChange={(e) => calculatorDataHandler(e)}
-                        className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
                       />
-                      <label htmlFor="wastage">0%</label>
+                      {message && calculatorData.totalNeeded <= 0 && (
+                        <p className="text-lg font-medium text-red-600 mt-2">
+                          {message}
+                        </p>
+                      )}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="wastage"
-                        id="10%"
-                        value={10}
-                        onChange={(e) => calculatorDataHandler(e)}
-                        className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
-                        checked={calculatorData.wastage === 10}
-                      />
-                      <label htmlFor="">10%</label>
+                    <div>
+                      <label
+                        htmlFor="wastage"
+                        className="text-lg text-[#666E7C]"
+                      >
+                        Wastage
+                      </label>
+                      <div className="flex gap-5 mt-3 items-center">
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="wastage"
+                            id="0%"
+                            value={0}
+                            onChange={(e) => calculatorDataHandler(e)}
+                            className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
+                          />
+                          <label htmlFor="wastage">0%</label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="wastage"
+                            id="10%"
+                            value={10}
+                            onChange={(e) => calculatorDataHandler(e)}
+                            className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
+                            checked={calculatorData.wastage === 10}
+                          />
+                          <label htmlFor="">10%</label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="wastage"
+                            id="15%"
+                            value={15}
+                            onChange={(e) => calculatorDataHandler(e)}
+                            className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
+                          />
+                          <label htmlFor="">15%</label>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="wastage"
-                        id="15%"
-                        value={15}
-                        onChange={(e) => calculatorDataHandler(e)}
-                        className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
-                      />
-                      <label htmlFor="">15%</label>
-                    </div>
+                    <p className="text-lg mt-5 text-black font-medium bg-[#FCF8F5] p-3 w-fit">
+                      Pack size:{" "}
+                      <b>
+                        {packSize} m<sup>2</sup> per carton
+                      </b>
+                    </p>
                   </div>
+                  <div className="mt-5 space-y-2">
+                    <p className="flex justify-between items-center font-semibold text-xl">
+                      <span className="text-lg font-normal text-[#666E7C]">
+                        Cartons Required:
+                      </span>{" "}
+                      {sizeData.cartons}
+                    </p>
+                    <p className="flex justify-between items-center font-semibold text-xl">
+                      <span className="text-lg font-normal text-[#666E7C]">
+                        Area Supplied:
+                      </span>
+                      {sizeData.area && `${sizeData.area} m²`}
+                    </p>
+                  </div>
+                </form>
+                {/* Price summery section */}
+                <motion.div className="space-y-4 mt-10 bg-[#F5F0ED] p-6">
+                  <h3 className="text-2xl font-semibold">Price Summary</h3>
+                  <div className="space-y-2">
+                    <p className="text-lg text-[#666E7C] flex justify-between items-center">
+                      Subtotal (Supply + Install):{" "}
+                      <span className="text-xl font-semibold text-black">
+                        {`$ ${priceData.subTotal}`}
+                      </span>
+                    </p>
+                    <p className="text-lg text-[#666E7C] flex justify-between items-center">
+                      GST (10%):{" "}
+                      <span className="text-xl font-semibold text-black">{`$ ${calculatorData.totalNeeded ? priceData.gst : 0}`}</span>
+                    </p>
+                    <div className="h-[1px] w-full bg-[#E7E9EB]"></div>
+                    <p className="text-lg text-[#666E7C] flex justify-between items-center">
+                      TOTAL{" "}
+                      <span className="text-xl font-semibold text-black">
+                        {`$ ${priceData.total}`}
+                      </span>
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+            ) : priceTab[1].active && (
+              <div className="bg-[#F9F6F4] border border-[#E7E9EB] rounded-2xl p-6 mt-6 space-y-5">
+                {/* Heading */}
+                <h3 className="text-xl font-semibold text-black">
+                  Supply Only pricing is available in-store and over the phone
+                  only.
+                </h3>
+
+                {/* Description */}
+                <p className="text-[#666E7C] text-base leading-relaxed">
+                  Due to brand partner agreements, online pricing for
+                  supply-only orders on this product is not available here. Our
+                  team can offer you competitive supply-only pricing directly.
+                </p>
+
+                {/* Contact Section */}
+                <div className="bg-white border border-[#E7E9EB] rounded-xl p-4 space-y-2">
+                  <p className="text-lg font-medium text-black flex items-center gap-2">
+                    <Phone /> Call us on{" "}
+                    <a
+                      href="tel:YOUR_PHONE_NUMBER"
+                      className="text-[#8A6A5B] font-semibold"
+                    >
+                      YOUR_PHONE_NUMBER
+                    </a>
+                  </p>
+                  <p className="text-sm text-[#666E7C]">
+                    Mon–Fri 8am–8pm · Sat 9am–5pm
+                  </p>
                 </div>
-                <p className="text-lg mt-5 text-black font-medium bg-[#FCF8F5] p-3 w-fit">
-                  Pack size:{" "}
-                  <b>
-                    {packSize} m<sup>2</sup> per carton
-                  </b>
-                </p>
+
+                {/* CTA Button */}
+                <div className="space-y-3">
+                  <button className="w-full bg-[#8A6A5B] hover:bg-[#755645] text-white py-3 rounded-xl font-semibold transition">
+                    Call to Get Supply Only Price
+                  </button>
+
+                  {/* Secondary Link */}
+                  <p className="text-sm text-center">
+                    <a
+                      href="#"
+                      className="text-[#8A6A5B] hover:underline font-medium"
+                    >
+                      Or request a callback and we’ll call you →
+                    </a>
+                  </p>
+                </div>
               </div>
-              <div className="mt-5 space-y-2">
-                <p className="flex justify-between items-center font-semibold text-xl">
-                  <span className="text-lg font-normal text-[#666E7C]">
-                    Cartons Required:
-                  </span>{" "}
-                  {sizeData.cartons}
-                </p>
-                <p className="flex justify-between items-center font-semibold text-xl">
-                  <span className="text-lg font-normal text-[#666E7C]">
-                    Area Supplied:
-                  </span>
-                  {sizeData.area && `${sizeData.area} m²`}
-                </p>
-              </div>
-            </form>
-            {/* Price summery section */}
-            <motion.div className="space-y-4 mt-10 bg-[#F5F0ED] p-6">
-              <h3 className="text-2xl font-semibold">Price Summary</h3>
-              <div className="space-y-2">
-                <p className="text-lg text-[#666E7C] flex justify-between items-center">
-                  Subtotal (Supply + Install):{" "}
-                  <span className="text-xl font-semibold text-black">
-                    {`$ ${priceData.subTotal}`}
-                  </span>
-                </p>
-                <p className="text-lg text-[#666E7C] flex justify-between items-center">
-                  GST (10%):{" "}
-                  <span className="text-xl font-semibold text-black">{`$ ${calculatorData.totalNeeded ? priceData.gst : 0}`}</span>
-                </p>
-                <div className="h-[1px] w-full bg-[#E7E9EB]"></div>
-                <p className="text-lg text-[#666E7C] flex justify-between items-center">
-                  TOTAL{" "}
-                  <span className="text-xl font-semibold text-black">
-                    {`$ ${priceData.total}`}
-                  </span>
-                </p>
-              </div>
-            </motion.div>
+            )}
           </motion.div>
 
           {/* CTA */}
@@ -1023,34 +1135,27 @@ console.log(deslugify(productName))
               </div>
             )}
 
-            {activeTab === "Additional Information" && (
-              <div className="space-y-3">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="space-y-2"
-                >
-                  <AdditionalInformation
-                    label="SKU"
-                    value={selectedProduct.sku}
-                  />
-                  <AdditionalInformation
-                    label="Thikness"
-                    value={selectedProduct.thickness}
-                  />
-                  <AdditionalInformation
-                    label="Category"
-                    value={selectedProduct.category}
-                  />
-                  <AdditionalInformation
-                    label="Range"
-                    value={selectedProduct.range}
-                  />
-                  <AdditionalInformation
-                    label="Brand"
-                    value={selectedProduct.brand}
-                  />
-                </motion.div>
+            {activeTab === "Dimensions" && (
+              <div className="space-y-4">
+                <p className="text-lg">{selectedProduct?.details.dimensions}</p>
+              </div>
+            )}
+
+            {activeTab === "Installation" && (
+              <div className="space-y-4">
+                <p className="text-lg">{selectedProduct?.details.installation}</p>
+              </div>
+            )}
+
+            {activeTab === "Warranty" && (
+              <div className="space-y-4">
+                <p className="text-lg">{selectedProduct?.details.warranty}</p>
+              </div>
+            )}
+
+            {activeTab === "Delivery" && (
+              <div className="space-y-4">
+                <p className="text-lg">{selectedProduct?.details.delivery}</p>
               </div>
             )}
           </motion.div>
@@ -1064,7 +1169,7 @@ console.log(deslugify(productName))
           </h2>
           <AnimatePresence mode="wait">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-              {willWork.map((item, index) => (
+              {selectedProduct?.features?.map((item, index) => (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1073,13 +1178,13 @@ console.log(deslugify(productName))
                   className="p-10 bg-white border-t-2 border-[#8A6A5B] space-y-4"
                 >
                   <CircleCheckBig color="#8A6A5B" />
-                  <p className="text-xl">{item.heading}</p>
+                  <p className="text-2xl">{item.title}</p>
                   <span
                     className={`p-2 text-xs ${item.btnType == "success" ? "bg-[#E3E4DD] text-[#4C6647]" : "bg-[#EFE8DA] text-[#B2873C]"}`}
                   >
                     {item.btnText}
                   </span>
-                  <p className="text-lg mt-5">{item.subHeading}</p>
+                  <p className="text-lg mt-5">{item.description}</p>
                 </motion.div>
               ))}
             </div>

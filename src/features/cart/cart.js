@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../../api/axios"
-import {ALL_CART, ADD_CART, MERGE_CART, PRODUCT_FOR_CARTS, DELETE_CART} from "../../api/apis"
+import api from "../../api/axios";
+import {
+  ALL_CART,
+  ADD_CART,
+  MERGE_CART,
+  PRODUCT_FOR_CARTS,
+  DELETE_CART,
+} from "../../api/apis";
 
 const CART_KEY = "guest_cart";
 
@@ -23,7 +29,6 @@ const saveGuestCart = (cart) => {
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
   async ({ isAuthenticated }, { rejectWithValue }) => {
-    
     if (isAuthenticated) {
       try {
         const res = await api.get(ALL_CART, { withCredentials: true });
@@ -41,20 +46,21 @@ export const fetchCartItems = createAsyncThunk(
         // Fetch product details for all guest cart items
         const res = await api.post(PRODUCT_FOR_CARTS, { productIds });
 
-        console.log(res)
+        console.log(res);
 
-        // Merge product details with quantity from localStorage
+        // Merge product details with quantity and price from localStorage
         const enrichedCart = guestCart.map((cartItem) => {
           const product = res.data.products.find(
-            (p) => p._id === cartItem.productId
+            (p) => p._id === cartItem.productId,
           );
           return {
             productId: cartItem.productId,
             name: product?.productName || "",
-            price: product?.supplyInstallPrice || 0,
+            price: cartItem.price || 0,
             image: product?.productImage?.[0] || "",
             quantity: cartItem.quantity,
-            totalPrice: (product?.price || 0) * cartItem.quantity,
+            wastage: cartItem.wastage,
+            totalPrice: (cartItem.price || 0) * cartItem.quantity,
           };
         });
 
@@ -63,74 +69,114 @@ export const fetchCartItems = createAsyncThunk(
         return rejectWithValue("Failed to fetch guest cart products");
       }
     }
-  }
+  },
 );
-
 
 // ─── Add to Cart ─────────────────────────────────────────────────
 export const addCartItems = createAsyncThunk(
   "cart/addCartItems",
-  async ({ productId, isAuthenticated }, { rejectWithValue }) => {
+  async (
+    { productId, isAuthenticated, totalMeterSquare, totalPrice, wastage },
+    { rejectWithValue },
+  ) => {
     if (isAuthenticated) {
       try {
-        const res = await axios.post(
+        const res = await api.post(
           ADD_CART,
-          { productId },
-          { withCredentials: true }
+          { productId, totalMeterSquare, totalPrice, wastage },
+          { withCredentials: true },
         );
         return { items: res.data.cart, isGuest: false };
       } catch (error) {
-        return rejectWithValue(error.response?.data?.message || "Failed to add to cart");
+        return rejectWithValue(
+          error.response?.data?.message || "Failed to add to cart",
+        );
       }
     } else {
       const currentCart = loadGuestCart();
-      const exists = currentCart.find((item) => item.productId === productId);
+      const exists = currentCart.find(
+        (item) =>
+          item.productId === productId &&
+          item.quantity === totalMeterSquare &&
+          item.wastage === wastage,
+      );
       let updatedCart;
 
       if (exists) {
         updatedCart = currentCart.map((item) =>
-          item.productId === productId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+          item.productId === productId &&
+          item.quantity === totalMeterSquare &&
+          item.wastage === wastage
+            ? {
+                ...item,
+                quantity: Number(item.quantity) + Number(totalMeterSquare),
+                price: Number(item.price) + Number(totalPrice),
+              }
+            : item,
         );
       } else {
         updatedCart = [
           ...currentCart,
-          { productId, quantity: 1, addedAt: new Date() },
+          {
+            productId,
+            quantity: totalMeterSquare,
+            price: totalPrice,
+            wastage,
+            addedAt: new Date(),
+          },
         ];
       }
 
       saveGuestCart(updatedCart);
       return { items: updatedCart, isGuest: true };
     }
-  }
+  },
 );
-
 
 // ─── Add to Cart ─────────────────────────────────────────────────
 export const removeCartItems = createAsyncThunk(
   "cart/deleteCart",
-  async ({ productId, isAuthenticated }, { rejectWithValue }) => {
+  async (
+    { productId, isAuthenticated, quantity, wastage },
+    { rejectWithValue },
+  ) => {
+    console.log({
+      productId,
+      quantity,
+      wastage,
+    });
     if (isAuthenticated) {
       try {
-        const res = await axios.post(
-          `${DELETE_CART}/${productId}`,
-          { withCredentials: true }
+        const res = await api.post(
+          DELETE_CART,
+          { productId, quantity, wastage },
+          {
+            withCredentials: true,
+          },
         );
         return { items: res.data.cart, isGuest: false };
       } catch (error) {
-        return rejectWithValue(error.response?.data?.message || "Failed to remove from cart");
+        return rejectWithValue(
+          error.response?.data?.message || "Failed to remove from cart",
+        );
       }
     } else {
       const currentCart = loadGuestCart();
-      const updatedCart=currentCart.filter((item)=> item.productId != productId)
+      const updatedCart = currentCart.filter(
+        (item) =>
+          !(
+            String(item.productId) === String(productId) &&
+            Number(item.quantity) === Number(quantity) &&
+            Number(item.wastage) === Number(wastage)
+          ),
+      );
 
-      console.log(updatedCart)
+      console.log(updatedCart);
 
       saveGuestCart(updatedCart);
       return { items: updatedCart, isGuest: true };
     }
-  }
+  },
 );
 
 // ─── Merge Guest Cart on Login ───────────────────────────────────
@@ -140,11 +186,7 @@ export const mergeCartOnLogin = createAsyncThunk(
     try {
       const guestCart = loadGuestCart();
       if (guestCart.length > 0) {
-        await axios.post(
-          MERGE_CART,
-          { guestCart },
-          { withCredentials: true }
-        );
+        await axios.post(MERGE_CART, { guestCart }, { withCredentials: true });
         localStorage.removeItem(CART_KEY); // clear guest cart after merge
       }
       // After merge, fetch fresh cart from DB
@@ -152,14 +194,14 @@ export const mergeCartOnLogin = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "Merge failed");
     }
-  }
+  },
 );
 
 // ─── Selectors ───────────────────────────────────────────────────
 export const selectCartItems = (state) => state.cart.items;
 export const selectCartCount = (state) => state.cart.items.length;
-export const selectTotalQuantity = (state) =>
-  state.cart.items.reduce((total, item) => total + item.quantity, 0);
+export const selectTotalPrice = (state) =>
+  state.cart.items.reduce((total, item) => total + item.price, 0);
 export const selectIsGuest = (state) => state.cart.isGuest;
 export const selectCartLoading = (state) => state.cart.loading;
 export const selectCartError = (state) => state.cart.error;

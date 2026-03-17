@@ -9,6 +9,7 @@ export default function LazyLoader({image, alt, style}) {
       alt={alt}
       effect="blur"
       className={style}
+      wrapperClassName="w-full h-full block"
     />
   );
 }

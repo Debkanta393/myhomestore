@@ -74,7 +74,7 @@ export default function ProductGrid({
                 variants={cardVariants}
                 className="group relative bg-white overflow-hidden transition-all duration-300 ease-out
                   border border-gray-300 hover:-translate-y-1 cursor-pointer z-0"
-                onClick={() => navigate(`/${item.range.toLowerCase()}/${slugify(item.productName)}`)}
+                onClick={() => navigate(`/${slugify(item.range)}/${slugify(item.productName)}`)}
               >
                 {/* Image */}
                 <div className="relative">
@@ -117,7 +117,7 @@ export default function ProductGrid({
                     <p className="text-lg xl:text-2xl font-semibold text-gray-900 line-clamp-1">
                       {item.productName}
                     </p>
-                    <div className="flex items-center gap-20">
+                    <div className="">
                       <p className="text-md xl:text-lg text-gray-500 line-clamp-1">
                         <span className="font-semibold">Type:</span>{" "}
                         {item.category}
