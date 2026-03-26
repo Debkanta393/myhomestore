@@ -3,7 +3,6 @@ import {
   ChevronRight,
   ChevronLeft,
   Star,
-  Heart,
   Share2,
   ZoomIn,
   HeartIcon,
@@ -21,7 +20,6 @@ import { addCartItems } from "../features/cart/cart";
 import LazyLoader from "../components/ui/LazyLoader";
 import { v4 as uuidv4 } from "uuid";
 
-// ##################### Other products ##################### //
 const products = [
   {
     id: 1,
@@ -33,9 +31,6 @@ const products = [
     price: 100,
     rating: 4.5,
     inStock: true,
-    color: "Natural Oak",
-    size: "M",
-    material: "Hybrid Core",
     isNew: true,
     onSale: false,
     tags: ["Premium", "Best Seller"],
@@ -50,9 +45,6 @@ const products = [
     price: 250,
     rating: 4.8,
     inStock: true,
-    color: "Dark Walnut",
-    size: "L",
-    material: "Engineered Wood",
     isNew: false,
     onSale: true,
     tags: ["Featured"],
@@ -67,9 +59,6 @@ const products = [
     price: 150,
     rating: 5.0,
     inStock: false,
-    color: "White Wash",
-    size: "XL",
-    material: "Bamboo Composite",
     isNew: true,
     onSale: false,
     tags: ["Eco-Friendly"],
@@ -84,75 +73,22 @@ const products = [
     price: 80,
     rating: 4.2,
     inStock: true,
-    color: "Concrete Grey",
-    size: "S",
-    material: "SPC Core",
     isNew: false,
     onSale: true,
     tags: ["Budget Friendly"],
   },
 ];
 
-const willWork = [
-  {
-    heading: "Concrete Slab",
-    subHeading:
-      "Use 15mm plywood subfloor. Slab moisture must be under 5.5%. Apply flexible polyurethane adhesive and secret nail fix. Finished height: 26mm.",
-    btnText: "✓ SUITABLE",
-    btnType: "success",
-  },
-  {
-    heading: "Timber Joists",
-    subHeading:
-      "Install 15mm ply or 19mm particleboard. Fix sheeting to joists with screws and adhesive. Use 14mm Blackbutt perpendicular to joists. Recommended: full trowel adhesive + secret nail.",
-    btnText: "✓ SUITABLE",
-    btnType: "success",
-  },
-  {
-    heading: "Underfloor Heating",
-    subHeading:
-      "Solid timber works with underfloor heating but needs care. Max temp 27°C. Heat slowly. Contact us; engineered Blackbutt may suit heated slabs better.",
-    btnText: "⚠ CHECK FIRST",
-    btnType: "warning",
-  },
-  {
-    heading: "Apartments",
-    subHeading:
-      "Solid Blackbutt 14mm is great for concrete slabs. Check strata requirements for acoustic ratings — an underlay or direct-stick may be needed. We can advise on compliant solutions.",
-    btnText: "✓ SUITABLE",
-    btnType: "success",
-  },
-  {
-    heading: "Pets & Kids",
-    subHeading:
-      "Janka 9 kN makes Blackbutt resistant to claws and foot traffic. The 14mm construction can be re-sanded when scratches accumulate.",
-    btnText: "✓ SUITABLE",
-    btnType: "success",
-  },
-  {
-    heading: "Wet Areas",
-    subHeading:
-      "Solid timber isn't suitable for wet areas. For adjacent spaces, maintain expansion gaps and treat with penetrating oil. Consider Supacore Hybrid.",
-    btnText: "⚠ NOT RECOMMENDED",
-    btnType: "warning",
-  },
-];
-
 export default function Product() {
-  // ##################### Get Range and product name from URI ##################### //
   const params = useParams();
   const { range, productName } = params;
 
-  // ##################### State hooks ##################### //
   const [selectedImage, setSelectedImage] = useState(0);
   const [calculatorData, setCalculatorData] = useState({
     totalNeeded: null,
     wastage: 10,
   });
-  const [sizeData, setSizeData] = useState({
-    cartons: "",
-    area: "",
-  });
+  const [sizeData, setSizeData] = useState({ cartons: "", area: "" });
   const [priceData, setPriceData] = useState({
     subTotal: "0",
     gst: "10",
@@ -162,27 +98,12 @@ export default function Product() {
   const [packSize, setPackSize] = useState();
   const [showZoom, setShowZoom] = useState(false);
   const [priceTab, setPriceTab] = useState([
-    {
-      id: 1,
-      heading: "Supply + Install",
-      desc: "",
-      active: true,
-    },
-    {
-      id: 2,
-      heading: "Supply Only",
-      desc: "",
-      active: false,
-    },
-    {
-      id: 3,
-      heading: "Request Quote",
-      desc: "POA",
-      active: false,
-    },
+    { id: 1, heading: "Supply + Install", desc: "", active: true },
+    { id: 2, heading: "Supply Only", desc: "", active: false },
+    { id: 3, heading: "Request Quote", desc: "POA", active: false },
   ]);
   const [rangeProducts, setRangeProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const tabs = [
     "Description",
@@ -195,63 +116,48 @@ export default function Product() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const { loading } = useSelector((state) => state.cart);
   const [message, setMessage] = useState("");
-  console.log(loading);
-
-  // Check if user is authenticated from your auth slice
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  console.log(isAuthenticated);
 
-  // ##################### Deslugify range and product data before fetching ##################### //
-  const deslugify = (slug) => {
-    return slug
+  const deslugify = (slug) =>
+    slug
       .split("-")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
-  };
-  console.log(deslugify(productName));
 
-  // ##################### Fetch all products in the same range ##################### //
+  // ✅ FIX #9: added range and productName to deps
   useEffect(() => {
     const getRangeProduct = async () => {
       const deslugifyRange = deslugify(range);
       const deslugifyName = deslugify(productName);
       const response = await dispatch(getProductByRange(deslugifyRange));
-      console.log(response.payload.product);
-      if (response.payload.success) {
+      if (response.payload?.success) {
         setRangeProducts(response.payload.product);
-
-        const selectedproduct = response.payload.product.find(
+        const found = response.payload.product.find(
           (item) =>
             item.productName?.toLowerCase().trim() ===
             deslugifyName.toLowerCase().trim(),
         );
-        console.log(selectedproduct);
-        setSelectedProduct(selectedproduct);
-
-        let packsize = parseFloat(selectedproduct?.packSize.split("-")[0]);
-        setPackSize(packsize);
+        setSelectedProduct(found ?? null);
+        if (found?.packSize) {
+          setPackSize(parseFloat(found.packSize.split("-")[0]));
+        }
       }
     };
     getRangeProduct();
-  }, [dispatch]);
+  }, [dispatch, range, productName]);
 
-  console.log(rangeProducts);
-
-  // ##################### Previous image handler ##################### //
   const handlePrevImage = () => {
     setSelectedImage((prev) =>
-      prev > 0 ? prev - 1 : selectedProduct?.productImage?.length - 1,
+      prev > 0 ? prev - 1 : (selectedProduct?.productImage?.length ?? 1) - 1,
     );
   };
 
-  // ##################### Next image handler ##################### //
   const handleNextImage = () => {
     setSelectedImage((prev) =>
-      prev < selectedProduct?.productImage?.length - 1 ? prev + 1 : 0,
+      prev < (selectedProduct?.productImage?.length ?? 1) - 1 ? prev + 1 : 0,
     );
   };
 
-  // ##################### Framer motion animations ##################### //
   const imageVariants = {
     enter: { opacity: 0, scale: 0.95 },
     center: { opacity: 1, scale: 1 },
@@ -260,163 +166,94 @@ export default function Product() {
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.4,
-        ease: "easeOut",
-      },
-    },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
   };
 
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: {
-        duration: 0.3,
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
+      transition: { duration: 0.3, staggerChildren: 0.1, delayChildren: 0.2 },
     },
   };
 
-  // ##################### Change product in the same range ##################### //
-  const selectedProductHandler = (productName) => {
-    const product = rangeProducts?.find(
-      (item) => item.productName === productName,
-    );
-    setSelectedProduct(product);
-
-    setTimeout(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }, 0);
+  const selectedProductHandler = (name) => {
+    const product = rangeProducts?.find((item) => item.productName === name);
+    setSelectedProduct(product ?? null);
+    setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 0);
   };
 
-  // ##################### Calculation handler ##################### //
   const calculatorDataHandler = (e) => {
-    console.log(e.target.name);
-    setCalculatorData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setCalculatorData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  // ✅ FIX #3: corrected wastage formula
   useEffect(() => {
-    if (!calculatorData.totalNeeded) {
-      return;
-    }
-    console.log(calculatorData.totalNeeded * (calculatorData.wastage / 100));
-    const calculatorHandler = () => {
-      let result =
-        calculatorData.wastage != 0
-          ? calculatorData.totalNeeded * (calculatorData.wastage / 100)
-          : calculatorData.totalNeeded;
-      console.log(result);
+    if (!calculatorData.totalNeeded) return;
 
-      setSizeData((prev) => ({
-        ...prev,
-        cartons: Math.ceil(result / packSize),
-        area: result,
-      }));
+    const format2 = (num) => parseFloat(Number(num || 0).toFixed(2));
+    let totalNeeded = Number(calculatorData.totalNeeded) || 0;
+    let wastage = Number(calculatorData.wastage) || 0;
+    let pack = Number(packSize) || 1;
 
-      let subtotal = priceTab[0].active
-        ? result *
-          parseInt(
-            selectedProduct?.supplyInstallPrice
-              ? selectedProduct?.supplyInstallPrice
-              : 0,
-          )
-        : result *
-          parseInt(
-            selectedProduct.supplyPrice ? selectedProduct.supplyPrice : 28,
-          );
+    // Correct: total area including wastage percentage
+    let result = totalNeeded * (1 + wastage / 100);
+    const twoDigitValue = format2(result);
 
-      console.log(subtotal);
-      let totalGst = subtotal * (10 / 100);
-      console.log(totalGst);
+    setSizeData({
+      cartons: Math.ceil(twoDigitValue / pack),
+      area: twoDigitValue,
+    });
 
-      setPriceData((prev) => ({
-        ...prev,
-        subTotal: subtotal,
-        gst: totalGst,
-        total: subtotal + totalGst,
-      }));
-    };
-    calculatorHandler();
+    let price = priceTab[0].active
+      ? Number(selectedProduct?.supplyInstallPrice) || 0
+      : Number(selectedProduct?.supplyPrice) || 28;
+
+    let subtotal = format2(twoDigitValue * price);
+    let totalGst = format2(subtotal * 0.1);
+
+    setPriceData({
+      subTotal: subtotal,
+      gst: totalGst,
+      total: format2(subtotal + totalGst),
+    });
   }, [calculatorData.totalNeeded, calculatorData.wastage, priceTab]);
 
-  // ##################### Set background fixed when modal is open ##################### //
   useEffect(() => {
-    if (showModal) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = showModal ? "hidden" : "auto";
   }, [showModal]);
 
-  // ##################### Add to cart selected product ##################### //
   const handleAddToCart = () => {
-    const productId = selectedProduct?._id;
-    const totalMeterSquare = calculatorData.totalNeeded;
-    const wastage = calculatorData.wastage;
-    const totalPrice = priceData.total;
-    const cartonsRequired = sizeData.cartons;
-    const areaSupplied = sizeData.area;
-    const selectedService = priceTab.find(
-      (item) => item.active == true,
-    ).heading;
-
     if (!calculatorData.totalNeeded) {
       setMessage("Total size can't be empty");
-      setTimeout(() => {
-        window.scrollTo({
-          top: 500,
-          behavior: "smooth",
-        });
-      }, 0);
-    } else {
-      dispatch(
-        addCartItems({
-          productId,
-          id: uuidv4(),
-          isAuthenticated,
-          totalMeterSquare,
-          wastage,
-          totalPrice,
-          cartonsRequired,
-          areaSupplied,
-          selectedService,
-        }),
-      );
+      setTimeout(() => window.scrollTo({ top: 500, behavior: "smooth" }), 0);
+      return;
     }
-    setCalculatorData({
-      totalNeeded: null,
-      wastage: 10,
-    });
+
+    dispatch(
+      addCartItems({
+        productId: selectedProduct?._id,
+        id: uuidv4(),
+        isAuthenticated,
+        totalMeterSquare: calculatorData.totalNeeded,
+        wastage: calculatorData.wastage,
+        totalPrice: priceData.total,
+        cartonsRequired: sizeData.cartons,
+        areaSupplied: sizeData.area,
+        selectedService: priceTab.find((item) => item.active)?.heading,
+      }),
+    );
+
+    setCalculatorData({ totalNeeded: null, wastage: 10 });
   };
 
-  console.log(calculatorData.totalNeeded);
-
-  // ##################### Product price tab ##################### //
   const priceTabHandler = (id) => {
-    const updatedTab = priceTab.map((price) => ({
-      ...price,
-      active: price.id === id,
-    }));
-    setPriceTab(updatedTab);
+    setPriceTab((prev) => prev.map((p) => ({ ...p, active: p.id === id })));
   };
-
-  console.log(selectedProduct);
-  console.log(rangeProducts);
 
   return (
     <div className="w-full mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
-      {/* Breadcrumb with glassmorphism */}
+      {/* Breadcrumb */}
       <div className="w-10/12 mx-auto mb-10 pt-6">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -439,7 +276,7 @@ export default function Product() {
 
       {/* Main Product Section */}
       <div className="w-10/12 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 relative">
-        {/* Image Gallery with enhanced interactions */}
+        {/* Image Gallery */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
@@ -459,16 +296,14 @@ export default function Product() {
               >
                 <LazyLoader
                   image={selectedProduct?.productImage?.[selectedImage]?.url}
-                  alt={"Product image"}
-                  style={"w-full h-full object-cover"}
+                  alt="Product image"
+                  style="w-full h-full object-cover"
                 />
               </motion.div>
             </AnimatePresence>
 
-            {/* Gradient overlays */}
             <div className="h-full absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-            {/* Navigation buttons with glassmorphism */}
             <motion.button
               whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.95 }}
@@ -487,7 +322,6 @@ export default function Product() {
               <ChevronRight size={20} className="text-gray-800" />
             </motion.button>
 
-            {/* Quick action buttons */}
             <div className="absolute top-5 right-5 flex flex-col gap-3 z-20">
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 5 }}
@@ -506,13 +340,13 @@ export default function Product() {
               </motion.button>
             </div>
 
-            {/* Image counter */}
+            {/* Image counter dots */}
             <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center">
-              {[...Array(selectedProduct?.productImage?.length)].map(
+              {[...Array(selectedProduct?.productImage?.length ?? 0)].map(
                 (_, index) => (
                   <span
-                    className={`w-10 h-10 ${selectedImage == index ? "text-white" : "text-gray-400"}`}
                     key={index}
+                    className={`w-10 h-10 ${selectedImage === index ? "text-white" : "text-gray-400"}`}
                   >
                     <Dot size={50} />
                   </span>
@@ -521,21 +355,27 @@ export default function Product() {
             </div>
           </div>
 
-          {/* Other images of this product */}
+          {/* ✅ FIX #6: overflow-x-auto for thumbnails on mobile */}
           <motion.div className="mt-10">
-            <div className="flex items-center gap-5 mt-5">
+            <div className="flex items-center gap-3 mt-5 overflow-x-auto pb-2">
               {selectedProduct?.productImage?.map((image, index) => (
-                <motion.div className="w-44 h-44 rounded">
+                // ✅ FIX #2: key prop added
+                <motion.div
+                  key={index}
+                  className="w-20 h-20 sm:w-28 sm:h-28 lg:w-36 lg:h-36 rounded shrink-0 cursor-pointer border-2 border-transparent hover:border-[#8A6A5B] transition-colors"
+                  onClick={() => setSelectedImage(index)}
+                >
                   <LazyLoader
                     image={image.url}
                     alt={`image ${index}`}
-                    style={"w-full h-full object-cover"}
+                    style="w-full h-full object-cover"
                   />
                 </motion.div>
               ))}
             </div>
           </motion.div>
 
+          {/* Color Options */}
           <div>
             <h3 className="text-xl sm:text-2xl font-semibold mt-10 mb-5">
               Color Options in this range
@@ -545,12 +385,13 @@ export default function Product() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.2 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
                   key={index}
-                  className="border border-white hover:border-[#E7E9EB] p-1 cursor-pointer w-28 sm:w-36 h-48 flex flex-col"
+                  // ✅ FIX #7: responsive sizing
+                  className="border border-white hover:border-[#E7E9EB] p-1 cursor-pointer w-32 xl:w-40 h-40 xl:h-48 flex flex-col"
                   onClick={() => selectedProductHandler(product.productName)}
                 >
-                  <div className="w-full h-3/4 overflow-hidden">
+                  <div className="overflow-hidden flex-1">
                     <LazyLoader
                       image={
                         product.productImage[1]
@@ -558,10 +399,10 @@ export default function Product() {
                           : product.productImage[0].url
                       }
                       alt={product.productName}
-                      style="w-32 h-32 object-cover rounded-full"
+                      style="w-full h-full object-cover rounded-full"
                     />
                   </div>
-                  <p className="text-xs sm:text-lg h-1/4 truncate">
+                  <p className="text-sm sm:text-lg mt-1 truncate px-1">
                     {product.productName}
                   </p>
                 </motion.div>
@@ -569,74 +410,65 @@ export default function Product() {
             </div>
           </div>
 
-          {selectedProduct?.thickness > 0 && (
+          {/* Thickness Options */}
+          {selectedProduct?.thickness?.length > 0 && (
             <div>
               <h3 className="text-xl sm:text-2xl font-semibold mt-10 mb-5">
-                Other Tickeness Options
+                Other Thickness Options
               </h3>
+              {/* ✅ FIX #1: corrected broken ?? operator precedence */}
               <div className="flex flex-wrap gap-5 text-center">
-                {selectedProduct?.thickness ??
-                  [].map((size, index) => (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.5 }}
-                      key={index}
-                      className="p-2 w-36 border border-[#998E8A] bg-[#FCF8F5] hover:bg-[#E7E9EB] cursor-pointer"
-                    >
-                      <p>{size}</p>
-                    </motion.div>
-                  ))}
+                {(selectedProduct?.thickness ?? []).map((size, index) => (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    key={index}
+                    className="p-2 w-36 border border-[#998E8A] bg-[#FCF8F5] hover:bg-[#E7E9EB] cursor-pointer"
+                  >
+                    <p>{size}</p>
+                  </motion.div>
+                ))}
               </div>
             </div>
           )}
 
-          {/* Grade sections */}
+          {/* Grade */}
           {selectedProduct?.grade && (
             <div>
               <h3 className="text-xl sm:text-2xl font-semibold mt-10 mb-5">
                 Grade
               </h3>
               <div className="flex flex-wrap gap-5 text-center w-full">
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="p-2 border border-[#998E8A] bg-[#FCF8F5] hover:bg-[#E7E9EB] cursor-pointer"
-                >
-                  <p className="text-lg">Select</p>
-                  <p className="text-[#666E7C] text-sm">Clean · contemporary</p>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="p-2 w-36 border border-[#998E8A] hover:bg-[#E7E9EB] cursor-pointer"
-                >
-                  <p className="text-lg">Standard</p>
-                  <p className="text-[#666E7C] text-sm">Most Popular</p>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="p-2 w-36 border border-[#998E8A] hover:bg-[#E7E9EB] cursor-pointer"
-                >
-                  <p className="text-lg">Feature</p>
-                  <p className="text-[#666E7C] text-sm">Maximum Character</p>
-                </motion.div>
+                {[
+                  { label: "Select", sub: "Clean · contemporary" },
+                  { label: "Standard", sub: "Most Popular" },
+                  { label: "Feature", sub: "Maximum Character" },
+                ].map(({ label, sub }) => (
+                  <motion.div
+                    key={label}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="p-2 w-36 border border-[#998E8A] bg-[#FCF8F5] hover:bg-[#E7E9EB] cursor-pointer"
+                  >
+                    <p className="text-lg">{label}</p>
+                    <p className="text-[#666E7C] text-sm">{sub}</p>
+                  </motion.div>
+                ))}
               </div>
             </div>
           )}
         </motion.div>
 
-        {/* Product Details (right section)*/}
+        {/* Product Details — Right Section */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
           className="w-full space-y-6"
         >
+          {/* Badges */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -644,7 +476,7 @@ export default function Product() {
             className="text-md text-black p-2 flex flex-wrap items-center gap-2 m-0"
           >
             <div className="bg-[#F5F0ED] p-2 sm:p-3 text-xs sm:text-sm font-medium">
-              SKU: {selectedProduct.sku}
+              SKU: {selectedProduct?.sku}
             </div>
             <div className="bg-[#F5F0ED] p-2 sm:p-3 text-xs sm:text-sm font-medium">
               {selectedProduct?.bal
@@ -661,9 +493,8 @@ export default function Product() {
             </div>
           </motion.div>
 
-          {/* Title, rating and description */}
+          {/* Title & Rating */}
           <div className="mt-2">
-            {/* Product heading */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -672,8 +503,6 @@ export default function Product() {
             >
               {selectedProduct?.productName}
             </motion.h1>
-
-            {/* Product description */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -682,8 +511,6 @@ export default function Product() {
             >
               {selectedProduct?.brand} {selectedProduct?.range}
             </motion.p>
-
-            {/* Enhanced Rating */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -698,48 +525,41 @@ export default function Product() {
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: 0.7 + i * 0.1, type: "spring" }}
                   >
-                    <Star
-                      size={20}
-                      className="fill-yellow-400 text-yellow-400"
-                    />
+                    <Star size={20} className="fill-yellow-400 text-yellow-400" />
                   </motion.div>
                 ))}
               </div>
-              <span className="text-sm font-bold text-gray-800">
-                <span className="text-md text-gray-600">(200 reviews)</span>
-              </span>
+              <span className="text-md text-gray-600">(200 reviews)</span>
             </motion.div>
           </div>
 
+          {/* Specs Grid */}
           <motion.div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-[#E7E9EB] border border-[#E7E9EB] justify-between items-center">
-            <motion.div className="text-center p-3 sm:p-5">
-              <p className="text-base sm:text-xl text-black font-medium">
-                {selectedProduct?.thickness && selectedProduct?.thickness[0]}
-              </p>
-              <p className="text-sm sm:text-lg text-[#666E7C]">Thickness</p>
-            </motion.div>
-            <motion.div className="text-center p-3 sm:p-5">
-              <p className="text-base sm:text-xl text-black font-medium">
-                {selectedProduct?.dimensions &&
-                  selectedProduct?.dimensions.split("x")[0]}
-              </p>
-              <p className="text-sm sm:text-lg text-[#666E7C]">Width</p>
-            </motion.div>
-            <motion.div className="text-center p-3 sm:p-5 border-t border-[#E7E9EB] sm:border-t-0">
-              <p className="text-base sm:text-xl text-black font-medium">
-                {selectedProduct?.jankaRating}
-              </p>
-              <p className="text-sm sm:text-lg text-[#666E7C]">Janka</p>
-            </motion.div>
-            <motion.div className="text-center p-3 sm:p-5 border-t border-[#E7E9EB] sm:border-t-0">
-              <p className="text-base sm:text-xl text-black font-medium">
-                {selectedProduct?.wearLayerThickness}
-              </p>
-              <p className="text-sm sm:text-lg text-[#666E7C]">Wear Layer</p>
-            </motion.div>
+            {[
+              {
+                value: selectedProduct?.thickness?.[0],
+                label: "Thickness",
+              },
+              {
+                value: selectedProduct?.dimensions?.split("x")[0],
+                label: "Width",
+              },
+              { value: selectedProduct?.jankaRating, label: "Janka" },
+              { value: selectedProduct?.wearLayerThickness, label: "Wear Layer" },
+            ].map(({ value, label }, i) => (
+              <motion.div
+                key={label}
+                className={`text-center p-3 sm:p-5 ${i >= 2 ? "border-t border-[#E7E9EB] sm:border-t-0" : ""}`}
+              >
+                <p className="text-base sm:text-xl text-black font-medium">
+                  {value}
+                </p>
+                <p className="text-sm sm:text-lg text-[#666E7C]">{label}</p>
+              </motion.div>
+            ))}
           </motion.div>
 
-          {/* Price section */}
+          {/* Price Tabs */}
           <motion.div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center justify-evenly border border-[#866053] p-1">
             {priceTab.map((price, index) => (
               <div
@@ -752,9 +572,8 @@ export default function Product() {
                 >
                   {price.heading}
                 </h3>
-
                 <p className="text-xl sm:text-2xl font-extrabold text-center">
-                  {price.id == 1
+                  {price.id === 1
                     ? selectedProduct?.supplyInstallPrice && (
                         <>
                           {selectedProduct?.supplyInstallPrice}
@@ -763,7 +582,7 @@ export default function Product() {
                           </span>
                         </>
                       )
-                    : price.id == 2
+                    : price.id === 2
                       ? selectedProduct?.supplyPrice && (
                           <>
                             {selectedProduct?.supplyPrice}
@@ -772,20 +591,19 @@ export default function Product() {
                             </span>
                           </>
                         )
-                      : price.id == 3 && "POA"}
+                      : "POA"}
                 </p>
               </div>
             ))}
           </motion.div>
 
-          {/* Quantity calculator */}
+          {/* Calculator */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
             className="border border-[#E7E9EB] p-4 sm:p-5"
           >
-            {/* ##################### TAB 1: Supply + Install ##################### */}
             {priceTab[0].active && (
               <>
                 {selectedProduct?.supplyInstallPrice ? (
@@ -811,7 +629,6 @@ export default function Product() {
               </>
             )}
 
-            {/* ##################### TAB 2: Supply Only ##################### */}
             {priceTab[1].active && (
               <>
                 {selectedProduct?.supplyPrice ? (
@@ -837,7 +654,6 @@ export default function Product() {
               </>
             )}
 
-            {/* ##################### TAB 3: Request Quote ##################### */}
             {priceTab[2].active && (
               <div className="bg-[#F9F6F4] border border-[#E7E9EB] rounded-2xl p-6 mt-2 space-y-5">
                 <h3 className="text-lg sm:text-xl font-semibold text-black">
@@ -845,8 +661,7 @@ export default function Product() {
                 </h3>
                 <p className="text-[#666E7C] text-sm sm:text-base leading-relaxed">
                   Get a personalised quote tailored to your project size and
-                  requirements. Our team will get back to you within 1 business
-                  day.
+                  requirements. Our team will get back to you within 1 business day.
                 </p>
                 <div className="bg-white border border-[#E7E9EB] rounded-xl p-4 space-y-2">
                   <p className="text-base sm:text-lg font-medium text-black flex items-center gap-2 flex-wrap">
@@ -879,7 +694,7 @@ export default function Product() {
             )}
           </motion.div>
 
-          {/* CTA */}
+          {/* CTA Banner */}
           <motion.div className="bg-[#D7CEC5] p-5 flex flex-col xl:flex-row items-center gap-5 sm:gap-10">
             <p className="text-base sm:text-lg text-black text-center sm:text-left">
               Ordering 100m² or more? Call us — we'll beat any written quote and
@@ -890,7 +705,7 @@ export default function Product() {
             </button>
           </motion.div>
 
-          {/* Buttons section */}
+          {/* Action Buttons */}
           <motion.div className="w-full flex flex-col sm:flex-row items-center gap-4 sm:gap-x-10">
             <button
               className="border border-[#998E8A] text-[#998E8A] py-3 text-base sm:text-lg xl:text-xl w-full cursor-pointer"
@@ -914,7 +729,7 @@ export default function Product() {
         </motion.div>
       </div>
 
-      {/* Modal section */}
+      {/* Showroom Modal */}
       {showModal && (
         <motion.div
           className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 px-4"
@@ -923,21 +738,18 @@ export default function Product() {
           exit={{ opacity: 0 }}
         >
           <div className="bg-white w-full max-w-[600px] p-6 sm:p-8 rounded-xl relative max-h-[90vh] overflow-y-auto">
-            {/* Close Button */}
             <button
               onClick={() => setShowModal(false)}
               className="absolute top-4 right-4 text-xl"
             >
               ✕
             </button>
-
             <h3 className="text-xl sm:text-2xl font-semibold mb-2">
               Book Showroom Visit
             </h3>
             <p className="mb-6 text-gray-600">
               View Premium Luxury Flooring in our showroom
             </p>
-
             <form className="flex flex-col gap-4">
               <input
                 type="text"
@@ -947,29 +759,26 @@ export default function Product() {
               <input
                 type="text"
                 placeholder="Name*"
-                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none"
+                className="border p-4 border-[#E7E9EB] focus:outline-none"
               />
               <input
                 type="text"
                 placeholder="Phone*"
-                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none"
+                className="border p-4 border-[#E7E9EB] focus:outline-none"
               />
               <input
                 type="email"
                 placeholder="Email*"
-                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none"
+                className="border p-4 border-[#E7E9EB] focus:outline-none"
               />
               <input
                 type="date"
-                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none"
-                placeholder="Preferred Date*"
+                className="border p-4 border-[#E7E9EB] focus:outline-none"
               />
               <input
                 type="time"
-                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none"
-                placeholder="Preferred Time*"
+                className="border p-4 border-[#E7E9EB] focus:outline-none"
               />
-
               <button className="bg-[#998E8A] text-white py-3 cursor-pointer">
                 Submit
               </button>
@@ -978,16 +787,15 @@ export default function Product() {
         </motion.div>
       )}
 
-      {/* Product highlights section */}
+      {/* Product Highlights */}
       <motion.div className="mt-20 w-full bg-[#FCF8F5] p-5 md:p-10">
-        <div className="grid grid-cols-3 gap-6 space-y-8 justify-center items-start w-10/12 mx-auto">
+        {/* ✅ FIX #5: responsive grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start w-10/12 mx-auto">
           <h3 className="text-3xl xl:text-4xl font-bold">Product Highlights</h3>
-          {/* <div className=" lg:mx-auto"> */}
-          <div className="space-y-3 flex-1 min-w-[200px]">
+          <div className="space-y-3">
             <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
-              <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
-              Thickness:{" "}
-              {selectedProduct?.thickness && selectedProduct?.thickness[0]}
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} />
+              Thickness: {selectedProduct?.thickness?.[0]}
             </p>
             <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
               <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Board
@@ -995,18 +803,16 @@ export default function Product() {
             </p>
             <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
               <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Pack
-              Coverage:{" "}
-              {selectedProduct?.packSize &&
-                selectedProduct?.packSize.split("-")[0]}
+              Coverage: {selectedProduct?.packSize?.split("-")[0]}
             </p>
           </div>
-          <div className="space-y-3 flex-1 min-w-[200px]">
+          <div className="space-y-3">
             <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
               <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Water
               Rating: {selectedProduct?.waterresistant}
             </p>
             <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
-              <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} />
               Warranty: {selectedProduct?.Warrenty}
             </p>
             <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
@@ -1015,37 +821,30 @@ export default function Product() {
             </p>
           </div>
         </div>
-        {/* </div> */}
       </motion.div>
 
-      {/* Specification and Details section */}
+      {/* Specs & Details */}
       <motion.div className="w-10/12 mx-auto mt-20">
         <h3 className="text-2xl sm:text-4xl font-bold">
           Specifications & Details
         </h3>
-
-        {/* Tab section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          {/* TAB HEADERS */}
           <div className="flex border-b border-gray-200 mt-5 overflow-x-auto scrollbar-hide">
             {tabs.map((tab, index) => (
               <button
                 key={index}
                 onClick={() => setActiveTab(tab)}
-                className={`px-3 lg:px-6 py-3 text-sm sm:text-md lg:text-lg xl:text-2xl font-normal transition relative whitespace-nowrap
-            ${
-              activeTab === tab
-                ? "text-[#8A6A5B] font-semibold"
-                : "text-gray-500 hover:text-black"
-            }`}
+                className={`px-3 lg:px-6 py-3 text-sm sm:text-md lg:text-lg xl:text-2xl font-normal transition relative whitespace-nowrap ${
+                  activeTab === tab
+                    ? "text-[#8A6A5B] font-semibold"
+                    : "text-gray-500 hover:text-black"
+                }`}
               >
                 {tab}
-
-                {/* Active underline */}
                 {activeTab === tab && (
                   <motion.div
                     layoutId="underline"
@@ -1056,7 +855,6 @@ export default function Product() {
             ))}
           </div>
 
-          {/* TAB CONTENT */}
           <motion.div
             key={activeTab}
             initial={{ opacity: 0, y: 10 }}
@@ -1065,13 +863,10 @@ export default function Product() {
             className="min-h-[180px] px-2 sm:px-6 py-6"
           >
             {activeTab === "Description" && (
-              <div className="space-y-4">
-                <p className="text-base sm:text-lg">
-                  {selectedProduct?.description}
-                </p>
-              </div>
+              <p className="text-base sm:text-lg">
+                {selectedProduct?.description}
+              </p>
             )}
-
             {activeTab === "Specifications" && (
               <div className="space-y-4 h-[280px] overflow-y-scroll">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
@@ -1086,42 +881,31 @@ export default function Product() {
                 </div>
               </div>
             )}
-
             {activeTab === "Dimensions" && (
-              <div className="space-y-4">
-                <p className="text-base sm:text-lg">
-                  {selectedProduct?.details?.dimensions}
-                </p>
-              </div>
+              <p className="text-base sm:text-lg">
+                {selectedProduct?.details?.dimensions}
+              </p>
             )}
-
             {activeTab === "Installation" && (
-              <div className="space-y-4">
-                <p className="text-base sm:text-lg">
-                  {selectedProduct?.details?.installation}
-                </p>
-              </div>
+              <p className="text-base sm:text-lg">
+                {selectedProduct?.details?.installation}
+              </p>
             )}
-
             {activeTab === "Warranty" && (
-              <div className="space-y-4">
-                <p className="text-base sm:text-lg">
-                  {selectedProduct?.details?.warranty}
-                </p>
-              </div>
+              <p className="text-base sm:text-lg">
+                {selectedProduct?.details?.warranty}
+              </p>
             )}
-
             {activeTab === "Delivery" && (
-              <div className="space-y-4">
-                <p className="text-base sm:text-lg">
-                  {selectedProduct?.details?.delivery}
-                </p>
-              </div>
+              <p className="text-base sm:text-lg">
+                {selectedProduct?.details?.delivery}
+              </p>
             )}
           </motion.div>
         </motion.div>
       </motion.div>
 
+      {/* Will This Work Section */}
       <motion.div className="bg-[#FCF8F5] w-full p-6 py-16 md:p-24 mt-10">
         <div className="w-full md:w-11/12 mx-auto">
           <h2 className="text-2xl sm:text-4xl font-semibold mb-10">
@@ -1133,20 +917,18 @@ export default function Product() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.5 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
                   key={index}
                   className="p-6 sm:p-10 bg-white border-t-2 border-[#8A6A5B] space-y-4"
                 >
                   <CircleCheckBig color="#8A6A5B" />
                   <p className="text-xl sm:text-2xl">{item.title}</p>
                   <span
-                    className={`p-2 text-xs ${item.btnType == "success" ? "bg-[#E3E4DD] text-[#4C6647]" : "bg-[#EFE8DA] text-[#B2873C]"}`}
+                    className={`p-2 text-xs ${item.tag === "Suitable" ? "bg-[#E3E4DD] text-[#4C6647]" : "bg-[#EFE8DA] text-[#B2873C]"}`}
                   >
-                    {item.btnText}
+                    {item.tag}
                   </span>
-                  <p className="text-base sm:text-lg mt-5">
-                    {item.description}
-                  </p>
+                  <p className="text-base sm:text-lg mt-5">{item.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -1154,15 +936,12 @@ export default function Product() {
         </div>
       </motion.div>
 
-      {/* Reviews */}
       <Reviews />
-
-      {/* Why choose us */}
       <div className="mt-20">
         <WhyChooseus />
       </div>
 
-      {/* You may also like section */}
+      {/* You May Also Like */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -1189,7 +968,7 @@ export default function Product() {
           </motion.p>
         </div>
 
-        <div className="max-w-[83.333%] mx-auto">
+        <div className="max-w-[90%] mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
               variants={containerVariants}
@@ -1211,16 +990,13 @@ export default function Product() {
                       loading="lazy"
                       className="block h-[220px] lg:h-[280px] 2xl:h-[400px] w-full object-cover transition-transform duration-500"
                     />
-
                     <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
                     <button
                       aria-label="Add to wishlist"
                       className="absolute top-2 right-2 z-20 bg-[#998E8A] backdrop-blur-sm p-1.5 rounded-full shadow-sm hover:bg-white hover:scale-110 transition-all duration-300"
                     >
                       <HeartIcon className="w-5 h-5 text-white hover:text-red-500" />
                     </button>
-
                     <div className="absolute top-2 left-2 z-20 flex gap-3">
                       {item.isNew && (
                         <span className="inline-block px-4 py-1 text-sm tracking-wide bg-white text-black font-semibold">
@@ -1233,7 +1009,6 @@ export default function Product() {
                         </span>
                       )}
                     </div>
-
                     {!item.inStock && (
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
                         <span className="bg-white text-gray-900 px-3 py-1 rounded-lg font-semibold text-xs">
@@ -1242,36 +1017,28 @@ export default function Product() {
                       </div>
                     )}
                   </div>
-
                   <div className="py-5 px-3 space-y-2">
                     <div className="flex items-center gap-1">
                       {[1, 2, 3, 4, 5].map((_, i) => (
-                        <span key={i} className="text-yellow-400 text-xl">
-                          ★
-                        </span>
+                        <span key={i} className="text-yellow-400 text-xl">★</span>
                       ))}
                       <span className="text-base sm:text-lg font-medium text-gray-700">
                         (200)
                       </span>
                     </div>
-
                     <div className="flex items-start justify-between gap-2">
                       <p className="text-xl sm:text-2xl font-bold text-gray-900 line-clamp-1">
-                        Hydro Laminate Tiles
+                        {item.heading}
                       </p>
                     </div>
-
                     <p className="text-base sm:text-lg text-gray-500 line-clamp-1">
-                      by Elite Floors Collection
+                      by {item.brand}
                     </p>
-
                     <div className="flex items-baseline gap-2">
                       <span className="text-lg sm:text-xl font-bold text-gray-900">
                         ${item.price}
                       </span>
-                      <span className="text-red-600 font-bold text-base">
-                        50%
-                      </span>
+                      <span className="text-red-600 font-bold text-base">50%</span>
                       <span className="text-base text-gray-400 line-through">
                         ${item.price * 2}
                       </span>
@@ -1290,6 +1057,7 @@ export default function Product() {
   );
 }
 
+// ─── Specification Card ───────────────────────────────────────────────────────
 function Specification({ label, value }) {
   return (
     <motion.div
@@ -1305,7 +1073,7 @@ function Specification({ label, value }) {
   );
 }
 
-// ─── Reusable Calculator Section ───────────────────────────────────────────────
+// ─── Calculator Section ───────────────────────────────────────────────────────
 function CalculatorSection({
   price,
   label,
@@ -1319,7 +1087,6 @@ function CalculatorSection({
 }) {
   return (
     <div>
-      {/* Price Header */}
       <div className="space-y-2 mb-8">
         <p>
           <span className="text-2xl sm:text-3xl font-extrabold">{price}</span>
@@ -1330,9 +1097,8 @@ function CalculatorSection({
         <p className="text-[#666E7C] text-base sm:text-lg">{label}</p>
       </div>
 
-      {/* Calculator */}
       <h2 className="text-lg sm:text-xl font-semibold">Coverage Calculator</h2>
-      <form action="" className="">
+      <form>
         <div className="space-y-3 mt-5">
           <div>
             <label
@@ -1343,15 +1109,17 @@ function CalculatorSection({
             </label>
             <br />
             <input
-              type="text"
+              type="number"
               id="totalNeeded"
               placeholder="Enter m²"
               value={calculatorData.totalNeeded ?? ""}
-              className="w-full border border-[#E7E9EB] p-3 mt-2 focus:outline-none focus:border-[#E7E9EB]"
+              className="w-full border border-[#E7E9EB] p-3 mt-2 focus:outline-none focus:border-[#998E8A]"
               name="totalNeeded"
-              onChange={(e) => calculatorDataHandler(e)}
+              onChange={calculatorDataHandler}
+              min="0"
             />
-            {message && calculatorData.totalNeeded <= 0 && (
+            {/* ✅ FIX #4: corrected validation condition */}
+            {message && !calculatorData.totalNeeded && (
               <p className="text-lg font-medium text-red-600 mt-2">{message}</p>
             )}
           </div>
@@ -1372,7 +1140,7 @@ function CalculatorSection({
                     id={`wastage-${val}`}
                     value={val}
                     checked={Number(calculatorData.wastage) === val}
-                    onChange={(e) => calculatorDataHandler(e)}
+                    onChange={calculatorDataHandler}
                     className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
                   />
                   <label htmlFor={`wastage-${val}`}>{val}%</label>
@@ -1393,7 +1161,7 @@ function CalculatorSection({
           <p className="flex justify-between items-center font-semibold text-lg sm:text-xl">
             <span className="text-base sm:text-lg font-normal text-[#666E7C]">
               Cartons Required:
-            </span>{" "}
+            </span>
             {sizeData.cartons}
           </p>
           <p className="flex justify-between items-center font-semibold text-lg sm:text-xl">
@@ -1405,7 +1173,6 @@ function CalculatorSection({
         </div>
       </form>
 
-      {/* Price Summary */}
       <motion.div className="space-y-4 mt-10 bg-[#F5F0ED] p-4 sm:p-6">
         <h3 className="text-xl sm:text-2xl font-semibold">Price Summary</h3>
         <div className="space-y-2">
@@ -1421,7 +1188,7 @@ function CalculatorSection({
               {`$ ${calculatorData.totalNeeded ? priceData.gst : 0}`}
             </span>
           </p>
-          <div className="h-[1px] w-full bg-[#E7E9EB]"></div>
+          <div className="h-[1px] w-full bg-[#E7E9EB]" />
           <p className="text-sm sm:text-lg text-[#666E7C] flex justify-between items-center">
             TOTAL{" "}
             <span className="text-lg sm:text-xl font-semibold text-black">
@@ -1434,7 +1201,7 @@ function CalculatorSection({
   );
 }
 
-// ─── Reusable No Online Pricing Section ────────────────────────────────────────
+// ─── No Online Pricing ────────────────────────────────────────────────────────
 function NoOnlinePricing({ title, description, btnText }) {
   return (
     <div className="bg-[#F9F6F4] border border-[#E7E9EB] rounded-2xl p-6 mt-2 space-y-5">
@@ -1442,20 +1209,15 @@ function NoOnlinePricing({ title, description, btnText }) {
       <p className="text-[#666E7C] text-sm sm:text-base leading-relaxed">
         {description}
       </p>
-
       <div className="bg-white border border-[#E7E9EB] rounded-xl p-4 space-y-2">
         <p className="text-base sm:text-lg font-medium text-black flex items-center gap-2 flex-wrap">
           <Phone /> Call us on{" "}
-          <a
-            href="tel:YOUR_PHONE_NUMBER"
-            className="text-[#8A6A5B] font-semibold"
-          >
+          <a href="tel:YOUR_PHONE_NUMBER" className="text-[#8A6A5B] font-semibold">
             YOUR_PHONE_NUMBER
           </a>
         </p>
         <p className="text-sm text-[#666E7C]">Mon–Fri 8am–8pm · Sat 9am–5pm</p>
       </div>
-
       <div className="space-y-3">
         <button className="w-full bg-[#8A6A5B] hover:bg-[#755645] text-white py-3 rounded-xl font-semibold transition">
           {btnText}

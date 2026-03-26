@@ -541,7 +541,7 @@ export default function CheckoutPage() {
             <h3 className="text-2xl font-semibold tracking-wider mb-4">
               Products
             </h3>
-            <div className="flex flex-col gap-4 divide-y divide-[#E7E9EB]">
+            <div className="flex flex-col divide-y divide-[#E7E9EB]">
               {cartItems?.map((item, i) => (
                 <motion.div
                   key={i}
@@ -549,22 +549,22 @@ export default function CheckoutPage() {
                   variants={fadeUp}
                   initial="hidden"
                   animate="visible"
-                  className="flex gap-3 pt-3 first:pt-0"
+                  className="flex gap-3 py-2"
                 >
                   <div className="w-20 h-20 sm:w-32 sm:h-32 flex-shrink-0 bg-stone-100">
                     <img
-                      src={item.product?.productImage[0].url}
+                      src={item.product&& item.product?.productImage[0].url}
                       alt="product image"
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-base sm:text-xl font-medium text-stone-800 leading-tight">
-                      {item.product?.productName}
+                      {item.product&& item.product?.productName}
                     </p>
                     <p className="text-sm sm:text-lg text-[#666E7C] mt-0.5 leading-relaxed flex items-center">
                       {item.areaSupplied} m<sup>2</sup> .{" "}
-                      {item.product?.thickness}
+                      {item.product&& item.product?.thickness}
                     </p>
                     <span className="inline-block mt-1 text-sm sm:text-lg text-[#666E7C] text-nowrap">
                       ⚒️ {item.service}

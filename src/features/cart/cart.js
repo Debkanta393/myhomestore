@@ -43,6 +43,7 @@ export const fetchCartItems = createAsyncThunk(
 
       try {
         const productIds = guestCart.map((item) => item.productId);
+        console.log(productIds)
         // Fetch product details for all guest cart items
         const res = await api.post(PRODUCT_FOR_CARTS, { productIds });
 

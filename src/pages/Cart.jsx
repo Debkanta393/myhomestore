@@ -259,10 +259,11 @@ export default function CartPage() {
   const [promo, setPromo] = useState("");
   const [promoMsg, setPromoMsg] = useState(null);
   const navigate = useNavigate();
+  const cartLoading = useSelector((state) => state.cart.loading);
 
   useEffect(() => {
     dispatch(fetchCartItems({ isAuthenticated }));
-  }, []);
+  }, [isAuthenticated]);
 
   // Sync Redux → local state
   useEffect(() => {
@@ -326,7 +327,6 @@ export default function CartPage() {
     setTimeout(() => setPromoMsg(null), 3000);
   };
 
-
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Inter', sans-serif" }}>
       <div
@@ -346,14 +346,16 @@ export default function CartPage() {
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="text-xl sm:text-2xl font-semibold text-[#2d2926] mb-5 tracking-tight border-b border-[#E7E9EB] py-5"
+            className="text-xl sm:text-3xl font-semibold text-[#2d2926] mb-5 tracking-tight border-b border-[#E7E9EB] py-5"
           >
             Your Cart
           </motion.h1>
 
           <div className="flex flex-col gap-3.5 divide-y divide-[#E7E9EB]">
             <AnimatePresence mode="popLayout">
-              {cartItems.length === 0 ? (
+              {cartLoading ? (
+                <div>Cart is loading</div>
+              ) : cartItems.length === 0 ? (
                 <motion.div
                   key="empty"
                   initial={{ opacity: 0, scale: 0.96 }}
@@ -391,12 +393,12 @@ export default function CartPage() {
           >
             <div className="overflow-hidden">
               <div className="px-4 sm:px-5 pt-6 pb-5">
-                <h2 className="text-xl sm:text-2xl font-semibold text-[#2d2926] mb-4 tracking-tight border-b border-[#E7E9EB] pb-5">
+                <h2 className="text-xl sm:text-3xl font-semibold text-[#2d2926] mb-4 tracking-tight border-b border-[#E7E9EB] pb-5">
                   Order Summary
                 </h2>
 
                 {/* Line items */}
-                <div className="space-y-0.5 border-b border-[#f0ece6] pb-4">
+                <div className="space-y-0.5 border-b border-[#f0ece6] pb-4 ">
                   <AnimatePresence>
                     {cartItems.map((item) => {
                       const linePrice = calcItemPrice(
@@ -412,7 +414,7 @@ export default function CartPage() {
                           initial={{ opacity: 0, y: -6 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, height: 0 }}
-                          className="flex justify-between gap-2"
+                          className="flex justify-between gap-2 py-1"
                         >
                           <span className="text-black text-base sm:text-lg truncate">
                             {item.product?.productName}
