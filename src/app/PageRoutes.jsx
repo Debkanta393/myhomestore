@@ -8,6 +8,7 @@ import Brand from "../pages/Brand";
 import ClaverChoise from "../pages/CleverChoice";
 import EngineeredOak from "../pages/EngineeredOak";
 import Payment from "../pages/Payment";
+import CartPage from "../pages/Cart";
 import BambooFlooring from "../pages/BambooFlooring"
 import Benchtops from "../pages/Benchtops"
 import CladdingScreens from "../pages/CladdingScreens"
@@ -22,6 +23,8 @@ import VinylFlooring from "../pages/VinylFlooring"
 import EcoGreen from "../pages/EcoGreen"
 import PreferenceFloor from "../pages/PreferenceFloor"
 import HurfordsFlooring from "../pages/HurfordsFlooring"
+import CheckoutPage from "../pages/Checkout";
+import ProfilePage from "../pages/ProfilePage";
 
 
 
@@ -52,6 +55,9 @@ export default function PageRoutes() {
         <Route path="/timber-flooring" element={<TimberFlooring />} />
         <Route path="/vinyl-flooring" element={<VinylFlooring />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Route>
     </Routes>
   );

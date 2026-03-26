@@ -19,6 +19,7 @@ import { getProductByRange } from "../features/product/product";
 import { useDispatch, useSelector } from "react-redux";
 import { addCartItems } from "../features/cart/cart";
 import LazyLoader from "../components/ui/LazyLoader";
+import { v4 as uuidv4 } from "uuid";
 
 // ##################### Other products ##################### //
 const products = [
@@ -145,7 +146,7 @@ export default function Product() {
   // ##################### State hooks ##################### //
   const [selectedImage, setSelectedImage] = useState(0);
   const [calculatorData, setCalculatorData] = useState({
-    totalNeeded: 0,
+    totalNeeded: null,
     wastage: 10,
   });
   const [sizeData, setSizeData] = useState({
@@ -159,7 +160,7 @@ export default function Product() {
   });
   const dispatch = useDispatch();
   const [packSize, setPackSize] = useState();
-  // const [priceTab, setPriceTab] = useState(0);
+  const [showZoom, setShowZoom] = useState(false);
   const [priceTab, setPriceTab] = useState([
     {
       id: 1,
@@ -201,7 +202,6 @@ export default function Product() {
   console.log(isAuthenticated);
 
   // ##################### Deslugify range and product data before fetching ##################### //
-
   const deslugify = (slug) => {
     return slug
       .split("-")
@@ -218,10 +218,8 @@ export default function Product() {
       const response = await dispatch(getProductByRange(deslugifyRange));
       console.log(response.payload.product);
       if (response.payload.success) {
-        // Set app products in this range
         setRangeProducts(response.payload.product);
 
-        // Set selected product
         const selectedproduct = response.payload.product.find(
           (item) =>
             item.productName?.toLowerCase().trim() ===
@@ -230,7 +228,6 @@ export default function Product() {
         console.log(selectedproduct);
         setSelectedProduct(selectedproduct);
 
-        // Set pack size
         let packsize = parseFloat(selectedproduct?.packSize.split("-")[0]);
         setPackSize(packsize);
       }
@@ -315,34 +312,31 @@ export default function Product() {
     }
     console.log(calculatorData.totalNeeded * (calculatorData.wastage / 100));
     const calculatorHandler = () => {
-      let totalCartons =
+      let result =
         calculatorData.wastage != 0
-          ? (calculatorData.totalNeeded * (calculatorData.wastage / 100)) /
-            packSize
-          : calculatorData.totalNeeded / packSize;
-      let areaSupplied = totalCartons * packSize;
-      // setCartonsNeeded(Math.ceil(totalCartons));
+          ? calculatorData.totalNeeded * (calculatorData.wastage / 100)
+          : calculatorData.totalNeeded;
+      console.log(result);
+
       setSizeData((prev) => ({
         ...prev,
-        cartons: Math.ceil(totalCartons),
-        area: areaSupplied,
+        cartons: Math.ceil(result / packSize),
+        area: result,
       }));
 
-      // Set price data
       let subtotal = priceTab[0].active
-        ? areaSupplied *
+        ? result *
           parseInt(
             selectedProduct?.supplyInstallPrice
               ? selectedProduct?.supplyInstallPrice
               : 0,
           )
-        : areaSupplied *
+        : result *
           parseInt(
             selectedProduct.supplyPrice ? selectedProduct.supplyPrice : 28,
           );
 
       console.log(subtotal);
-      //  Total Gst calculation
       let totalGst = subtotal * (10 / 100);
       console.log(totalGst);
 
@@ -371,6 +365,11 @@ export default function Product() {
     const totalMeterSquare = calculatorData.totalNeeded;
     const wastage = calculatorData.wastage;
     const totalPrice = priceData.total;
+    const cartonsRequired = sizeData.cartons;
+    const areaSupplied = sizeData.area;
+    const selectedService = priceTab.find(
+      (item) => item.active == true,
+    ).heading;
 
     if (!calculatorData.totalNeeded) {
       setMessage("Total size can't be empty");
@@ -384,14 +383,24 @@ export default function Product() {
       dispatch(
         addCartItems({
           productId,
+          id: uuidv4(),
           isAuthenticated,
           totalMeterSquare,
           wastage,
           totalPrice,
+          cartonsRequired,
+          areaSupplied,
+          selectedService,
         }),
       );
     }
+    setCalculatorData({
+      totalNeeded: null,
+      wastage: 10,
+    });
   };
+
+  console.log(calculatorData.totalNeeded);
 
   // ##################### Product price tab ##################### //
   const priceTabHandler = (id) => {
@@ -402,35 +411,34 @@ export default function Product() {
     setPriceTab(updatedTab);
   };
 
-
-  console.log(selectedProduct.features)
-  console.log(rangeProducts)
+  console.log(selectedProduct);
+  console.log(rangeProducts);
 
   return (
     <div className="w-full mb-20 bg-gradient-to-b from-white via-gray-50/30 to-white">
       {/* Breadcrumb with glassmorphism */}
-      <div className="w-11/12 sm:w-10/12 mx-auto mb-10 pt-6">
+      <div className="w-10/12 mx-auto mb-10 pt-6">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="backdrop-blur-sm bg-white/60 border border-white/20 rounded-full px-6 py-3 inline-flex items-center gap-2 shadow-sm"
+          className="backdrop-blur-sm bg-white/60 border border-white/20 rounded-full px-4 py-3 inline-flex items-center gap-2 shadow-sm max-w-full overflow-hidden"
         >
-          <span className="text-sm text-gray-600 hover:text-[#8A6A5A] cursor-pointer transition">
+          <span className="text-sm text-gray-600 hover:text-[#8A6A5A] cursor-pointer transition shrink-0">
             Home
           </span>
-          <ChevronRight size={14} className="text-gray-400" />
-          <span className="text-sm text-gray-600 hover:text-[#8A6A5A] cursor-pointer transition">
+          <ChevronRight size={14} className="text-gray-400 shrink-0" />
+          <span className="text-sm text-gray-600 hover:text-[#8A6A5A] cursor-pointer transition shrink-0">
             {range}
           </span>
-          <ChevronRight size={14} className="text-gray-400" />
-          <span className="text-sm text-[#8A6A5A] font-medium text-nowrap">
+          <ChevronRight size={14} className="text-gray-400 shrink-0" />
+          <span className="text-sm text-[#8A6A5A] font-medium truncate">
             {selectedProduct?.productName}
           </span>
         </motion.div>
       </div>
 
       {/* Main Product Section */}
-      <div className="w-10/12 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 relative">
+      <div className="w-10/12 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 relative">
         {/* Image Gallery with enhanced interactions */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -440,17 +448,6 @@ export default function Product() {
         >
           <div className="relative group shadow-xl">
             <AnimatePresence mode="wait">
-              {/* <motion.img
-                key={selectedImage}
-                src={selectedProduct?.productImage?.[selectedImage]?.url}
-                alt="Product"
-                variants={imageVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.3 }}
-                className="w-full h-[500px] object-cover"
-              /> */}
               <motion.div
                 key={selectedImage}
                 variants={imageVariants}
@@ -458,7 +455,7 @@ export default function Product() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.3 }}
-                className="w-full h-full"
+                className="w-full h-[300px] sm:h-[400px] lg:h-[500px]"
               >
                 <LazyLoader
                   image={selectedProduct?.productImage?.[selectedImage]?.url}
@@ -476,18 +473,18 @@ export default function Product() {
               whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.95 }}
               onClick={handlePrevImage}
-              className="absolute top-1/2 -translate-y-1/2 left-5 backdrop-blur-md bg-white/80 hover:bg-white shadow-2xl z-20 p-4 rounded-full transition-all opacity-0 group-hover:opacity-100 border border-white/50"
+              className="absolute top-1/2 -translate-y-1/2 left-3 sm:left-5 backdrop-blur-md bg-white/80 hover:bg-white shadow-2xl z-20 p-2 sm:p-4 rounded-full transition-all opacity-0 group-hover:opacity-100 border border-white/50"
             >
-              <ChevronLeft size={24} className="text-gray-800" />
+              <ChevronLeft size={20} className="text-gray-800" />
             </motion.button>
 
             <motion.button
               whileHover={{ scale: 1.1, x: 5 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleNextImage}
-              className="absolute top-1/2 -translate-y-1/2 right-5 backdrop-blur-md bg-white/80 hover:bg-white shadow-2xl z-20 p-4 rounded-full transition-all opacity-0 group-hover:opacity-100 border border-white/50"
+              className="absolute top-1/2 -translate-y-1/2 right-3 sm:right-5 backdrop-blur-md bg-white/80 hover:bg-white shadow-2xl z-20 p-2 sm:p-4 rounded-full transition-all opacity-0 group-hover:opacity-100 border border-white/50"
             >
-              <ChevronRight size={24} className="text-gray-800" />
+              <ChevronRight size={20} className="text-gray-800" />
             </motion.button>
 
             {/* Quick action buttons */}
@@ -524,29 +521,47 @@ export default function Product() {
             </div>
           </div>
 
+          {/* Other images of this product */}
+          <motion.div className="mt-10">
+            <div className="flex items-center gap-5 mt-5">
+              {selectedProduct?.productImage?.map((image, index) => (
+                <motion.div className="w-44 h-44 rounded">
+                  <LazyLoader
+                    image={image.url}
+                    alt={`image ${index}`}
+                    style={"w-full h-full object-cover"}
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
           <div>
-            <h3 className="text-2xl font-semibold mt-10 mb-5">
+            <h3 className="text-xl sm:text-2xl font-semibold mt-10 mb-5">
               Color Options in this range
             </h3>
-            <div className="flex flex-wrap gap-x-1 xl:gap-x-3 gap-y-2 text-center">
+            <div className="flex flex-wrap gap-x-2 gap-y-3 text-center">
               {rangeProducts?.map((product, index) => (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.2 }} // also reduced delay (0.5 feels slow)
+                  transition={{ duration: 0.3, delay: index * 0.2 }}
                   key={index}
-                  className="border border-white hover:border-[#E7E9EB] p-1 cursor-pointer w-32 h-36 flex flex-col"
+                  className="border border-white hover:border-[#E7E9EB] p-1 cursor-pointer w-28 sm:w-36 h-48 flex flex-col"
                   onClick={() => selectedProductHandler(product.productName)}
                 >
                   <div className="w-full h-3/4 overflow-hidden">
                     <LazyLoader
-                      image={product.productImage[0].url}
+                      image={
+                        product.productImage[1]
+                          ? product.productImage[1].url
+                          : product.productImage[0].url
+                      }
                       alt={product.productName}
-                      style="w-full h-full object-cover"
+                      style="w-32 h-32 object-cover rounded-full"
                     />
                   </div>
-
-                  <p className="text-sm md:text-lg h-1/4 truncate">
+                  <p className="text-xs sm:text-lg h-1/4 truncate">
                     {product.productName}
                   </p>
                 </motion.div>
@@ -554,101 +569,65 @@ export default function Product() {
             </div>
           </div>
 
-          {/* Product highlights section */}
-          <motion.div className=" mt-20 w-full bg-[#FCF8F5] p-5 md:p-10 border-l-3 border-[#8A6A5B]">
-            <div className="space-y-8">
-              <h3 className="text-3xl md:text-4xl font-bold text-nowrap">
-                Product Highlights
+          {selectedProduct?.thickness > 0 && (
+            <div>
+              <h3 className="text-xl sm:text-2xl font-semibold mt-10 mb-5">
+                Other Tickeness Options
               </h3>
-              <div className="flex flex-col md:flex-row lg:flex-col xl:flex-row xl:items-center justify-between gap-y-10 lg:mx-auto">
-                <div className="space-y-3">
-                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
-                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
-                    Thickness: 8mm
-                  </p>
-                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
-                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
-                    Board Size: 1215 x 196mm
-                  </p>
-                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
-                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
-                    Pack Coverage: 1.7404m²
-                  </p>
-                </div>
-                <div className="space-y-3">
-                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
-                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
-                    Water Rating: Waterproof
-                  </p>
-                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
-                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
-                    Warranty: 20 Years
-                  </p>
-                  <p className="text-md md:text-lg flex items-center gap-2 text-nowrap">
-                    <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
-                    Wear Layer: AC4
-                  </p>
-                </div>
+              <div className="flex flex-wrap gap-5 text-center">
+                {selectedProduct?.thickness ??
+                  [].map((size, index) => (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.5 }}
+                      key={index}
+                      className="p-2 w-36 border border-[#998E8A] bg-[#FCF8F5] hover:bg-[#E7E9EB] cursor-pointer"
+                    >
+                      <p>{size}</p>
+                    </motion.div>
+                  ))}
               </div>
             </div>
-          </motion.div>
+          )}
 
-          <div>
-            {/* {selectedProduct?.thickness?.length > 1 && (
-              <> */}
-            <h3 className="text-2xl font-semibold mt-10 mb-5">
-              Other Tickeness Options
-            </h3>
-            <div className="flex flex-wrap gap-5 text-center">
-              {selectedProduct?.thickness?.map((size, index) => (
+          {/* Grade sections */}
+          {selectedProduct?.grade && (
+            <div>
+              <h3 className="text-xl sm:text-2xl font-semibold mt-10 mb-5">
+                Grade
+              </h3>
+              <div className="flex flex-wrap gap-5 text-center w-full">
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.5 }}
-                  key={index}
-                  className="p-2 w-36 border border-[#998E8A] bg-[#FCF8F5] hover:bg-[#E7E9EB] cursor-pointer"
+                  transition={{ duration: 0.3 }}
+                  className="p-2 border border-[#998E8A] bg-[#FCF8F5] hover:bg-[#E7E9EB] cursor-pointer"
                 >
-                  <p>{size}</p>
+                  <p className="text-lg">Select</p>
+                  <p className="text-[#666E7C] text-sm">Clean · contemporary</p>
                 </motion.div>
-              ))}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="p-2 w-36 border border-[#998E8A] hover:bg-[#E7E9EB] cursor-pointer"
+                >
+                  <p className="text-lg">Standard</p>
+                  <p className="text-[#666E7C] text-sm">Most Popular</p>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="p-2 w-36 border border-[#998E8A] hover:bg-[#E7E9EB] cursor-pointer"
+                >
+                  <p className="text-lg">Feature</p>
+                  <p className="text-[#666E7C] text-sm">Maximum Character</p>
+                </motion.div>
+              </div>
             </div>
-            {/* </>
-            )} */}
-          </div>
-
-          {/* Grade sections */}
-          <div>
-            <h3 className="text-2xl font-semibold mt-10 mb-5">Grade</h3>
-            <div className="flex flex-wrap gap-5 text-center w-full">
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="p-2 border border-[#998E8A] bg-[#FCF8F5] hover:bg-[#E7E9EB] cursor-pointer text-nowrap"
-              >
-                <p className="text-lg">Select</p>
-                <p className="text-[#666E7C] text-sm">Clean · contemporary</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="p-2 w-36 border border-[#998E8A] hover:bg-[#E7E9EB] cursor-pointer text-nowrap"
-              >
-                <p className="text-lg">Standard</p>
-                <p className="text-[#666E7C] text-sm">Most Popular</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="p-2 w-36 border border-[#998E8A] hover:bg-[#E7E9EB] cursor-pointer text-nowrap"
-              >
-                <p className="text-lg">Feature</p>
-                <p className="text-[#666E7C] text-sm">Maximum Character</p>
-              </motion.div>
-            </div>
-          </div>
+          )}
         </motion.div>
 
         {/* Product Details (right section)*/}
@@ -664,17 +643,21 @@ export default function Product() {
             transition={{ delay: 0.3, type: "spring" }}
             className="text-md text-black p-2 flex flex-wrap items-center gap-2 m-0"
           >
-            <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
+            <div className="bg-[#F5F0ED] p-2 sm:p-3 text-xs sm:text-sm font-medium">
               SKU: {selectedProduct.sku}
             </div>
-            <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
-              🔥 BAL 29
+            <div className="bg-[#F5F0ED] p-2 sm:p-3 text-xs sm:text-sm font-medium">
+              {selectedProduct?.bal
+                ? `🔥 BAL ${selectedProduct?.bal}`
+                : selectedProduct?.jankaRating
+                  ? selectedProduct?.jankaRating
+                  : selectedProduct?.fireTested}
             </div>
-            <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
-              ✓ PEFC
+            <div className="bg-[#F5F0ED] p-2 sm:p-3 text-xs sm:text-sm font-medium">
+              ✓ {selectedProduct?.certification}
             </div>
-            <div className="bg-[#F5F0ED] p-3 text-sm font-medium text-nowrap">
-              Solid Hardwood
+            <div className="bg-[#F5F0ED] p-2 sm:p-3 text-xs sm:text-sm font-medium">
+              {selectedProduct?.productTypeLabel}
             </div>
           </motion.div>
 
@@ -685,7 +668,7 @@ export default function Product() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight"
+              className="text-3xl sm:text-4xl xl:text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent leading-tight"
             >
               {selectedProduct?.productName}
             </motion.h1>
@@ -695,9 +678,9 @@ export default function Product() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="text-gray-600 text-lg font-medium mt-3"
+              className="text-gray-600 text-base sm:text-lg font-medium mt-3"
             >
-              {selectedProduct?.description}
+              {selectedProduct?.brand} {selectedProduct?.range}
             </motion.p>
 
             {/* Enhanced Rating */}
@@ -728,44 +711,54 @@ export default function Product() {
             </motion.div>
           </div>
 
-          <motion.div className="grid lg:grid-cols-4 grid-cols-2 divide-x divide-[#E7E9EB] border border-[#E7E9EB] justify-between">
-            {[
-              { title: "14mm", desc: "Thickness" },
-              { title: "130mm", desc: "Width" },
-              { title: "9 kN", desc: "Janka" },
-              { title: "6mm", desc: "Wear Layer" },
-            ].map((item, index) => (
-              <motion.div className="text-center p-5">
-                <p className="text-xl text-black font-medium">{item.title}</p>
-                <p className="text-lg text-[#666E7C]">{item.desc}</p>
-              </motion.div>
-            ))}
+          <motion.div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-[#E7E9EB] border border-[#E7E9EB] justify-between items-center">
+            <motion.div className="text-center p-3 sm:p-5">
+              <p className="text-base sm:text-xl text-black font-medium">
+                {selectedProduct?.thickness && selectedProduct?.thickness[0]}
+              </p>
+              <p className="text-sm sm:text-lg text-[#666E7C]">Thickness</p>
+            </motion.div>
+            <motion.div className="text-center p-3 sm:p-5">
+              <p className="text-base sm:text-xl text-black font-medium">
+                {selectedProduct?.dimensions &&
+                  selectedProduct?.dimensions.split("x")[0]}
+              </p>
+              <p className="text-sm sm:text-lg text-[#666E7C]">Width</p>
+            </motion.div>
+            <motion.div className="text-center p-3 sm:p-5 border-t border-[#E7E9EB] sm:border-t-0">
+              <p className="text-base sm:text-xl text-black font-medium">
+                {selectedProduct?.jankaRating}
+              </p>
+              <p className="text-sm sm:text-lg text-[#666E7C]">Janka</p>
+            </motion.div>
+            <motion.div className="text-center p-3 sm:p-5 border-t border-[#E7E9EB] sm:border-t-0">
+              <p className="text-base sm:text-xl text-black font-medium">
+                {selectedProduct?.wearLayerThickness}
+              </p>
+              <p className="text-sm sm:text-lg text-[#666E7C]">Wear Layer</p>
+            </motion.div>
           </motion.div>
 
           {/* Price section */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 grid-flow-row-dense gap-3 items-center justify-evenly border
-          border-[#866053] p-1"
-          >
+          <motion.div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center justify-evenly border border-[#866053] p-1">
             {priceTab.map((price, index) => (
               <div
                 key={index}
-                className={`text-center space-y-3 h-full ${price.active ? "bg-[#866053] text-white" : "bg-white"} p-4 col-span-1 lg:col-span-2 xl:col-span-1 flex
-                flex-col items-center justify-center`}
+                className={`text-center space-y-3 h-full ${price.active ? "bg-[#866053] text-white" : "bg-white"} p-4 flex flex-col items-center justify-center cursor-pointer`}
                 onClick={() => priceTabHandler(price.id)}
               >
                 <h3
-                  className={`${price.active ? "text-white" : "text-[#8A6A5B]"} text-xl font-semibold`}
+                  className={`${price.active ? "text-white" : "text-[#8A6A5B]"} text-lg sm:text-xl font-semibold`}
                 >
                   {price.heading}
                 </h3>
 
-                <p className="text-2xl font-extrabold text-center">
+                <p className="text-xl sm:text-2xl font-extrabold text-center">
                   {price.id == 1
-                    ? selectedProduct?.supplyInstallPrice != null && (
+                    ? selectedProduct?.supplyInstallPrice && (
                         <>
                           {selectedProduct?.supplyInstallPrice}
-                          <span className="text-lg font-normal">
+                          <span className="text-base sm:text-lg font-normal">
                             /m <sup>2</sup>
                           </span>
                         </>
@@ -774,7 +767,7 @@ export default function Product() {
                       ? selectedProduct?.supplyPrice && (
                           <>
                             {selectedProduct?.supplyPrice}
-                            <span className="text-lg font-normal">
+                            <span className="text-base sm:text-lg font-normal">
                               /m <sup>2</sup>
                             </span>
                           </>
@@ -785,162 +778,78 @@ export default function Product() {
             ))}
           </motion.div>
 
-          {/* Qualtiny calculator */}
+          {/* Quantity calculator */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
-            className="border border-[#E7E9EB] p-5"
+            className="border border-[#E7E9EB] p-4 sm:p-5"
           >
-            {/* Selected price */}
-            {selectedProduct?.supplyInstallPrice && selectedProduct?.supplyPrice ? (
-              <div>
-                <div className="space-y-2 mb-8">
-                  <p>
-                    <span className="text-3xl font-extrabold ">
-                      {priceTab[0].active
-                        ? selectedProduct?.supplyInstallPrice
-                        : 28}
-                    </span>
-                    <span className="text-md font-normal text-[#666E7C]">
-                      /m <sup>2</sup> + GST
-                    </span>
-                  </p>
-                  <p className="text-[#666E7C] text-lg">
-                    Supply + Install pricing includes professional installation
-                    by our licensed Melbourne team.
-                  </p>
-                </div>
+            {/* ##################### TAB 1: Supply + Install ##################### */}
+            {priceTab[0].active && (
+              <>
+                {selectedProduct?.supplyInstallPrice ? (
+                  <CalculatorSection
+                    price={selectedProduct.supplyInstallPrice}
+                    label="Supply + Install pricing includes professional installation by our licensed Melbourne team."
+                    priceTab={priceTab}
+                    calculatorData={calculatorData}
+                    calculatorDataHandler={calculatorDataHandler}
+                    message={message}
+                    packSize={packSize}
+                    sizeData={sizeData}
+                    priceData={priceData}
+                    subtotalLabel="Subtotal (Supply + Install)"
+                  />
+                ) : (
+                  <NoOnlinePricing
+                    title="Supply + Install pricing is available in-store and over the phone only."
+                    description="Due to brand partner agreements, online pricing for supply + install orders on this product is not available here. Our team can offer you competitive pricing directly."
+                    btnText="Call to Get Supply + Install Price"
+                  />
+                )}
+              </>
+            )}
 
-                <h2 className="text-xl font-semibold">Coverage Calculator</h2>
-                <form action="" className="">
-                  <div className="space-y-3 mt-5">
-                    <div>
-                      <label htmlFor="" className="text-xl text-[#666E7C]">
-                        Total square meters needed
-                      </label>
-                      <br />
-                      <input
-                        type="text"
-                        placeholder="Enter m²"
-                        className="w-full border border-[#E7E9EB] p-3 mt-2 active:border-[#E7E9EB] focus:border-[#E7E9EB]"
-                        name="totalNeeded"
-                        onChange={(e) => calculatorDataHandler(e)}
-                      />
-                      {message && calculatorData.totalNeeded <= 0 && (
-                        <p className="text-lg font-medium text-red-600 mt-2">
-                          {message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="wastage"
-                        className="text-lg text-[#666E7C]"
-                      >
-                        Wastage
-                      </label>
-                      <div className="flex gap-5 mt-3 items-center">
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="radio"
-                            name="wastage"
-                            id="0%"
-                            value={0}
-                            onChange={(e) => calculatorDataHandler(e)}
-                            className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
-                          />
-                          <label htmlFor="wastage">0%</label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="radio"
-                            name="wastage"
-                            id="10%"
-                            value={10}
-                            onChange={(e) => calculatorDataHandler(e)}
-                            className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
-                            checked={calculatorData.wastage === 10}
-                          />
-                          <label htmlFor="">10%</label>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="radio"
-                            name="wastage"
-                            id="15%"
-                            value={15}
-                            onChange={(e) => calculatorDataHandler(e)}
-                            className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
-                          />
-                          <label htmlFor="">15%</label>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-lg mt-5 text-black font-medium bg-[#FCF8F5] p-3 w-fit">
-                      Pack size:{" "}
-                      <b>
-                        {packSize} m<sup>2</sup> per carton
-                      </b>
-                    </p>
-                  </div>
-                  <div className="mt-5 space-y-2">
-                    <p className="flex justify-between items-center font-semibold text-xl">
-                      <span className="text-lg font-normal text-[#666E7C]">
-                        Cartons Required:
-                      </span>{" "}
-                      {sizeData.cartons}
-                    </p>
-                    <p className="flex justify-between items-center font-semibold text-xl">
-                      <span className="text-lg font-normal text-[#666E7C]">
-                        Area Supplied:
-                      </span>
-                      {sizeData.area && `${sizeData.area} m²`}
-                    </p>
-                  </div>
-                </form>
-                {/* Price summery section */}
-                <motion.div className="space-y-4 mt-10 bg-[#F5F0ED] p-6">
-                  <h3 className="text-2xl font-semibold">Price Summary</h3>
-                  <div className="space-y-2">
-                    <p className="text-lg text-[#666E7C] flex justify-between items-center">
-                      Subtotal (Supply + Install):{" "}
-                      <span className="text-xl font-semibold text-black">
-                        {`$ ${priceData.subTotal}`}
-                      </span>
-                    </p>
-                    <p className="text-lg text-[#666E7C] flex justify-between items-center">
-                      GST (10%):{" "}
-                      <span className="text-xl font-semibold text-black">{`$ ${calculatorData.totalNeeded ? priceData.gst : 0}`}</span>
-                    </p>
-                    <div className="h-[1px] w-full bg-[#E7E9EB]"></div>
-                    <p className="text-lg text-[#666E7C] flex justify-between items-center">
-                      TOTAL{" "}
-                      <span className="text-xl font-semibold text-black">
-                        {`$ ${priceData.total}`}
-                      </span>
-                    </p>
-                  </div>
-                </motion.div>
-              </div>
-            ) : priceTab[1].active && (
-              <div className="bg-[#F9F6F4] border border-[#E7E9EB] rounded-2xl p-6 mt-6 space-y-5">
-                {/* Heading */}
-                <h3 className="text-xl font-semibold text-black">
-                  Supply Only pricing is available in-store and over the phone
-                  only.
+            {/* ##################### TAB 2: Supply Only ##################### */}
+            {priceTab[1].active && (
+              <>
+                {selectedProduct?.supplyPrice ? (
+                  <CalculatorSection
+                    price={selectedProduct.supplyPrice}
+                    label="Supply Only pricing — product will be delivered to your door."
+                    priceTab={priceTab}
+                    calculatorData={calculatorData}
+                    calculatorDataHandler={calculatorDataHandler}
+                    message={message}
+                    packSize={packSize}
+                    sizeData={sizeData}
+                    priceData={priceData}
+                    subtotalLabel="Subtotal (Supply Only)"
+                  />
+                ) : (
+                  <NoOnlinePricing
+                    title="Supply Only pricing is available in-store and over the phone only."
+                    description="Due to brand partner agreements, online pricing for supply-only orders on this product is not available here. Our team can offer you competitive supply-only pricing directly."
+                    btnText="Call to Get Supply Only Price"
+                  />
+                )}
+              </>
+            )}
+
+            {/* ##################### TAB 3: Request Quote ##################### */}
+            {priceTab[2].active && (
+              <div className="bg-[#F9F6F4] border border-[#E7E9EB] rounded-2xl p-6 mt-2 space-y-5">
+                <h3 className="text-lg sm:text-xl font-semibold text-black">
+                  Request a Custom Quote
                 </h3>
-
-                {/* Description */}
-                <p className="text-[#666E7C] text-base leading-relaxed">
-                  Due to brand partner agreements, online pricing for
-                  supply-only orders on this product is not available here. Our
-                  team can offer you competitive supply-only pricing directly.
+                <p className="text-[#666E7C] text-sm sm:text-base leading-relaxed">
+                  Get a personalised quote tailored to your project size and
+                  requirements. Our team will get back to you within 1 business
+                  day.
                 </p>
-
-                {/* Contact Section */}
                 <div className="bg-white border border-[#E7E9EB] rounded-xl p-4 space-y-2">
-                  <p className="text-lg font-medium text-black flex items-center gap-2">
+                  <p className="text-base sm:text-lg font-medium text-black flex items-center gap-2 flex-wrap">
                     <Phone /> Call us on{" "}
                     <a
                       href="tel:YOUR_PHONE_NUMBER"
@@ -953,20 +862,16 @@ export default function Product() {
                     Mon–Fri 8am–8pm · Sat 9am–5pm
                   </p>
                 </div>
-
-                {/* CTA Button */}
                 <div className="space-y-3">
                   <button className="w-full bg-[#8A6A5B] hover:bg-[#755645] text-white py-3 rounded-xl font-semibold transition">
-                    Call to Get Supply Only Price
+                    Request a Quote
                   </button>
-
-                  {/* Secondary Link */}
                   <p className="text-sm text-center">
                     <a
                       href="#"
                       className="text-[#8A6A5B] hover:underline font-medium"
                     >
-                      Or request a callback and we’ll call you →
+                      Or request a callback and we'll call you →
                     </a>
                   </p>
                 </div>
@@ -975,20 +880,20 @@ export default function Product() {
           </motion.div>
 
           {/* CTA */}
-          <motion.div className="bg-[#D7CEC5] p-5 flex flex-col xl:flex-row items-center gap-10">
-            <p className="text-lg text-black">
+          <motion.div className="bg-[#D7CEC5] p-5 flex flex-col xl:flex-row items-center gap-5 sm:gap-10">
+            <p className="text-base sm:text-lg text-black text-center sm:text-left">
               Ordering 100m² or more? Call us — we'll beat any written quote and
               offer you a trade price most retailers can't match.
             </p>
-            <button className="text-nowrap text-black bg-white px-8 py-3">
+            <button className="whitespace-nowrap text-black bg-white px-8 py-3 shrink-0">
               Call Now
             </button>
           </motion.div>
 
           {/* Buttons section */}
-          <motion.div className="w-full flex flex-col md:flex-row items-center gap-y-5 gap-x-10">
+          <motion.div className="w-full flex flex-col sm:flex-row items-center gap-4 sm:gap-x-10">
             <button
-              className="border border-[#998E8A] text-[#998E8A] py-3 text-lg xl:text-xl w-full md:w-6/12 cursor-pointer"
+              className="border border-[#998E8A] text-[#998E8A] py-3 text-base sm:text-lg xl:text-xl w-full cursor-pointer"
               onClick={() => setShowModal(true)}
             >
               View in showroom
@@ -996,7 +901,7 @@ export default function Product() {
             <button
               onClick={handleAddToCart}
               disabled={loading}
-              className="bg-[#998E8A] py-3 text-white text-lg xl:text-xl w-full md:w-6/12 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-[#998E8A] py-3 text-white text-base sm:text-lg xl:text-xl w-full cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Adding..." : "Add to Cart"}
             </button>
@@ -1009,15 +914,15 @@ export default function Product() {
         </motion.div>
       </div>
 
-      {/* Model section */}
+      {/* Modal section */}
       {showModal && (
         <motion.div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 px-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div className="bg-white w-[90%] md:w-[600px] p-8 rounded-xl relative">
+          <div className="bg-white w-full max-w-[600px] p-6 sm:p-8 rounded-xl relative max-h-[90vh] overflow-y-auto">
             {/* Close Button */}
             <button
               onClick={() => setShowModal(false)}
@@ -1026,7 +931,9 @@ export default function Product() {
               ✕
             </button>
 
-            <h3 className="text-2xl font-semibold mb-2">Book Showroom Visit</h3>
+            <h3 className="text-xl sm:text-2xl font-semibold mb-2">
+              Book Showroom Visit
+            </h3>
             <p className="mb-6 text-gray-600">
               View Premium Luxury Flooring in our showroom
             </p>
@@ -1035,31 +942,31 @@ export default function Product() {
               <input
                 type="text"
                 placeholder="Product"
-                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none"
               />
               <input
                 type="text"
                 placeholder="Name*"
-                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none"
               />
               <input
                 type="text"
                 placeholder="Phone*"
-                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none"
               />
               <input
                 type="email"
                 placeholder="Email*"
-                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none"
               />
               <input
                 type="date"
-                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none"
                 placeholder="Preferred Date*"
               />
               <input
                 type="time"
-                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none placeholder:absolute focus:placeholder:top-1 focus:placeholder:text-sm"
+                className="border p-4 border-[#E7E9EB] focus:border-[#E7E9EB] focus:outline-none"
                 placeholder="Preferred Time*"
               />
 
@@ -1071,9 +978,51 @@ export default function Product() {
         </motion.div>
       )}
 
+      {/* Product highlights section */}
+      <motion.div className="mt-20 w-full bg-[#FCF8F5] p-5 md:p-10">
+        <div className="grid grid-cols-3 gap-6 space-y-8 justify-center items-start w-10/12 mx-auto">
+          <h3 className="text-3xl xl:text-4xl font-bold">Product Highlights</h3>
+          {/* <div className=" lg:mx-auto"> */}
+          <div className="space-y-3 flex-1 min-w-[200px]">
+            <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+              Thickness:{" "}
+              {selectedProduct?.thickness && selectedProduct?.thickness[0]}
+            </p>
+            <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Board
+              Size: {selectedProduct?.dimensions}
+            </p>
+            <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Pack
+              Coverage:{" "}
+              {selectedProduct?.packSize &&
+                selectedProduct?.packSize.split("-")[0]}
+            </p>
+          </div>
+          <div className="space-y-3 flex-1 min-w-[200px]">
+            <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Water
+              Rating: {selectedProduct?.waterresistant}
+            </p>
+            <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} />{" "}
+              Warranty: {selectedProduct?.Warrenty}
+            </p>
+            <p className="text-sm sm:text-base md:text-lg flex items-center gap-2">
+              <CircleCheckBig color="#8A6A5B" width={20} height={20} /> Wear
+              Layer: {selectedProduct?.coating}
+            </p>
+          </div>
+        </div>
+        {/* </div> */}
+      </motion.div>
+
       {/* Specification and Details section */}
       <motion.div className="w-10/12 mx-auto mt-20">
-        <h3 className="text-4xl font-bold">Specifications & Details</h3>
+        <h3 className="text-2xl sm:text-4xl font-bold">
+          Specifications & Details
+        </h3>
 
         {/* Tab section */}
         <motion.div
@@ -1082,12 +1031,12 @@ export default function Product() {
           transition={{ delay: 0.8 }}
         >
           {/* TAB HEADERS */}
-          <div className="flex border-b border-gray-200 mt-5 overflow-x-scroll">
+          <div className="flex border-b border-gray-200 mt-5 overflow-x-auto scrollbar-hide">
             {tabs.map((tab, index) => (
               <button
                 key={index}
                 onClick={() => setActiveTab(tab)}
-                className={`px-3 lg:px-6 py-3 text-md lg:text-lg xl:text-2xl font-normal transition relative
+                className={`px-3 lg:px-6 py-3 text-sm sm:text-md lg:text-lg xl:text-2xl font-normal transition relative whitespace-nowrap
             ${
               activeTab === tab
                 ? "text-[#8A6A5B] font-semibold"
@@ -1113,59 +1062,70 @@ export default function Product() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="min-h-[180px] px-6 py-6"
+            className="min-h-[180px] px-2 sm:px-6 py-6"
           >
             {activeTab === "Description" && (
               <div className="space-y-4">
-                <p className="text-lg">{selectedProduct?.description}</p>
+                <p className="text-base sm:text-lg">
+                  {selectedProduct?.description}
+                </p>
               </div>
             )}
 
             {activeTab === "Specifications" && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-4 gap-5">
-                  {Object.entries(
-                    selectedProduct.specifications instanceof Map
-                      ? Object.fromEntries(selectedProduct.specifications)
-                      : selectedProduct.specifications,
-                  ).map(([key, value]) => (
-                    <Specification key={key} label={key} value={value} />
-                  ))}
+              <div className="space-y-4 h-[280px] overflow-y-scroll">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                  {selectedProduct?.specifications &&
+                    Object.entries(
+                      selectedProduct.specifications instanceof Map
+                        ? Object.fromEntries(selectedProduct.specifications)
+                        : selectedProduct.specifications,
+                    ).map(([key, value]) => (
+                      <Specification key={key} label={key} value={value} />
+                    ))}
                 </div>
               </div>
             )}
 
             {activeTab === "Dimensions" && (
               <div className="space-y-4">
-                <p className="text-lg">{selectedProduct?.details.dimensions}</p>
+                <p className="text-base sm:text-lg">
+                  {selectedProduct?.details?.dimensions}
+                </p>
               </div>
             )}
 
             {activeTab === "Installation" && (
               <div className="space-y-4">
-                <p className="text-lg">{selectedProduct?.details.installation}</p>
+                <p className="text-base sm:text-lg">
+                  {selectedProduct?.details?.installation}
+                </p>
               </div>
             )}
 
             {activeTab === "Warranty" && (
               <div className="space-y-4">
-                <p className="text-lg">{selectedProduct?.details.warranty}</p>
+                <p className="text-base sm:text-lg">
+                  {selectedProduct?.details?.warranty}
+                </p>
               </div>
             )}
 
             {activeTab === "Delivery" && (
               <div className="space-y-4">
-                <p className="text-lg">{selectedProduct?.details.delivery}</p>
+                <p className="text-base sm:text-lg">
+                  {selectedProduct?.details?.delivery}
+                </p>
               </div>
             )}
           </motion.div>
         </motion.div>
       </motion.div>
 
-      <motion.div className="bg-[#FCF8F5] w-full p-10 py-20 md:p-24 mt-20">
+      <motion.div className="bg-[#FCF8F5] w-full p-6 py-16 md:p-24 mt-10">
         <div className="w-full md:w-11/12 mx-auto">
-          <h2 className="text-4xl font-semibold mb-10">
-            Will this work in your home?
+          <h2 className="text-2xl sm:text-4xl font-semibold mb-10">
+            Will this work in your home?
           </h2>
           <AnimatePresence mode="wait">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
@@ -1175,16 +1135,18 @@ export default function Product() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.5 }}
                   key={index}
-                  className="p-10 bg-white border-t-2 border-[#8A6A5B] space-y-4"
+                  className="p-6 sm:p-10 bg-white border-t-2 border-[#8A6A5B] space-y-4"
                 >
                   <CircleCheckBig color="#8A6A5B" />
-                  <p className="text-2xl">{item.title}</p>
+                  <p className="text-xl sm:text-2xl">{item.title}</p>
                   <span
                     className={`p-2 text-xs ${item.btnType == "success" ? "bg-[#E3E4DD] text-[#4C6647]" : "bg-[#EFE8DA] text-[#B2873C]"}`}
                   >
                     {item.btnText}
                   </span>
-                  <p className="text-lg mt-5">{item.description}</p>
+                  <p className="text-base sm:text-lg mt-5">
+                    {item.description}
+                  </p>
                 </motion.div>
               ))}
             </div>
@@ -1212,7 +1174,7 @@ export default function Product() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold  mb-4"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
           >
             You May Also Like
           </motion.h2>
@@ -1221,20 +1183,20 @@ export default function Product() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-gray-600 text-lg"
+            className="text-gray-600 text-base sm:text-lg"
           >
             Discover more premium flooring options
           </motion.p>
         </div>
 
-        <div className="max-w-10/12 mx-auto">
+        <div className="max-w-[83.333%] mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="show"
               exit="exit"
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6 relative z-10"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6 relative z-10"
             >
               {products.map((item) => (
                 <motion.div
@@ -1261,12 +1223,12 @@ export default function Product() {
 
                     <div className="absolute top-2 left-2 z-20 flex gap-3">
                       {item.isNew && (
-                        <span className="inline-block px-4 py-1 text-md tracking-wide bg-white text-black font-semibold">
+                        <span className="inline-block px-4 py-1 text-sm tracking-wide bg-white text-black font-semibold">
                           New
                         </span>
                       )}
                       {item.onSale && (
-                        <span className="inline-block px-4 py-1 text-md font-semibold tracking-wide bg-white text-black">
+                        <span className="inline-block px-4 py-1 text-sm font-semibold tracking-wide bg-white text-black">
                           Sale
                         </span>
                       )}
@@ -1281,30 +1243,30 @@ export default function Product() {
                     )}
                   </div>
 
-                  <div className="py-5 space-y-2">
+                  <div className="py-5 px-3 space-y-2">
                     <div className="flex items-center gap-1">
                       {[1, 2, 3, 4, 5].map((_, i) => (
                         <span key={i} className="text-yellow-400 text-xl">
                           ★
                         </span>
                       ))}
-                      <span className="text-lg font-medium text-gray-700">
+                      <span className="text-base sm:text-lg font-medium text-gray-700">
                         (200)
                       </span>
                     </div>
 
                     <div className="flex items-start justify-between gap-2">
-                      <p className="text-2xl font-bold text-gray-900 line-clamp-1">
+                      <p className="text-xl sm:text-2xl font-bold text-gray-900 line-clamp-1">
                         Hydro Laminate Tiles
                       </p>
                     </div>
 
-                    <p className="text-lg text-gray-500 line-clamp-1">
+                    <p className="text-base sm:text-lg text-gray-500 line-clamp-1">
                       by Elite Floors Collection
                     </p>
 
                     <div className="flex items-baseline gap-2">
-                      <span className="text-xl font-bold text-gray-900">
+                      <span className="text-lg sm:text-xl font-bold text-gray-900">
                         ${item.price}
                       </span>
                       <span className="text-red-600 font-bold text-base">
@@ -1320,7 +1282,7 @@ export default function Product() {
             </motion.div>
           </AnimatePresence>
         </div>
-        <button className="bg-[#998E8A] px-10 py-3 text-white flex justify-center items-center mx-auto mt-10 text-lg">
+        <button className="bg-[#998E8A] px-10 py-3 text-white flex justify-center items-center mx-auto mt-10 text-base sm:text-lg">
           View All
         </button>
       </motion.div>
@@ -1333,24 +1295,177 @@ function Specification({ label, value }) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="backdrop-blur-sm bg-gray-50/50 flex items-center gap-5 border border-gray-200/50 rounded-2xl p-4 hover:shadow-md transition-all"
+      className="backdrop-blur-sm bg-gray-50/50 border border-gray-200/50 rounded-2xl p-4 hover:shadow-md transition-all"
     >
-      <p className="text-md text-gray-600 mb-1">{label}:</p>
+      <p className="text-sm sm:text-md text-gray-600 mb-1 text-nowrap">
+        {label}:
+      </p>
       <p className="font-bold text-gray-900">{value}</p>
     </motion.div>
   );
 }
 
-function AdditionalInformation({ label, value }) {
+// ─── Reusable Calculator Section ───────────────────────────────────────────────
+function CalculatorSection({
+  price,
+  label,
+  calculatorData,
+  calculatorDataHandler,
+  message,
+  packSize,
+  sizeData,
+  priceData,
+  subtotalLabel,
+}) {
   return (
-    <motion.p
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: 1, x: 0 }}
-      // transition={{ delay: i * 0.1 }}
-      className="text-sm text-gray-600 flex items-center gap-2"
-    >
-      <span className="font-semibold text-gray-800">{label}:</span>
-      <span>{value}</span>
-    </motion.p>
+    <div>
+      {/* Price Header */}
+      <div className="space-y-2 mb-8">
+        <p>
+          <span className="text-2xl sm:text-3xl font-extrabold">{price}</span>
+          <span className="text-sm sm:text-md font-normal text-[#666E7C]">
+            /m <sup>2</sup> + GST
+          </span>
+        </p>
+        <p className="text-[#666E7C] text-base sm:text-lg">{label}</p>
+      </div>
+
+      {/* Calculator */}
+      <h2 className="text-lg sm:text-xl font-semibold">Coverage Calculator</h2>
+      <form action="" className="">
+        <div className="space-y-3 mt-5">
+          <div>
+            <label
+              htmlFor="totalNeeded"
+              className="text-base sm:text-xl text-[#666E7C]"
+            >
+              Total square meters needed
+            </label>
+            <br />
+            <input
+              type="text"
+              id="totalNeeded"
+              placeholder="Enter m²"
+              value={calculatorData.totalNeeded ?? ""}
+              className="w-full border border-[#E7E9EB] p-3 mt-2 focus:outline-none focus:border-[#E7E9EB]"
+              name="totalNeeded"
+              onChange={(e) => calculatorDataHandler(e)}
+            />
+            {message && calculatorData.totalNeeded <= 0 && (
+              <p className="text-lg font-medium text-red-600 mt-2">{message}</p>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="wastage"
+              className="text-base sm:text-lg text-[#666E7C]"
+            >
+              Wastage
+            </label>
+            <div className="flex flex-wrap gap-4 sm:gap-5 mt-3 items-center">
+              {[0, 10, 15].map((val) => (
+                <div key={val} className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="wastage"
+                    id={`wastage-${val}`}
+                    value={val}
+                    checked={Number(calculatorData.wastage) === val}
+                    onChange={(e) => calculatorDataHandler(e)}
+                    className="accent-[#8A6A5B] cursor-pointer w-4 h-4"
+                  />
+                  <label htmlFor={`wastage-${val}`}>{val}%</label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-base sm:text-lg mt-5 text-black font-medium bg-[#FCF8F5] p-3 w-fit">
+            Pack size:{" "}
+            <b>
+              {packSize} m<sup>2</sup> per carton
+            </b>
+          </p>
+        </div>
+
+        <div className="mt-5 space-y-2">
+          <p className="flex justify-between items-center font-semibold text-lg sm:text-xl">
+            <span className="text-base sm:text-lg font-normal text-[#666E7C]">
+              Cartons Required:
+            </span>{" "}
+            {sizeData.cartons}
+          </p>
+          <p className="flex justify-between items-center font-semibold text-lg sm:text-xl">
+            <span className="text-base sm:text-lg font-normal text-[#666E7C]">
+              Area Supplied:
+            </span>
+            {sizeData.area && `${sizeData.area} m²`}
+          </p>
+        </div>
+      </form>
+
+      {/* Price Summary */}
+      <motion.div className="space-y-4 mt-10 bg-[#F5F0ED] p-4 sm:p-6">
+        <h3 className="text-xl sm:text-2xl font-semibold">Price Summary</h3>
+        <div className="space-y-2">
+          <p className="text-sm sm:text-lg text-[#666E7C] flex justify-between items-center gap-4 flex-wrap">
+            <span>{subtotalLabel}:</span>
+            <span className="text-lg sm:text-xl font-semibold text-black">
+              {`$ ${priceData.subTotal}`}
+            </span>
+          </p>
+          <p className="text-sm sm:text-lg text-[#666E7C] flex justify-between items-center">
+            GST (10%):{" "}
+            <span className="text-lg sm:text-xl font-semibold text-black">
+              {`$ ${calculatorData.totalNeeded ? priceData.gst : 0}`}
+            </span>
+          </p>
+          <div className="h-[1px] w-full bg-[#E7E9EB]"></div>
+          <p className="text-sm sm:text-lg text-[#666E7C] flex justify-between items-center">
+            TOTAL{" "}
+            <span className="text-lg sm:text-xl font-semibold text-black">
+              {`$ ${priceData.total}`}
+            </span>
+          </p>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+// ─── Reusable No Online Pricing Section ────────────────────────────────────────
+function NoOnlinePricing({ title, description, btnText }) {
+  return (
+    <div className="bg-[#F9F6F4] border border-[#E7E9EB] rounded-2xl p-6 mt-2 space-y-5">
+      <h3 className="text-lg sm:text-xl font-semibold text-black">{title}</h3>
+      <p className="text-[#666E7C] text-sm sm:text-base leading-relaxed">
+        {description}
+      </p>
+
+      <div className="bg-white border border-[#E7E9EB] rounded-xl p-4 space-y-2">
+        <p className="text-base sm:text-lg font-medium text-black flex items-center gap-2 flex-wrap">
+          <Phone /> Call us on{" "}
+          <a
+            href="tel:YOUR_PHONE_NUMBER"
+            className="text-[#8A6A5B] font-semibold"
+          >
+            YOUR_PHONE_NUMBER
+          </a>
+        </p>
+        <p className="text-sm text-[#666E7C]">Mon–Fri 8am–8pm · Sat 9am–5pm</p>
+      </div>
+
+      <div className="space-y-3">
+        <button className="w-full bg-[#8A6A5B] hover:bg-[#755645] text-white py-3 rounded-xl font-semibold transition">
+          {btnText}
+        </button>
+        <p className="text-sm text-center">
+          <a href="#" className="text-[#8A6A5B] hover:underline font-medium">
+            Or request a callback and we'll call you →
+          </a>
+        </p>
+      </div>
+    </div>
   );
 }

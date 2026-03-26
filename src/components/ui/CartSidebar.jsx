@@ -8,7 +8,7 @@ import {
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { X, Trash2 } from "lucide-react";
-import { addCartItems, removeCartItems } from "../../features/cart/cart";
+import { removeCartItems } from "../../features/cart/cart";
 
 const CartSidebar = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();

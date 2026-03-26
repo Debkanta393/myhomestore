@@ -54,13 +54,14 @@ export const fetchCartItems = createAsyncThunk(
             (p) => p._id === cartItem.productId,
           );
           return {
-            productId: cartItem.productId,
-            name: product?.productName || "",
-            price: cartItem.price || 0,
-            image: product?.productImage?.[0] || "",
-            quantity: cartItem.quantity,
+            id: cartItem.id,
+            product: product || "",
+            quantity: cartItem.totalMeterSquare,
             wastage: cartItem.wastage,
-            totalPrice: (cartItem.price || 0) * cartItem.quantity,
+            totalPrice: cartItem.totalPrice,
+            cartons: cartItem.cartonsRequired,
+            areaSupplied: cartItem.areaSupplied,
+            service: cartItem.selectedService,
           };
         });
 
@@ -76,14 +77,35 @@ export const fetchCartItems = createAsyncThunk(
 export const addCartItems = createAsyncThunk(
   "cart/addCartItems",
   async (
-    { productId, isAuthenticated, totalMeterSquare, totalPrice, wastage },
+    {
+      productId,
+      id,
+      isAuthenticated,
+      totalMeterSquare,
+      wastage,
+      totalPrice,
+      cartonsRequired,
+      areaSupplied,
+      selectedService,
+    },
     { rejectWithValue },
   ) => {
+    console.log(totalPrice);
     if (isAuthenticated) {
       try {
         const res = await api.post(
           ADD_CART,
-          { productId, totalMeterSquare, totalPrice, wastage },
+          {
+            productId,
+            id,
+            isAuthenticated,
+            totalMeterSquare,
+            wastage,
+            totalPrice,
+            cartonsRequired,
+            areaSupplied,
+            selectedService,
+          },
           { withCredentials: true },
         );
         return { items: res.data.cart, isGuest: false };
@@ -119,9 +141,14 @@ export const addCartItems = createAsyncThunk(
           ...currentCart,
           {
             productId,
-            quantity: totalMeterSquare,
-            price: totalPrice,
+            id,
+            isAuthenticated,
+            totalMeterSquare,
             wastage,
+            totalPrice,
+            cartonsRequired,
+            areaSupplied,
+            selectedService,
             addedAt: new Date(),
           },
         ];
@@ -137,19 +164,15 @@ export const addCartItems = createAsyncThunk(
 export const removeCartItems = createAsyncThunk(
   "cart/deleteCart",
   async (
-    { productId, isAuthenticated, quantity, wastage },
+    { productId, isAuthenticated },
     { rejectWithValue },
   ) => {
-    console.log({
-      productId,
-      quantity,
-      wastage,
-    });
+    console.log(productId)
     if (isAuthenticated) {
       try {
         const res = await api.post(
           DELETE_CART,
-          { productId, quantity, wastage },
+          { productId },
           {
             withCredentials: true,
           },
@@ -165,11 +188,10 @@ export const removeCartItems = createAsyncThunk(
       const updatedCart = currentCart.filter(
         (item) =>
           !(
-            String(item.productId) === String(productId) &&
-            Number(item.quantity) === Number(quantity) &&
-            Number(item.wastage) === Number(wastage)
+            String(item.id) == String(productId) 
           ),
       );
+      
 
       console.log(updatedCart);
 
@@ -198,10 +220,10 @@ export const mergeCartOnLogin = createAsyncThunk(
 );
 
 // ─── Selectors ───────────────────────────────────────────────────
-export const selectCartItems = (state) => state.cart.items;
+export const selectCartItems = (state) => state.cart.items ?? [];
 export const selectCartCount = (state) => state.cart.items.length;
 export const selectTotalPrice = (state) =>
-  state.cart.items.reduce((total, item) => total + item.price, 0);
+  state.cart.items.reduce((total, item) => total + item.totalPrice, 0);
 export const selectIsGuest = (state) => state.cart.isGuest;
 export const selectCartLoading = (state) => state.cart.loading;
 export const selectCartError = (state) => state.cart.error;

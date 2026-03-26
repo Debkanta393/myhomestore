@@ -347,7 +347,8 @@ export function Header() {
 
                 {/* Cart */}
                 <div
-                  onClick={() => setActiveCartSection(true)}
+                  // onClick={() => setActiveCartSection(true)}
+                  onClick={() => navigate("/cart")}
                   className="flex items-center gap-2 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 relative group cursor-pointer"
                 >
                   <motion.div
