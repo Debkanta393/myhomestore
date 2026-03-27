@@ -26,12 +26,26 @@ import { navData } from "../../../data/data";
 import * as Icons from "lucide-react";
 import { searchProduct } from "../../features/product/product";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../ui/Button";
 
 // ✅ Moved outside component — no recreation on every render
 const mobileNavSections = {
   0: ["By Room", "By Category", "Shop By Brands"],
-  1: ["Resilient & Modern", "Accessories", "Brands", "Natural Timber", "By Species", "Eco - Friendly", "Need Help?"],
-  2: ["Decking", "Cladding & Screening", "Fencing & Benchtops", "Outdoor Benchtops"],
+  1: [
+    "Resilient & Modern",
+    "Accessories",
+    "Brands",
+    "Natural Timber",
+    "By Species",
+    "Eco - Friendly",
+    "Need Help?",
+  ],
+  2: [
+    "Decking",
+    "Cladding & Screening",
+    "Fencing & Benchtops",
+    "Outdoor Benchtops",
+  ],
   3: ["Bamboo Products", "Sustainable Timber", "Eco Brands"],
   4: ["Bathroom", "Kitchen", "Brands", "Services"],
   5: ["Indoor Tiles", "Outdoor & Commercial", "DW Tiles"],
@@ -80,7 +94,9 @@ export function Header() {
   const [activeCartSection, setActiveCartSection] = useState(false);
   useEffect(() => {
     document.body.style.overflow = activeCartSection ? "hidden" : "auto";
-    return () => { document.body.style.overflow = "auto"; };
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [activeCartSection]);
 
   // ✅ Lock body scroll when mobile menu is open
@@ -90,7 +106,9 @@ export function Header() {
     } else {
       document.body.style.overflow = "auto";
     }
-    return () => { document.body.style.overflow = "auto"; };
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [mobileMenuOpen]);
 
   const cartCount = useSelector(selectCartCount);
@@ -102,7 +120,9 @@ export function Header() {
     dispatch(searchProduct(name));
   };
 
-  const searchResults = useSelector((state) => state.product.list.searchResults);
+  const searchResults = useSelector(
+    (state) => state.product.list.searchResults,
+  );
 
   // Close search dropdown on outside click
   useEffect(() => {
@@ -110,7 +130,10 @@ export function Header() {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setSearchResult(false);
       }
-      if (mobileSearchRef.current && !mobileSearchRef.current.contains(event.target)) {
+      if (
+        mobileSearchRef.current &&
+        !mobileSearchRef.current.contains(event.target)
+      ) {
         setMobileSearchOpen(false);
       }
     };
@@ -120,12 +143,10 @@ export function Header() {
 
   return (
     <header className="bg-white w-full sticky top-0 z-30">
-
       {/* ── Top Bar ── */}
       <div className="bg-[#f5efed] w-full border-b border-[#D6CEC6]/30 relative z-40">
         <div className="w-full lg:w-10/12 mx-auto px-4 lg:px-0">
           <nav className="flex justify-between items-center py-2 md:py-3">
-
             {/* Left nav links — hidden on mobile, visible md+ */}
             <div className="flex gap-2 lg:gap-8 items-center">
               {topNavItems.map((item) => (
@@ -135,8 +156,10 @@ export function Header() {
                   onMouseEnter={() => setHovered(item.key)}
                   onMouseLeave={() => setHovered(null)}
                 >
-                  <div className="flex items-center gap-1.5 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 text-xs sm:text-base
-                   font-medium whitespace-nowrap cursor-pointer">
+                  <div
+                    className="flex items-center gap-1.5 text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 text-xs sm:text-base
+                   font-medium whitespace-nowrap cursor-pointer"
+                  >
                     {item.label}
                     <motion.div
                       animate={{ rotate: hovered === item.key ? 180 : 0 }}
@@ -210,9 +233,9 @@ export function Header() {
         <div className="py-2.5 md:py-3 px-4">
           {/* Desktop: static text */}
           <p className="hidden lg:block text-center text-white text-sm md:text-base font-medium">
-            🎄 Merry Christmas! We'll be taking a break on the 20th December
-            and resuming on 8th January. Online orders and enquiries can still
-            be made during this period.
+            🎄 Merry Christmas! We'll be taking a break on the 20th December and
+            resuming on 8th January. Online orders and enquiries can still be
+            made during this period.
           </p>
           {/* ✅ Mobile: marquee replaced with CSS scrolling for better browser support */}
           <div className="lg:hidden overflow-hidden">
@@ -240,7 +263,6 @@ export function Header() {
       >
         <div className="w-11/12 lg:w-10/12 mx-auto">
           <div className="flex justify-between items-center py-3 sm:py-4 lg:py-5">
-
             {/* Logo */}
             <Link to="/" className="flex items-center group shrink-0">
               <motion.div
@@ -279,7 +301,9 @@ export function Header() {
                     onClick={() => setSearchResult(false)}
                   >
                     {searchResults.length === 0 ? (
-                      <p className="text-sm text-[#999] px-3 py-2">No results found.</p>
+                      <p className="text-sm text-[#999] px-3 py-2">
+                        No results found.
+                      </p>
                     ) : (
                       searchResults.map((list, index) => (
                         <motion.li
@@ -289,7 +313,9 @@ export function Header() {
                           transition={{ delay: 0.05 * index, duration: 0.3 }}
                           className="px-3 py-2 rounded hover:bg-[#f5efed] cursor-pointer text-sm font-medium text-[#666E7C]"
                           onClick={() =>
-                            navigate(`/${list.range.toLowerCase()}/${slugify(list.productName)}`)
+                            navigate(
+                              `/${list.range.toLowerCase()}/${slugify(list.productName)}`,
+                            )
                           }
                         >
                           {list.productName}
@@ -303,13 +329,15 @@ export function Header() {
 
             {/* Right Actions */}
             <div className="flex items-center gap-2 sm:gap-3 lg:gap-5">
-
               {/* Profile — md+ only */}
               <Link
                 to="/profile"
                 className="hidden md:flex items-center text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300"
               >
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <User size={20} />
                 </motion.div>
               </Link>
@@ -332,7 +360,10 @@ export function Header() {
                 onClick={() => navigate("/cart")}
                 className="flex items-center text-[#8A6A5A] hover:text-[#998e8a] transition-colors duration-300 relative cursor-pointer"
               >
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <ShoppingBag size={20} />
                 </motion.div>
                 {cartCount > 0 && (
@@ -343,7 +374,7 @@ export function Header() {
               </div>
 
               {/* Get Quote — desktop only */}
-              <motion.button
+              {/* <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="hidden lg:block relative overflow-hidden py-2.5 xl:py-3 px-5 xl:px-8 bg-[#998e8a] text-white font-semibold group border-2 border-[#998e8a] transition-all duration-300 text-sm xl:text-base"
@@ -352,7 +383,11 @@ export function Header() {
                   Get a Quote
                 </span>
                 <span className="absolute inset-0 bg-[#f5efed] transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100" />
-              </motion.button>
+              </motion.button> */}
+
+              <Button variant="primary" size="lg">
+                Get a Quote
+              </Button>
 
               {/* Hamburger — mobile/tablet only */}
               <motion.button
@@ -401,14 +436,18 @@ export function Header() {
                     onClick={() => setSearchResult(false)}
                   >
                     {searchResults.length === 0 ? (
-                      <p className="text-sm text-[#999] px-4 py-3">No results found.</p>
+                      <p className="text-sm text-[#999] px-4 py-3">
+                        No results found.
+                      </p>
                     ) : (
                       searchResults.map((list, index) => (
                         <div
                           key={index}
                           className="px-4 py-2.5 hover:bg-[#f5efed] cursor-pointer text-sm font-medium text-[#666E7C] border-b border-[#f0ece8] last:border-0"
                           onClick={() =>
-                            navigate(`/${list.range.toLowerCase()}/${slugify(list.productName)}`)
+                            navigate(
+                              `/${list.range.toLowerCase()}/${slugify(list.productName)}`,
+                            )
                           }
                         >
                           {list.productName}
@@ -484,7 +523,6 @@ export function Header() {
             className="lg:hidden bg-white border-t border-[#D6CEC6]/30 max-h-[calc(100dvh-120px)] overflow-y-auto relative z-20"
           >
             <div className="w-11/12 mx-auto py-4 pb-24">
-
               {/* Mobile nav accordion */}
               {tabs.map((tab, tabIndex) => (
                 <motion.div
@@ -518,14 +556,16 @@ export function Header() {
                         className="overflow-hidden"
                       >
                         <div className="py-2 flex flex-col gap-0.5">
-                          {(mobileNavSections[tabIndex] ?? []).map((sectionKey) => (
-                            <MobileNavSection
-                              key={sectionKey}
-                              sectionKey={sectionKey}
-                              openSection={mainHovered}
-                              setOpenSection={setMainHovered}
-                            />
-                          ))}
+                          {(mobileNavSections[tabIndex] ?? []).map(
+                            (sectionKey) => (
+                              <MobileNavSection
+                                key={sectionKey}
+                                sectionKey={sectionKey}
+                                openSection={mainHovered}
+                                setOpenSection={setMainHovered}
+                              />
+                            ),
+                          )}
                         </div>
                       </motion.div>
                     )}
@@ -600,7 +640,9 @@ function MobileNavSection({ sectionKey, openSection, setOpenSection }) {
         onClick={() => setOpenSection(isOpen ? null : sectionKey)}
         className="w-full flex justify-between items-center px-3 py-3 text-left"
       >
-        <span className="text-sm font-semibold text-[#8A6A5A]">{sectionKey}</span>
+        <span className="text-sm font-semibold text-[#8A6A5A]">
+          {sectionKey}
+        </span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.25 }}
@@ -628,7 +670,10 @@ function MobileNavSection({ sectionKey, openSection, setOpenSection }) {
                     className="flex items-start gap-2 px-3 py-2 hover:bg-[#f5efed] rounded-lg transition-colors"
                   >
                     {Icon && (
-                      <Icon size={16} className="text-[#B2873C] shrink-0 mt-0.5" />
+                      <Icon
+                        size={16}
+                        className="text-[#B2873C] shrink-0 mt-0.5"
+                      />
                     )}
                     <div className="flex flex-col flex-1 min-w-0">
                       <span className="text-[14px] sm:text-[15px] text-[#666E7C] font-medium truncate">

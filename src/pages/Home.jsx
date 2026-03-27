@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { collections } from "../../data/data";
 import { useSelector } from "react-redux";
 import { MapPin, ShieldCheck, Leaf, DollarSign } from "lucide-react";
+import { Button } from "../components/ui/Button";
 
 // ✅ FIX #1: constants moved outside — prevents stale closure & unnecessary re-renders
 const TYPING_TEXT = "Australia";
@@ -136,8 +137,7 @@ function Home() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               Premium Tiles & Surface Solutions
-              <br className="hidden md:block" />
-              {" "}Across{" "}
+              <br className="hidden md:block" /> Across{" "}
               <span className="text-[#D6CEC6]">
                 {displayText}
                 <span className="animate-pulse">|</span>
@@ -160,10 +160,9 @@ function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              <button className="bg-white text-[#8A6A5A] py-3 sm:py-4 px-8 sm:px-12 text-base sm:text-xl font-medium cursor-pointer hover:bg-[#f5f0ed]
-               transition-colors w-auto">
-                Get a quote
-              </button>
+              <Button variant="secondary" size="xl">
+                Get a Quote
+              </Button>
             </motion.div>
           </div>
 
@@ -185,7 +184,7 @@ function Home() {
 
         {/* ✅ FIX #4: replaced hardcoded negative bottom offsets with a proper
             section that flows naturally below the hero using negative margin overlap */}
-        <div className="w-full bg-[#998e8a] relative -mt-8 pt-16 pb-16 sm:pb-20 rounded-t-[2rem] sm:rounded-t-[3rem]">
+        <div className="w-full bg-[#998e8a] relative -mt-8 pt-16 pb-16 sm:pb-20 rounded-t-[2rem] sm:rounded-t-[5rem]">
           <motion.img
             src="./images/abstract_image1.png"
             className="absolute right-4 sm:right-10 bottom-0 w-40 sm:w-56 md:w-72 opacity-30 rotate-6 pointer-events-none"
@@ -212,13 +211,17 @@ function Home() {
                 transforms your space.
               </p>
             </motion.div>
-            <motion.button
+            {/* <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="bg-white text-[#8A6A5A] text-base sm:text-xl py-3 px-8 sm:px-10 whitespace-nowrap z-10 cursor-pointer flex-shrink-0 hover:bg-[#f5f0ed] transition-colors"
+              className="bg-white text-[#8A6A5A] text-base sm:text-xl py-3 px-8 sm:px-10 whitespace-nowrap z-10 cursor-pointer
+               flex-shrink-0 hover:bg-[#f5f0ed] transition-colors"
             >
               Request a quote
-            </motion.button>
+            </motion.button> */}
+            <Button variant="secondary" size="xl">
+              Request a quote
+            </Button>
           </div>
         </div>
       </section>
@@ -325,7 +328,6 @@ function Home() {
         {/* ✅ FIX #7: valid max-w-7xl instead of max-w-10/12 */}
         <div className="w-full max-w-7xl mx-auto">
           <div className="flex flex-col gap-10 sm:gap-12 lg:gap-16">
-
             {/* Text + stats */}
             <motion.div
               initial={{ opacity: 0, y: 50 }}
@@ -379,7 +381,11 @@ function Home() {
                   <motion.div
                     key={index}
                     variants={logoVariants}
-                    whileHover={{ y: -8, scale: 1.05, transition: { duration: 0.3 } }}
+                    whileHover={{
+                      y: -8,
+                      scale: 1.05,
+                      transition: { duration: 0.3 },
+                    }}
                     className="group relative transition-all duration-500"
                   >
                     <img
@@ -436,7 +442,10 @@ function Home() {
                 "Australia-wide delivery available",
                 "No obligation quote within 24 hours",
               ].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-white/80 text-sm sm:text-base">
+                <li
+                  key={i}
+                  className="flex items-center gap-3 text-white/80 text-sm sm:text-base"
+                >
                   <span className="w-5 h-5 rounded-full bg-[#998E8A] flex items-center justify-center shrink-0 text-white text-xs">
                     ✓
                   </span>

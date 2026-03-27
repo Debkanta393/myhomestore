@@ -6,6 +6,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import LazyLoader from "../ui/LazyLoader";
 import { useEffect } from "react";
+import { Button } from "../ui/Button";
 
 // ##################### Animation ##################### //
 const cardVariants = {
@@ -46,15 +47,13 @@ export default function ProductGrid({
   const [visibleCount, setVisibleCount] = useState(8);
   const [loadedImages, setLoadedImages] = useState({});
 
-
   // ##################### View more button handler ##################### //
   const loadMore = () => {
     setVisibleCount((prev) => prev + 8);
   };
 
   // ##################### Modify product name ##################### //
-  const slugify = (text) =>
-  text.toLowerCase().replace(/\s+/g, "-");
+  const slugify = (text) => text.toLowerCase().replace(/\s+/g, "-");
   return (
     <div>
       {sortedProducts?.length === 0 && (
@@ -74,7 +73,11 @@ export default function ProductGrid({
                 variants={cardVariants}
                 className="group relative bg-white overflow-hidden transition-all duration-300 ease-out
                   border border-gray-300 hover:-translate-y-1 cursor-pointer z-0"
-                onClick={() => navigate(`/${slugify(item.range)}/${slugify(item.productName)}`)}
+                onClick={() =>
+                  navigate(
+                    `/${slugify(item.range)}/${slugify(item.productName)}`,
+                  )
+                }
               >
                 {/* Image */}
                 <div className="relative">
@@ -84,7 +87,13 @@ export default function ProductGrid({
                     effect="blur"
                     className="block h-[220px] lg:h-[250px] 2xl:h-[400px] w-full object-cover transition-transform duration-500"
                   /> */}
-                  <LazyLoader image={item.productImage[0].url} alt={item.heading} style={"block h-[220px] lg:h-[250px] 2xl:h-[400px] w-full object-cover transition-transform duration-500"}/>
+                  <LazyLoader
+                    image={item.productImage[0].url}
+                    alt={item.heading}
+                    style={
+                      "block h-[220px] lg:h-[250px] 2xl:h-[400px] w-full object-cover transition-transform duration-500"
+                    }
+                  />
                   <div className="absolute top-0 h-[98%] inset-0 pointer-events-none bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                   {/* Wishlist */}
@@ -136,12 +145,17 @@ export default function ProductGrid({
       )}
 
       {visibleCount < productData?.length && (
-        <button
-          onClick={loadMore}
-          className="bg-[#998E8A] px-10 py-3 text-white flex justify-center items-center mx-auto mt-10 text-lg cursor-pointer"
-        >
-          View More
-        </button>
+        // <button
+        //   onClick={loadMore}
+        //   className="bg-[#998E8A] px-10 py-3 text-white flex justify-center items-center mx-auto mt-10 text-lg cursor-pointer"
+        // >
+        //   View More
+        // </button>
+        <div onClick={loadMore} className="flex justify-center items-center mt-10">
+          <Button variant="primary" size="xl">
+            View More
+          </Button>
+        </div>
       )}
     </div>
   );

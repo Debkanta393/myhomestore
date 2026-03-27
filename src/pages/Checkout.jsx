@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Truck, Box, CreditCard, Landmark } from "lucide-react";
 import { useSelector } from "react-redux";
 import { selectCartCount, selectTotalPrice } from "../features/cart/cart";
+import CheckoutPageSkeleton from "../components/skeleton/CheckoutSkeleton";
 
 // ─── Animation Variants ───────────────────────────────────────────────────────
 const fadeUp = {
@@ -135,6 +136,7 @@ export default function CheckoutPage() {
   const cartItems = useSelector((state) => state.cart?.items ?? []);
   const totalPrice = useSelector(selectTotalPrice);
   const totalCart = useSelector(selectCartCount);
+   const cartLoading = useSelector((state) => state.cart.loading);
 
   const shippingOptions = [
     {
@@ -164,6 +166,7 @@ export default function CheckoutPage() {
   const gst = (subtotal * 0.1).toFixed(2);
   const total = (subtotal + shippingCost).toFixed(2);
 
+  if (cartLoading) return <CheckoutPageSkeleton />;
   return (
     <div className="min-h-screen bg-stone-50 font-sans mb-20">
       {/* ── Breadcrumb ── */}

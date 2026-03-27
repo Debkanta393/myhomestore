@@ -5,6 +5,7 @@ import { Shield, Package, CircleDollarSign, House } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeCartItems, fetchCartItems } from "../features/cart/cart"; // ✅ FIX 1: single import (was duplicated across two lines)
 import { useNavigate } from "react-router-dom";
+import CartPageSkeleton from "../components/skeleton/CartSkeleton";
 
 // ##################### Price formula ##################### //
 function calcItemPrice(quantity, wastage, service, product) {
@@ -329,8 +330,11 @@ export default function CartPage() {
 
   return (
     <div className="min-h-screen" style={{ fontFamily: "'Inter', sans-serif" }}>
-      <div
-        className="
+      {cartLoading ? (
+        <CartPageSkeleton />
+      ) : (
+        <div
+          className="
           w-full max-w-[1600px] mx-auto
           px-4 sm:px-6 lg:px-8
           py-6 sm:py-10
@@ -339,256 +343,257 @@ export default function CartPage() {
           items-start
           lg:divide-x lg:divide-[#E7E9EB]
         "
-      >
-        {/****************** Left section ***********************/}
-        <div className="lg:px-6 xl:px-10">
-          <motion.h1
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="text-xl sm:text-3xl font-semibold text-[#2d2926] mb-5 tracking-tight border-b border-[#E7E9EB] py-5"
-          >
-            Your Cart
-          </motion.h1>
+        >
+          {/****************** Left section ***********************/}
+          <div className="lg:px-6 xl:px-10">
+            <motion.h1
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="text-xl sm:text-3xl font-semibold text-[#2d2926] mb-5 tracking-tight border-b border-[#E7E9EB] py-5"
+            >
+              Your Cart
+            </motion.h1>
 
-          <div className="flex flex-col gap-3.5 divide-y divide-[#E7E9EB]">
-            <AnimatePresence mode="popLayout">
-              {cartLoading ? (
-                <div>Cart is loading</div>
-              ) : cartItems.length === 0 ? (
-                <motion.div
-                  key="empty"
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="bg-white rounded-2xl border border-[#ece8e2] p-8 sm:p-12 text-center"
-                >
-                  <div className="text-4xl mb-3">🛒</div>
-                  <p className="text-[#7a7367] text-sm">Your cart is empty.</p>
-                  <button className="mt-4 px-5 py-2 bg-[#6b6055] text-white text-sm rounded-xl hover:bg-[#2d2926] transition-colors">
-                    Continue Shopping
-                  </button>
-                </motion.div>
-              ) : (
-                cartItems.map((item, i) => (
-                  <CartItem
-                    key={item.id ?? item.productId ?? i}
-                    item={item}
-                    index={i}
-                    onRemove={removeItem}
-                    onChangeQty={changeQty}
-                  />
-                ))
-              )}
-            </AnimatePresence>
+            <div className="flex flex-col gap-3.5 divide-y divide-[#E7E9EB]">
+              <AnimatePresence mode="popLayout">
+                {cartItems.length === 0 ? (
+                  <motion.div
+                    key="empty"
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-white rounded-2xl border border-[#ece8e2] p-8 sm:p-12 text-center"
+                  >
+                    <div className="text-4xl mb-3">🛒</div>
+                    <p className="text-[#7a7367] text-sm">
+                      Your cart is empty.
+                    </p>
+                    <button className="mt-4 px-5 py-2 bg-[#6b6055] text-white text-sm rounded-xl hover:bg-[#2d2926] transition-colors">
+                      Continue Shopping
+                    </button>
+                  </motion.div>
+                ) : (
+                  cartItems.map((item, i) => (
+                    <CartItem
+                      key={item.id ?? item.productId ?? i}
+                      item={item}
+                      index={i}
+                      onRemove={removeItem}
+                      onChangeQty={changeQty}
+                    />
+                  ))
+                )}
+              </AnimatePresence>
+            </div>
           </div>
-        </div>
 
-        {/****************** Right section ***********************/}
-        <div className="lg:sticky lg:top-[200px] lg:self-start lg:h-fit">
-          <motion.aside
-            variants={summaryVariants}
-            initial="hidden"
-            animate="visible"
-            className="w-full"
-          >
-            <div className="overflow-hidden">
-              <div className="px-4 sm:px-5 pt-6 pb-5">
-                <h2 className="text-xl sm:text-3xl font-semibold text-[#2d2926] mb-4 tracking-tight border-b border-[#E7E9EB] pb-5">
-                  Order Summary
-                </h2>
+          {/****************** Right section ***********************/}
+          <div className="lg:sticky lg:top-[200px] lg:self-start lg:h-fit">
+            <motion.aside
+              variants={summaryVariants}
+              initial="hidden"
+              animate="visible"
+              className="w-full"
+            >
+              <div className="overflow-hidden">
+                <div className="px-4 sm:px-5 pt-6 pb-5">
+                  <h2 className="text-xl sm:text-3xl font-semibold text-[#2d2926] mb-4 tracking-tight border-b border-[#E7E9EB] pb-5">
+                    Order Summary
+                  </h2>
 
-                {/* Line items */}
-                <div className="space-y-0.5 border-b border-[#f0ece6] pb-4 ">
-                  <AnimatePresence>
-                    {cartItems.map((item) => {
-                      const linePrice = calcItemPrice(
-                        item.quantity,
-                        item.wastage,
-                        item.service,
-                        item.product,
-                      );
-                      return (
-                        <motion.div
-                          key={item._id ?? item.id}
-                          layout
-                          initial={{ opacity: 0, y: -6 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="flex justify-between gap-2 py-1"
-                        >
-                          <span className="text-black text-base sm:text-lg truncate">
-                            {item.product?.productName}
-                          </span>
-                          <motion.span
-                            key={linePrice}
-                            initial={{ opacity: 0, y: -4 }}
+                  {/* Line items */}
+                  <div className="space-y-0.5 border-b border-[#f0ece6] pb-4 ">
+                    <AnimatePresence>
+                      {cartItems.map((item) => {
+                        const linePrice = calcItemPrice(
+                          item.quantity,
+                          item.wastage,
+                          item.service,
+                          item.product,
+                        );
+                        return (
+                          <motion.div
+                            key={item._id ?? item.id}
+                            layout
+                            initial={{ opacity: 0, y: -6 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="font-medium text-black text-base sm:text-lg whitespace-nowrap flex-shrink-0"
+                            exit={{ opacity: 0, height: 0 }}
+                            className="flex justify-between gap-2 py-1"
                           >
-                            ${linePrice.toLocaleString("en-AU")}
-                          </motion.span>
-                        </motion.div>
-                      );
-                    })}
-                  </AnimatePresence>
-                </div>
+                            <span className="text-black text-base sm:text-lg truncate">
+                              {item.product?.productName}
+                            </span>
+                            <motion.span
+                              key={linePrice}
+                              initial={{ opacity: 0, y: -4 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className="font-medium text-black text-base sm:text-lg whitespace-nowrap flex-shrink-0"
+                            >
+                              ${linePrice.toLocaleString("en-AU")}
+                            </motion.span>
+                          </motion.div>
+                        );
+                      })}
+                    </AnimatePresence>
+                  </div>
 
-                {/* Subtotal */}
-                <div className="flex justify-between mt-3.5">
-                  <span className="text-black text-base sm:text-lg">
-                    Subtotal ({cartItems.length} item
-                    {cartItems.length !== 1 ? "s" : ""})
-                  </span>
-                  <motion.span
-                    key={subtotal}
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="font-semibold text-black text-base sm:text-lg"
-                  >
-                    ${subtotal.toLocaleString("en-AU")}
-                  </motion.span>
-                </div>
-
-                {/* Shipping */}
-                <div className="flex justify-between gap-4 mt-2.5 mb-4">
-                  <span className="text-black text-base sm:text-lg flex-shrink-0">
-                    Shipping
-                  </span>
-                  <span className="text-[#666E7C] text-sm sm:text-lg text-right leading-snug">
-                    Calculated at checkout based on your postcode
-                  </span>
-                </div>
-
-                {/* Promo */}
-                <div className="flex gap-2 mb-2">
-                  <input
-                    value={promo}
-                    onChange={(e) => setPromo(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && applyPromo()}
-                    placeholder="Apply Discount/Promo Code"
-                    className="flex-1 min-w-0 border border-[#E7E9EB] px-3 py-3 text-sm placeholder-[#666E7C] text-[#2d2926] focus:outline-none focus:border-[#6b6055] transition-colors"
-                  />
-                  <motion.button
-                    whileTap={{ scale: 0.94 }}
-                    onClick={applyPromo}
-                    className="bg-[#998E8A] hover:bg-[#6b6055] text-white text-sm font-semibold px-4 sm:px-5 transition-colors flex-shrink-0"
-                  >
-                    Apply
-                  </motion.button>
-                </div>
-
-                <AnimatePresence>
-                  {promoMsg && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className={`text-[11px] mb-2 ${
-                        promoMsg.type === "error"
-                          ? "text-red-500"
-                          : "text-green-500"
-                      }`}
-                    >
-                      {promoMsg.text}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-
-                {/* Total */}
-                <div className="flex justify-between items-center border-t border-[#f0ece6] pt-4 mt-2">
-                  <span className="text-[20px] font-semibold text-[#2d2926]">
-                    Total
-                  </span>
-                  <div className="text-right">
-                    <motion.p
+                  {/* Subtotal */}
+                  <div className="flex justify-between mt-3.5">
+                    <span className="text-black text-base sm:text-lg">
+                      Subtotal ({cartItems.length} item
+                      {cartItems.length !== 1 ? "s" : ""})
+                    </span>
+                    <motion.span
                       key={subtotal}
                       initial={{ scale: 0.9, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
-                      className="text-[16px] text-[#2d2926] leading-none"
+                      className="font-semibold text-black text-base sm:text-lg"
                     >
-                      AUD
-                      <span className="font-bold text-[20px] ml-2">
-                        ${subtotal.toLocaleString("en-AU")}
-                      </span>
-                    </motion.p>
+                      ${subtotal.toLocaleString("en-AU")}
+                    </motion.span>
                   </div>
-                </div>
-                <p className="text-[16px] text-[#666E7C] mt-1 text-end">
-                  GST included in all prices
-                </p>
-              </div>
 
-              {/* Supply + Install banner */}
-              <AnimatePresence>
-                {hasSupplyInstall && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="mx-3 sm:mx-4 mb-4 bg-[#D7CEC5] border border-[#e5dfd7] px-4 py-3 overflow-hidden"
-                  >
-                    <p className="text-md sm:text-lg font-semibold text-[#4a4440] mb-0.5">
-                      🛠 Supply + Install items in your order
-                    </p>
-                    <p className="text-sm sm:text-lg text-[#7a7367] leading-relaxed">
-                      Installation pricing is confirmed after a brief site
-                      measure. Our team will call you within 1 business day.
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* CTA Buttons */}
-              <div className="px-3 sm:px-4 pb-4 flex flex-col gap-2.5">
-                <motion.button
-                  whileHover={{ scale: 1.015 }}
-                  whileTap={{ scale: 0.975 }}
-                  disabled={cartItems.length === 0}
-                  className="w-full bg-[#998E8A] hover:bg-[#2d2926] disabled:opacity-40 disabled:cursor-not-allowed text-white py-3 text-[16px] tracking-wide transition-colors"
-                  onClick={() => navigate(`/checkout`)}
-                >
-                  Proceed To Checkout
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full border border-[#998E8A] text-[#6b6055] hover:bg-[#f5f2ee] py-2.5 text-[16px] font-medium transition-colors"
-                >
-                  Continue Shopping
-                </motion.button>
-              </div>
-
-              {/* Trust Badges */}
-              <div className="px-3 sm:px-0 space-y-2 sm:space-y-0">
-                {TRUST.map(({ icon: Icon, label }, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-2.5 text-sm sm:text-lg text-[#7a7367] sm:ml-5 py-1"
-                  >
-                    <span className="text-lg text-[#8A6A5B]">
-                      <Icon size={18} />
+                  {/* Shipping */}
+                  <div className="flex justify-between gap-4 mt-2.5 mb-4">
+                    <span className="text-black text-base sm:text-lg flex-shrink-0">
+                      Shipping
                     </span>
-                    {label}
+                    <span className="text-[#666E7C] text-sm sm:text-lg text-right leading-snug">
+                      Calculated at checkout based on your postcode
+                    </span>
                   </div>
-                ))}
-              </div>
 
-              {/* Help box */}
-              <div className="bg-[#F5F0ED] mx-3 sm:mx-4 mb-5 px-4 py-3.5 text-center border-l-2 border-[#8A6A5B] mt-10">
-                <p className="text-base sm:text-lg text-[#666E7C]">
-                  Need help with your order?
-                </p>
-                <p className="text-lg sm:text-xl font-semibold text-[#998E8A] mt-0.5 underline">
-                  03 9000 0000
-                </p>
-                <p className="text-base sm:text-lg text-[#a09890] mt-0.5">
-                  Mon–Fri 8am–6pm · Sat 9am–4pm
-                </p>
+                  {/* Promo */}
+                  <div className="flex gap-2 mb-2">
+                    <input
+                      value={promo}
+                      onChange={(e) => setPromo(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && applyPromo()}
+                      placeholder="Apply Discount/Promo Code"
+                      className="flex-1 min-w-0 border border-[#E7E9EB] px-3 py-3 text-sm placeholder-[#666E7C] text-[#2d2926] focus:outline-none focus:border-[#6b6055] transition-colors"
+                    />
+                    <motion.button
+                      whileTap={{ scale: 0.94 }}
+                      onClick={applyPromo}
+                      className="bg-[#998E8A] hover:bg-[#6b6055] text-white text-sm font-semibold px-4 sm:px-5 transition-colors flex-shrink-0"
+                    >
+                      Apply
+                    </motion.button>
+                  </div>
+
+                  <AnimatePresence>
+                    {promoMsg && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className={`text-[11px] mb-2 ${
+                          promoMsg.type === "error"
+                            ? "text-red-500"
+                            : "text-green-500"
+                        }`}
+                      >
+                        {promoMsg.text}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Total */}
+                  <div className="flex justify-between items-center border-t border-[#f0ece6] pt-4 mt-2">
+                    <span className="text-[20px] font-semibold text-[#2d2926]">
+                      Total
+                    </span>
+                    <div className="text-right">
+                      <motion.p
+                        key={subtotal}
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="text-[16px] text-[#2d2926] leading-none"
+                      >
+                        AUD
+                        <span className="font-bold text-[20px] ml-2">
+                          ${subtotal.toLocaleString("en-AU")}
+                        </span>
+                      </motion.p>
+                    </div>
+                  </div>
+                  <p className="text-[16px] text-[#666E7C] mt-1 text-end">
+                    GST included in all prices
+                  </p>
+                </div>
+
+                {/* Supply + Install banner */}
+                <AnimatePresence>
+                  {hasSupplyInstall && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mx-3 sm:mx-4 mb-4 bg-[#D7CEC5] border border-[#e5dfd7] px-4 py-3 overflow-hidden"
+                    >
+                      <p className="text-md sm:text-lg font-semibold text-[#4a4440] mb-0.5">
+                        🛠 Supply + Install items in your order
+                      </p>
+                      <p className="text-sm sm:text-lg text-[#7a7367] leading-relaxed">
+                        Installation pricing is confirmed after a brief site
+                        measure. Our team will call you within 1 business day.
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* CTA Buttons */}
+                <div className="px-3 sm:px-4 pb-4 flex flex-col gap-2.5">
+                  <motion.button
+                    whileHover={{ scale: 1.015 }}
+                    whileTap={{ scale: 0.975 }}
+                    disabled={cartItems.length === 0}
+                    className="w-full bg-[#998E8A] hover:bg-[#2d2926] disabled:opacity-40 disabled:cursor-not-allowed text-white py-3 text-[16px] tracking-wide transition-colors"
+                    onClick={() => navigate(`/checkout`)}
+                  >
+                    Proceed To Checkout
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full border border-[#998E8A] text-[#6b6055] hover:bg-[#f5f2ee] py-2.5 text-[16px] font-medium transition-colors"
+                  >
+                    Continue Shopping
+                  </motion.button>
+                </div>
+
+                {/* Trust Badges */}
+                <div className="px-3 sm:px-0 space-y-2 sm:space-y-0">
+                  {TRUST.map(({ icon: Icon, label }, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2.5 text-sm sm:text-lg text-[#7a7367] sm:ml-5 py-1"
+                    >
+                      <span className="text-lg text-[#8A6A5B]">
+                        <Icon size={18} />
+                      </span>
+                      {label}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Help box */}
+                <div className="bg-[#F5F0ED] mx-3 sm:mx-4 mb-5 px-4 py-3.5 text-center border-l-2 border-[#8A6A5B] mt-10">
+                  <p className="text-base sm:text-lg text-[#666E7C]">
+                    Need help with your order?
+                  </p>
+                  <p className="text-lg sm:text-xl font-semibold text-[#998E8A] mt-0.5 underline">
+                    03 9000 0000
+                  </p>
+                  <p className="text-base sm:text-lg text-[#a09890] mt-0.5">
+                    Mon–Fri 8am–6pm · Sat 9am–4pm
+                  </p>
+                </div>
               </div>
-            </div>
-          </motion.aside>
+            </motion.aside>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
