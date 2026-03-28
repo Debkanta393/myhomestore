@@ -109,12 +109,11 @@ export default function Product() {
   const tabs = [
     "Description",
     "Specifications",
-    "Dimensions",
     "Installation",
     "Warranty",
     "Delivery",
   ];
-  const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [activeTab, setActiveTab] = useState(tabs[1]);
   const { loading } = useSelector((state) => state.cart);
   const [message, setMessage] = useState("");
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -405,11 +404,7 @@ export default function Product() {
                     >
                       <div className="overflow-hidden flex-1">
                         <LazyLoader
-                          image={
-                            product.productImage[1]
-                              ? product.productImage[1].url
-                              : product.productImage[0].url
-                          }
+                          image={product && product.productImage[0].url}
                           alt={product.productName}
                           style="w-full h-full object-cover rounded-full"
                         />
@@ -889,6 +884,9 @@ export default function Product() {
                 {activeTab === "Description" && (
                   <p className="text-base sm:text-lg">
                     {selectedProduct?.description}
+                    <br />
+                    <br />
+                    {selectedProduct?.details?.dimensions}
                   </p>
                 )}
                 {activeTab === "Specifications" && (
@@ -905,11 +903,11 @@ export default function Product() {
                     </div>
                   </div>
                 )}
-                {activeTab === "Dimensions" && (
+                {/* {activeTab === "Dimensions" && (
                   <p className="text-base sm:text-lg">
                     {selectedProduct?.details?.dimensions}
                   </p>
-                )}
+                )} */}
                 {activeTab === "Installation" && (
                   <p className="text-base sm:text-lg">
                     {selectedProduct?.details?.installation}

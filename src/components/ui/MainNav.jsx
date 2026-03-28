@@ -14,7 +14,9 @@ import {
 } from "lucide-react";
 import * as Icons from "lucide-react";
 
-export default function MainNav({ activeNav }) {
+const slugify = (text) => text.toLowerCase().replace(/\s+/g, "-");
+
+export default function MainNav({ activeNav, setActiveNav }) {
   const popular = [
     {
       icon: BrickWall,
@@ -116,8 +118,9 @@ function NavItem({ item }) {
   const Icon = Icons[item.icon];
   return (
     <Link
-      to={`/${item.heading}`}
+      to={`/${slugify(item.heading)}`}
       className="flex hover:bg-[#f5efed] py-2 px-2 w-full"
+      onClick={()=> setActiveNav(null)}
     >
       <motion.div
         transition={{ duration: 0.25 }}

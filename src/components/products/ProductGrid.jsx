@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import LazyLoader from "../ui/LazyLoader";
-import { useEffect } from "react";
 import { Button } from "../ui/Button";
 
 // ##################### Animation ##################### //
@@ -56,7 +55,7 @@ export default function ProductGrid({
   const slugify = (text) => text.toLowerCase().replace(/\s+/g, "-");
   return (
     <div>
-      {sortedProducts?.length === 0 && (
+      {sortedProducts?.length > 0 ? (
         <AnimatePresence mode="wait">
           <motion.div
             key={page}
@@ -67,7 +66,7 @@ export default function ProductGrid({
             exit="exit"
             className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 relative mt-6 z-0"
           >
-            {productData?.slice(0, visibleCount).map((item) => (
+            {sortedProducts?.slice(0, visibleCount).map((item) => (
               <motion.div
                 key={item._id}
                 variants={cardVariants}
@@ -121,37 +120,32 @@ export default function ProductGrid({
                 </div>
 
                 {/* Info */}
-                <div className="py-5 space-y-2">
-                  <div className="flex flex-col items-start justify-between gap-1 px-5">
-                    <p className="text-lg xl:text-2xl font-semibold text-gray-900 line-clamp-1">
+                <div className="py-5 space-y-0.5 px-3">
+                    <p className="text-xl font-medium text-gray-900 line-clamp-1">
                       {item.productName}
                     </p>
-                    <div className="">
-                      <p className="text-md xl:text-lg text-gray-500 line-clamp-1">
-                        <span className="font-semibold">Type:</span>{" "}
-                        {item.category}
+                      <p className="text-md text-gray-500 line-clamp-1">
+                        {item.category} . {item.brand}
                       </p>
-                      <p className="text-md xl:text-lg text-gray-500 line-clamp-1">
-                        <span className="font-semibold">Brand:</span>{" "}
-                        {item.brand}
-                      </p>
-                    </div>
-                  </div>
+                      <p></p>
                 </div>
               </motion.div>
             ))}
           </motion.div>
         </AnimatePresence>
+      ) : (
+        // Empty state — when no products match filters
+        <div className="flex flex-col items-center justify-center py-24 text-gray-400">
+          <p className="text-xl">No products found</p>
+          <p className="text-sm mt-2">Try adjusting your filters</p>
+        </div>
       )}
 
-      {visibleCount < productData?.length && (
-        // <button
-        //   onClick={loadMore}
-        //   className="bg-[#998E8A] px-10 py-3 text-white flex justify-center items-center mx-auto mt-10 text-lg cursor-pointer"
-        // >
-        //   View More
-        // </button>
-        <div onClick={loadMore} className="flex justify-center items-center mt-10">
+      {visibleCount < sortedProducts?.length && (
+        <div
+          onClick={loadMore}
+          className="flex justify-center items-center mt-10"
+        >
           <Button variant="primary" size="xl">
             View More
           </Button>

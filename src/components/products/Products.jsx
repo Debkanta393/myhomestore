@@ -11,10 +11,10 @@ export default function Products() {
   const [navigateTo, setNavigateTo] = useState("right");
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [sortBy, setSortBy] = useState("featured");
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
   const selectedTab = useSelector(
-    (state) => state.activeTab.tabSelected
+    (state) => state.activeTab.tabSelected,
   ).toLowerCase();
 
   const [allProducts, setAllProducts] = useState([]);
@@ -60,7 +60,7 @@ export default function Products() {
   // Fetch products
   useEffect(() => {
     const fetchProduct = async () => {
-      const product = await dispatch(getAllProducts())
+      const product = await dispatch(getAllProducts());
       setProductData(product?.payload?.data?.products);
       setAllProducts(product?.payload?.data?.products);
     };
@@ -73,24 +73,34 @@ export default function Products() {
     setFilterOptions((prev) => ({
       ...prev,
       categories: [...new Set(allProducts.map((item) => item.category))],
-      thickness: [...new Set(allProducts.flatMap((item) => item.thickness || []))],
+      thickness: [
+        ...new Set(allProducts.flatMap((item) => item.thickness || [])),
+      ],
       brands: [...new Set(allProducts.map((item) => item.brand))],
       patterns: [...new Set(allProducts.map((item) => item.pattern))],
       colors: [...new Set(allProducts.flatMap((item) => item.color || []))],
-      scratchresistant: [...new Set(allProducts.map((item) => item.scratchresistant))],
-      waterresistant: [...new Set(allProducts.map((item) => item.waterresistant))],
+      scratchresistant: [
+        ...new Set(allProducts.map((item) => item.scratchresistant)),
+      ],
+      waterresistant: [
+        ...new Set(allProducts.map((item) => item.waterresistant)),
+      ],
       petfriendly: [...new Set(allProducts.map((item) => item.petfriendly))],
     }));
   }, [allProducts]);
-
 
   // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (filterRef.current && !filterRef.current.contains(event.target)) {
         setExpandedSections({
-          category: false, thickness: false, brand: false,
-          pattern: false, color: false, additional: false, price: false,
+          category: false,
+          thickness: false,
+          brand: false,
+          pattern: false,
+          color: false,
+          additional: false,
+          price: false,
         });
       }
     };
@@ -118,25 +128,36 @@ export default function Products() {
           : [...currentArray, value],
       };
     });
-    const filteredArray = productData?.filter(
-      (product) => product[filterKey] == value
-    );
-    setProductData(filteredArray);
     setPage(0);
   };
 
   const handlePriceChange = (index, value) => {
-    const newRange = [...filterOptions.priceRange];
+    const newRange = [...checkedFilter.priceRange];
     newRange[index] = Number(value);
-    setFilterOptions((prev) => ({ ...prev, priceRange: newRange }));
+    setCheckedFilter((prev) => ({ ...prev, priceRange: newRange }));
+    setPage(0);
+  };
+
+  const clearOneFilter = (sectionKey) => {
+    setCheckedFilter((prev)=> ({
+      ...prev,
+      [sectionKey]: []
+    }))
+    setProductData(allProducts);
     setPage(0);
   };
 
   const clearFilters = () => {
     setCheckedFilter({
-      category: [], thickness: [], brand: [], pattern: [],
-      color: [], scratchresistant: [], waterresistant: [],
-      petfriendly: [], priceRange: [0, 500],
+      category: [],
+      thickness: [],
+      brand: [],
+      pattern: [],
+      color: [],
+      scratchresistant: [],
+      waterresistant: [],
+      petfriendly: [],
+      priceRange: [0, 500],
     });
     setProductData(allProducts);
     setPage(0);
@@ -146,48 +167,91 @@ export default function Products() {
   const filteredProducts = useMemo(() => {
     return allProducts?.filter((product) => {
       const categoryMatch =
-        filterOptions.categories.length === 0 ||
-        filterOptions.categories.includes(product.category);
+        checkedFilter.category.length === 0 ||
+        checkedFilter.category.includes(product.category);
+
       const brandMatch =
-        filterOptions.brands.length === 0 ||
-        filterOptions.brands.includes(product.brand);
+        checkedFilter.brand.length === 0 ||
+        checkedFilter.brand.includes(product.brand);
+
       const thicknessMatch =
-        filterOptions.thickness.length === 0 ||
-        filterOptions.thickness.includes(product.thickness);
+        checkedFilter.thickness.length === 0 ||
+        checkedFilter.thickness.some((t) =>
+          Array.isArray(product.thickness)
+            ? product.thickness.includes(t)
+            : product.thickness === t,
+        );
+
       const patternMatch =
-        filterOptions.patterns.length === 0 ||
-        filterOptions.patterns.includes(product.pattern);
-      const shadeMatch =
-        filterOptions.colors.length === 0 ||
-        filterOptions.colors.includes(product.shade);
+        checkedFilter.pattern.length === 0 ||
+        checkedFilter.pattern.includes(product.pattern);
+
+      const colorMatch =
+        checkedFilter.color.length === 0 ||
+        checkedFilter.color.some((c) =>
+          Array.isArray(product.color)
+            ? product.color.includes(c)
+            : product.color === c,
+        );
+
+      const scratchMatch =
+        checkedFilter.scratchresistant.length === 0 ||
+        checkedFilter.scratchresistant.includes(product.scratchresistant);
+
+      const waterMatch =
+        checkedFilter.waterresistant.length === 0 ||
+        checkedFilter.waterresistant.includes(product.waterresistant);
+
+      const petMatch =
+        checkedFilter.petfriendly.length === 0 ||
+        checkedFilter.petfriendly.includes(product.petfriendly);
+
       const priceMatch =
-        product.price >= filterOptions.priceRange[0] &&
-        product.price <= filterOptions.priceRange[1];
+        product.price >= checkedFilter.priceRange[0] &&
+        product.price <= checkedFilter.priceRange[1];
+
       return (
-        categoryMatch && brandMatch && thicknessMatch &&
-        patternMatch && shadeMatch && priceMatch
+        categoryMatch &&
+        brandMatch &&
+        thicknessMatch &&
+        patternMatch &&
+        colorMatch &&
+        scratchMatch &&
+        waterMatch &&
+        petMatch &&
+        priceMatch
       );
     });
-  }, [productData, filterOptions]);
+  }, [allProducts, checkedFilter]);
 
-  const sortedProducts = filteredProducts &&
+  const sortedProducts =
+    filteredProducts &&
     [...filteredProducts].sort((a, b) => {
       switch (sortBy) {
-        case "price-low": return a.price - b.price;
-        case "price-high": return b.price - a.price;
-        case "rating": return b.rating - a.rating;
-        case "newest": return b.isNew - a.isNew;
-        default: return 0;
+        case "price-low":
+          return a.price - b.price;
+        case "price-high":
+          return b.price - a.price;
+        case "rating":
+          return b.rating - a.rating;
+        case "newest":
+          return b.isNew - a.isNew;
+        default:
+          return 0;
       }
     });
 
   const activeFilterCount =
-    filterOptions.categories.length +
-    filterOptions.brands.length +
-    filterOptions.thickness.length +
-    filterOptions.patterns.length +
-    filterOptions.colors.length;
+    checkedFilter.category.length +
+    checkedFilter.brand.length +
+    checkedFilter.thickness.length +
+    checkedFilter.pattern.length +
+    checkedFilter.color.length +
+    checkedFilter.scratchresistant.length +
+    checkedFilter.waterresistant.length +
+    checkedFilter.petfriendly.length;
 
+    console.log("All products", allProducts)
   return (
     <div className="w-full mt-28" ref={filterRef}>
       <h2 className="text-3xl md:text-5xl mb-16 text-center">
@@ -200,13 +264,14 @@ export default function Products() {
           filterOptions={filterOptions}
           checkedFilter={checkedFilter}
           expandedSections={expandedSections}
-          allProducts={allProducts}
+          allProducts={sortedProducts}
           activeFilterCount={activeFilterCount}
           mobileFilterOpen={mobileFilterOpen}
           sortBy={sortBy}
           toggleSection={toggleSection}
           toggleArrayFilter={toggleArrayFilter}
           handlePriceChange={handlePriceChange}
+          clearOneFilter={clearOneFilter}
           clearFilters={clearFilters}
           setMobileFilterOpen={setMobileFilterOpen}
           setSortBy={setSortBy}

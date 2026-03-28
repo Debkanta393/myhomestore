@@ -373,18 +373,6 @@ export function Header() {
                 )}
               </div>
 
-              {/* Get Quote — desktop only */}
-              {/* <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="hidden lg:block relative overflow-hidden py-2.5 xl:py-3 px-5 xl:px-8 bg-[#998e8a] text-white font-semibold group border-2 border-[#998e8a] transition-all duration-300 text-sm xl:text-base"
-              >
-                <span className="relative z-10 transition-colors duration-300 group-hover:text-[#8A6A5A]">
-                  Get a Quote
-                </span>
-                <span className="absolute inset-0 bg-[#f5efed] transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100" />
-              </motion.button> */}
-
               <Button variant="primary" size="lg">
                 Get a Quote
               </Button>
@@ -465,6 +453,7 @@ export function Header() {
         <div
           className="relative hidden lg:block"
           onMouseLeave={() => {
+            setActiveTab(null);
             setActiveNav(null);
             setMainHovered(null);
           }}
@@ -507,7 +496,7 @@ export function Header() {
             </div>
           </div>
 
-          <MainNav activeTab={activeTab} activeNav={activeNav} />
+          <MainNav activeTab={activeTab} activeNav={activeNav} setActiveNav={setActiveNav} />
         </div>
       </motion.div>
 
@@ -661,12 +650,12 @@ function MobileNavSection({ sectionKey, openSection, setOpenSection }) {
             className="overflow-hidden"
           >
             <div className="pb-2 pl-3 flex flex-col gap-0.5">
-              {items.map((item, index) => {
+              {items.map((item, index) => { 
                 const Icon = Icons[item.icon];
                 return (
                   <Link
                     key={index}
-                    to={`/${item.heading}`}
+                    to={`/${slugify(item.heading)}`}
                     className="flex items-start gap-2 px-3 py-2 hover:bg-[#f5efed] rounded-lg transition-colors"
                   >
                     {Icon && (
@@ -686,7 +675,7 @@ function MobileNavSection({ sectionKey, openSection, setOpenSection }) {
                       )}
                     </div>
                     {item.soon && (
-                      <span className="bg-[#EFE8DA] text-[11px] text-[#B2873C] px-2 py-0.5 shrink-0 rounded">
+                      <span className="bg-[#EFE8DA] text-[11px] tex t-[#B2873C] px-2 py-0.5 shrink-0 rounded">
                         Soon
                       </span>
                     )}

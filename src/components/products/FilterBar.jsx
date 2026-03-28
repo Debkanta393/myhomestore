@@ -8,6 +8,7 @@ const FilterSection = ({
   sectionKey,
   options,
   checkedValues,
+  clearOneFilter,
   expandedSections,
   allProducts,
   productKey,
@@ -53,7 +54,7 @@ const FilterSection = ({
             </span>
           </label>
         ))}
-        <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+        <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer" onClick={()=> clearOneFilter(sectionKey)}>
           Clear Filter
         </p>
       </div>
@@ -71,6 +72,7 @@ const FilterPanel = ({
   toggleSection,
   toggleArrayFilter,
   handlePriceChange,
+  clearOneFilter,
   clearFilters,
   setMobileFilterOpen,
   setExpandedSections,
@@ -120,6 +122,7 @@ const FilterPanel = ({
             key={sectionKey}
             label={label}
             sectionKey={sectionKey}
+            clearOneFilter={clearOneFilter}
             options={options}
             checkedValues={checkedFilter[sectionKey === "color" ? "color" : sectionKey]}
             expandedSections={expandedSections}
@@ -273,11 +276,11 @@ export default function FilterBar({
   filterOptions, checkedFilter, expandedSections, allProducts,
   activeFilterCount, mobileFilterOpen, sortBy,
   toggleSection, toggleArrayFilter, handlePriceChange,
-  clearFilters, setMobileFilterOpen, setSortBy, setExpandedSections,
+  clearFilters, clearOneFilter, setMobileFilterOpen, setSortBy, setExpandedSections,
 }) {
   const sharedProps = {
     filterOptions, checkedFilter, expandedSections, allProducts,
-    toggleSection, toggleArrayFilter, handlePriceChange,
+    toggleSection, toggleArrayFilter, handlePriceChange, clearOneFilter,
     clearFilters, setMobileFilterOpen, setExpandedSections,
   };
 

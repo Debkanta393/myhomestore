@@ -76,6 +76,7 @@ function Home() {
   const selectedTab = useSelector(
     (store) => store.activeTab?.tabSelected ?? "",
   ).toLowerCase();
+  console.log(selectedTab)
 
   const logoVariants = {
     hidden: { opacity: 0, y: 40, scale: 0.9 },
