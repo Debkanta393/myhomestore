@@ -1,7 +1,7 @@
 // CartPage.jsx
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, Package, CircleDollarSign, House } from "lucide-react";
+import { Shield, Package, CircleDollarSign, House, X } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { removeCartItems, fetchCartItems } from "../features/cart/cart"; // ✅ FIX 1: single import (was duplicated across two lines)
 import { useNavigate } from "react-router-dom";
@@ -13,11 +13,6 @@ function calcItemPrice(quantity, wastage, service, product) {
 
   const qty = Number(quantity) || 0;
   const wst = Number(wastage) || 0;
-
-  // ✅ FIX 2: wastage should always be applied as an ADDITIVE multiplier.
-  // Old logic: wst !== 0 ? qty * (wst / 100) : qty
-  //   → when wastage = 10, result = qty * 0.10 (only 10% of area — wrong!)
-  //   → should mean qty PLUS 10% extra = qty * 1.10
   const result = qty * (1 + wst / 100);
 
   const supplyInstallPrice = parseInt(product.supplyInstallPrice || 0);
@@ -92,7 +87,13 @@ function QtyStepper({ value, onDecrement, onIncrement }) {
 }
 
 // ##################### CartItem ##################### //
-function CartItem({ item, index, onRemove, onChangeQty }) {
+function CartItem({
+  item,
+  index,
+  setRemoveCart,
+  onChangeQty,
+  setShowConfirmModal,
+}) {
   const livePrice = calcItemPrice(
     item.quantity,
     item.wastage,
@@ -162,8 +163,11 @@ function CartItem({ item, index, onRemove, onChangeQty }) {
               <motion.button
                 whileHover={{ scale: 1.2, color: "#ef4444" }}
                 whileTap={{ scale: 0.85 }}
-                onClick={() => onRemove(item._id ?? item.id)} // ✅ FIX 3 (same as above)
-                className="text-black mt-[1px] transition-colors text-xl font-medium"
+                onClick={() => {
+                  (setShowConfirmModal(true),
+                    setRemoveCart(item._id ?? item.id));
+                }}
+                className="text-black mt-[1px] transition-colors text-xl font-medium cursor-pointer"
               >
                 ✕
               </motion.button>
@@ -227,15 +231,15 @@ function CartItem({ item, index, onRemove, onChangeQty }) {
                 Edit Selection
               </button>
               <button
-                onClick={() => onRemove(item._id ?? item.id)} // ✅ FIX 3
-                className="text-sm sm:text-[16px] text-[#c0392b] underline underline-offset-2 hover:text-red-700 transition-colors"
+                onClick={() => {
+                  (setShowConfirmModal(true),
+                    setRemoveCart(item._id ?? item.id));
+                }}
+                className="text-sm sm:text-[16px] text-[#c0392b] underline underline-offset-2 hover:text-red-700 transition-colors cursor-pointer"
               >
                 Remove
               </button>
             </div>
-            <button className="text-sm sm:text-[16px] text-[#7a7367] hover:text-[#2d2926] transition-colors">
-              + Request a free sample
-            </button>
           </div>
         </div>
       </div>
@@ -261,6 +265,8 @@ export default function CartPage() {
   const [promoMsg, setPromoMsg] = useState(null);
   const navigate = useNavigate();
   const cartLoading = useSelector((state) => state.cart.loading);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [removeCart, setRemoveCart] = useState(null);
 
   useEffect(() => {
     dispatch(fetchCartItems({ isAuthenticated }));
@@ -276,6 +282,7 @@ export default function CartPage() {
   // ##################### Remove cart ##################### //
   const removeItem = useCallback(
     (productId) => {
+      if (!showConfirmModal) return;
       dispatch(removeCartItems({ productId, isAuthenticated }))
         .unwrap()
         .then(() => {
@@ -290,7 +297,7 @@ export default function CartPage() {
         prev.filter((item) => (item._id ?? item.id) !== productId),
       );
     },
-    [dispatch, isAuthenticated],
+    [dispatch, isAuthenticated, showConfirmModal],
   );
 
   // ##################### Quantity change ##################### //
@@ -378,7 +385,8 @@ export default function CartPage() {
                       key={item.id ?? item.productId ?? i}
                       item={item}
                       index={i}
-                      onRemove={removeItem}
+                      setShowConfirmModal={setShowConfirmModal}
+                      setRemoveCart={setRemoveCart}
                       onChangeQty={changeQty}
                     />
                   ))
@@ -594,6 +602,81 @@ export default function CartPage() {
           </div>
         </div>
       )}
+      <AnimatePresence>
+        {showConfirmModal && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setShowConfirmModal(false)}
+            />
+
+            {/* Modal */}
+            <motion.div
+              className="fixed z-50 left-1/2 top-32 -translate-x-1/2 
+                   w-[380px] rounded-2xl bg-white dark:bg-zinc-900
+                   shadow-[0_8px_32px_rgba(0,0,0,0.12)]
+                   border border-black/[0.06] dark:border-white/[0.08]
+                   p-6 flex flex-col gap-5"
+              initial={{ opacity: 0, scale: 0.94, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 8 }}
+              transition={{ type: "spring", stiffness: 400, damping: 28 }}
+            >
+              {/* Icon */}
+              <div
+                className="absolute top-0 right-0 w-10 h-10 rounded-full bg-red-50 dark:bg-red-500/10
+                        flex items-center justify-center cursor-pointer hover:bg-[#dddddd]"
+                onClick={() => setShowConfirmModal(false)}
+              >
+                <X />
+              </div>
+
+              {/* Text */}
+              <div className="flex flex-col gap-1">
+                <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 leading-tight">
+                  Remove from cart?
+                </h3>
+                <p className="text-md text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                  This item will be removed from your cart. You can always add
+                  it back later.
+                </p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-2.5">
+                <button
+                  onClick={() => setShowConfirmModal(false)}
+                  className="flex-1 h-10 rounded text-sm font-medium
+                       bg-zinc-100 dark:bg-zinc-800
+                       text-zinc-700 dark:text-zinc-300
+                       hover:bg-zinc-200 dark:hover:bg-zinc-700
+                       active:scale-[0.97] transition-all duration-150 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    removeItem(removeCart);
+                    setShowConfirmModal(false);
+                  }}
+                  className="flex-1 h-10 rounded text-sm font-medium
+                       bg-[#998e8a] hover:bg-[#817d7b]
+                       text-white active:scale-[0.97]
+                       transition-all duration-150
+                        cursor-pointer"
+                >
+                  Remove
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
