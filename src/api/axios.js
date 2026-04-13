@@ -1,4 +1,4 @@
-// In your axios config file
+
 import axios from 'axios';
 
 const api = axios.create({

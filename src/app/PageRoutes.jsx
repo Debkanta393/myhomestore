@@ -25,6 +25,8 @@ import PreferenceFloor from "../pages/PreferenceFloor"
 import HurfordsFlooring from "../pages/HurfordsFlooring"
 import CheckoutPage from "../pages/Checkout";
 import ProfilePage from "../pages/ProfilePage";
+import Contact from "../pages/Contact";
+import DynamicPage from "../pages/DynamicPage";
 
 
 
@@ -38,7 +40,7 @@ export default function PageRoutes() {
         <Route path="/" element={<HomePage />} />
         <Route path="/:range/:productName" element={<Product />} />
         <Route path="/brand" element={<Brand />} />
-        <Route path="/cleverchoice" element={<ClaverChoise />} />
+        <Route path="/clever-choice" element={<ClaverChoise />} />
         <Route path="/ecogreen" element={<EcoGreen />} />
         <Route path="/preference-floor" element={<PreferenceFloor />} />
         <Route path="/hurfords-flooring" element={<HurfordsFlooring />} />
@@ -58,6 +60,8 @@ export default function PageRoutes() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/:slug" element={<DynamicPage />} />
       </Route>
     </Routes>
   );

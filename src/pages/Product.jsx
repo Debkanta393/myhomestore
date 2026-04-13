@@ -20,6 +20,8 @@ import { addCartItems } from "../features/cart/cart";
 import LazyLoader from "../components/ui/LazyLoader";
 import { v4 as uuidv4 } from "uuid";
 import ProductSkeleton from "../components/skeleton/ProductSkeleton";
+import { deslugify } from "../utils/deslugify";
+import { slugify } from "../utils/slugify";
 
 const products = [
   {
@@ -119,26 +121,23 @@ export default function Product() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const [productLoading, setProductLoading] = useState(true);
 
-  const deslugify = (slug) =>
-    slug
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+  
 
-  // ✅ FIX #9: added range and productName to deps
+  // added range and productName to deps
   useEffect(() => {
     const getRangeProduct = async () => {
       setProductLoading(true);
       const deslugifyRange = deslugify(range);
       const deslugifyName = deslugify(productName);
-      const response = await dispatch(getProductByRange(deslugifyRange));
+      console.log(range)
+      const response = await dispatch(getProductByRange(range));
       if (response.payload?.success) {
         setRangeProducts(response.payload.product);
         const found = response.payload.product.find(
           (item) =>
-            item.productName?.toLowerCase().trim() ===
-            deslugifyName.toLowerCase().trim(),
+            slugify(item.productName) === productName
         );
+        console.log("Selected product", found)
         setSelectedProduct(found ?? null);
         if (found?.packSize) {
           setPackSize(parseFloat(found.packSize.split("-")[0]));
@@ -148,6 +147,8 @@ export default function Product() {
     };
     getRangeProduct();
   }, [dispatch, range, productName]);
+
+  console.log(rangeProducts)
 
   const handlePrevImage = () => {
     setSelectedImage((prev) =>
@@ -677,6 +678,20 @@ export default function Product() {
                       requirements. Our team will get back to you within 1
                       business day.
                     </p>
+                    
+                    <div className="space-y-3">
+                      <button className="w-full bg-[#8A6A5B] hover:bg-[#755645] text-white py-3 rounded-xl font-semibold transition">
+                        Request a Quote
+                      </button>
+                      <p className="text-sm text-center">
+                        <a
+                          href="#"
+                          className="text-[#8A6A5B] hover:underline font-medium"
+                        >
+                          Or request a callback and we'll call you →
+                        </a>
+                      </p>
+                    </div>
                     <div className="bg-white border border-[#E7E9EB] rounded-xl p-4 space-y-2">
                       <p className="text-base sm:text-lg font-medium text-black flex items-center gap-2 flex-wrap">
                         <Phone /> Call us on{" "}
@@ -689,19 +704,6 @@ export default function Product() {
                       </p>
                       <p className="text-sm text-[#666E7C]">
                         Mon–Fri 8am–8pm · Sat 9am–5pm
-                      </p>
-                    </div>
-                    <div className="space-y-3">
-                      <button className="w-full bg-[#8A6A5B] hover:bg-[#755645] text-white py-3 rounded-xl font-semibold transition">
-                        Request a Quote
-                      </button>
-                      <p className="text-sm text-center">
-                        <a
-                          href="#"
-                          className="text-[#8A6A5B] hover:underline font-medium"
-                        >
-                          Or request a callback and we'll call you →
-                        </a>
                       </p>
                     </div>
                   </div>

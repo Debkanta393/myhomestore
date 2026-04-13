@@ -248,7 +248,7 @@ const FilterPanel = ({
                           </div>
                         ))}
                       </div>
-                      <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer">
+                      <p className="text-[#8A6A5B] text-lg font-semibold cursor-pointer" onClick={()=> clearOneFilter(sectionKey)}>
                         Clear Filter
                       </p>
                     </div>

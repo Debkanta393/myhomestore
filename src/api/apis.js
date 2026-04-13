@@ -19,3 +19,9 @@ export const DELETE_CART="api/cart/deleteCart"
 export const CLEAR_CART="api/cart/clearCart"
 export const MERGE_CART="api/cart/merge"
 export const COUNT_CART="api/cart/count"
+
+
+
+
+// Page API
+export const GET_PAGE_BYSLUG="api/page/page"

@@ -5,6 +5,7 @@ import {
   ADD_CART,
   MERGE_CART,
   PRODUCT_FOR_CARTS,
+  UPDATE_CART,
   DELETE_CART,
 } from "../../api/apis";
 
@@ -43,7 +44,7 @@ export const fetchCartItems = createAsyncThunk(
 
       try {
         const productIds = guestCart.map((item) => item.productId);
-        console.log(productIds)
+        console.log(productIds);
         // Fetch product details for all guest cart items
         const res = await api.post(PRODUCT_FOR_CARTS, { productIds });
 
@@ -161,14 +162,53 @@ export const addCartItems = createAsyncThunk(
   },
 );
 
+export const updateCartItems = createAsyncThunk(
+  "/update/cart",
+  async ({ product, isAuthenticated }, { rejectWithValue }) => {
+    try {
+      if (isAuthenticated) {
+        const res = await api.put(
+          UPDATE_CART,
+          { product },
+          { withCredentials: true },
+        );
+
+        return res.data;
+      }
+
+      let currentCart = loadGuestCart();
+
+      const index = currentCart.findIndex(
+        (item) => item.productId === product.productId,
+      );
+
+      if (index !== -1) {
+        currentCart[index] = {
+          ...currentCart[index],
+          ...product,
+          addedAt: new Date().toISOString(),
+        };
+      } else {
+        currentCart.push({
+          ...product,
+          addedAt: new Date().toISOString(),
+        });
+      }
+
+      saveGuestCart(currentCart);
+
+      return currentCart;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
+  },
+);
+
 // ─── Add to Cart ─────────────────────────────────────────────────
 export const removeCartItems = createAsyncThunk(
   "cart/deleteCart",
-  async (
-    { productId, isAuthenticated },
-    { rejectWithValue },
-  ) => {
-    console.log(productId)
+  async ({ productId, isAuthenticated }, { rejectWithValue }) => {
+    console.log(productId);
     if (isAuthenticated) {
       try {
         const res = await api.post(
@@ -187,12 +227,8 @@ export const removeCartItems = createAsyncThunk(
     } else {
       const currentCart = loadGuestCart();
       const updatedCart = currentCart.filter(
-        (item) =>
-          !(
-            String(item.id) == String(productId) 
-          ),
+        (item) => !(String(item.id) == String(productId)),
       );
-      
 
       console.log(updatedCart);
 
@@ -277,6 +313,22 @@ const cartSlice = createSlice({
         state.isGuest = action.payload.isGuest;
       })
       .addCase(addCartItems.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // ── updatecartItems ──
+      .addCase(updateCartItems.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCartItems.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload.items;
+        state.totalItems = action.payload.items.length;
+        state.isGuest = action.payload.isGuest;
+      })
+      .addCase(updateCartItems.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

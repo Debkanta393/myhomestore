@@ -27,6 +27,7 @@ import * as Icons from "lucide-react";
 import { searchProduct } from "../../features/product/product";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/Button";
+import { slugify } from "../../utils/slugify";
 
 // ✅ Moved outside component — no recreation on every render
 const mobileNavSections = {
@@ -64,11 +65,10 @@ const tabs = [
   { tab: "Sale", icon: <House />, hasMenu: true },
 ];
 
-const slugify = (text) => text.toLowerCase().replace(/\s+/g, "-");
-
 export function Header() {
   const [hovered, setHovered] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [hideTopInfoBars, setHideTopInfoBars] = useState(false);
   const [mainHovered, setMainHovered] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -81,11 +81,26 @@ export function Header() {
   const mobileMenuRef = useRef(null);
   const searchRef = useRef();
   const mobileSearchRef = useRef();
+  const lastScrollYRef = useRef(0);
   const navigate = useNavigate();
 
-  // Sticky header on scroll
+  // Sticky header + hide top bars when scrolling down
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      setIsScrolled(currentY > 50);
+
+      if (currentY <= 20) {
+        setHideTopInfoBars(false);
+      } else if (currentY > lastScrollYRef.current + 4) {
+        setHideTopInfoBars(true);
+      } else if (currentY < lastScrollYRef.current - 4) {
+        setHideTopInfoBars(false);
+      }
+
+      lastScrollYRef.current = currentY;
+    };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -144,7 +159,16 @@ export function Header() {
   return (
     <header className="bg-white w-full sticky top-0 z-30">
       {/* ── Top Bar ── */}
-      <div className="bg-[#f5efed] w-full border-b border-[#D6CEC6]/30 relative z-40">
+      <motion.div
+        initial={false}
+        animate={{
+          y: hideTopInfoBars ? -24 : 0,
+          opacity: hideTopInfoBars ? 0 : 1,
+          height: hideTopInfoBars ? 0 : "auto",
+        }}
+        transition={{ duration: 0.28, ease: "easeOut" }}
+        className="bg-[#f5efed] w-full border-b border-[#D6CEC6]/30 relative z-40 overflow-hidden"
+      >
         <div className="w-full lg:w-10/12 mx-auto px-4 lg:px-0">
           <nav className="flex justify-between items-center py-2 md:py-3">
             {/* Left nav links — hidden on mobile, visible md+ */}
@@ -221,14 +245,18 @@ export function Header() {
             </p>
           </nav>
         </div>
-      </div>
+      </motion.div>
 
       {/* ── Announcement Banner ── */}
       <motion.div
-        initial={{ height: "auto" }}
-        animate={{ height: isScrolled ? 0 : "auto" }}
-        transition={{ duration: 0.3 }}
-        className="w-full bg-gradient-to-r from-[#998e8a] to-[#8A6A5A] overflow-hidden"
+        initial={false}
+        animate={{
+          y: hideTopInfoBars ? -20 : 0,
+          opacity: hideTopInfoBars ? 0 : 1,
+          height: hideTopInfoBars ? 0 : "auto",
+        }}
+        transition={{ duration: 0.28, ease: "easeOut" }}
+        className="w-full bg-linear-to-r from-[#998e8a] to-[#8A6A5A] overflow-hidden"
       >
         <div className="py-2.5 md:py-3 px-4">
           {/* Desktop: static text */}
@@ -267,7 +295,7 @@ export function Header() {
             <Link to="/" className="flex items-center group shrink-0">
               <motion.div
                 whileHover={{ scale: 1.04 }}
-                className="text-lg sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-[#8A6A5A] to-[#998e8a] bg-clip-text text-transparent"
+                className="text-lg sm:text-2xl lg:text-3xl font-bold bg-linear-to-r from-[#8A6A5A] to-[#998e8a] bg-clip-text text-transparent"
               >
                 MyHomeStore
               </motion.div>
@@ -314,7 +342,7 @@ export function Header() {
                           className="px-3 py-2 rounded hover:bg-[#f5efed] cursor-pointer text-sm font-medium text-[#666E7C]"
                           onClick={() =>
                             navigate(
-                              `/${list.range.toLowerCase()}/${slugify(list.productName)}`,
+                              `/${list?.range.toLowerCase()}/${slugify(list?.productName)}`,
                             )
                           }
                         >
@@ -434,7 +462,7 @@ export function Header() {
                           className="px-4 py-2.5 hover:bg-[#f5efed] cursor-pointer text-sm font-medium text-[#666E7C] border-b border-[#f0ece8] last:border-0"
                           onClick={() =>
                             navigate(
-                              `/${list.range.toLowerCase()}/${slugify(list.productName)}`,
+                              `/${list?.range.toLowerCase()}/${slugify(list?.productName)}`,
                             )
                           }
                         >
@@ -591,26 +619,6 @@ export function Header() {
               </motion.button>
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ── Cart Sidebar ── */}
-      <AnimatePresence>
-        {activeCartSection && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black z-[9998]"
-              onClick={() => setActiveCartSection(false)}
-            />
-            <CartSidebar
-              onClose={() => setActiveCartSection(false)}
-              isOpen={activeCartSection}
-            />
-          </>
         )}
       </AnimatePresence>
     </header>

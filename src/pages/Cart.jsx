@@ -3,9 +3,10 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, Package, CircleDollarSign, House, X } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeCartItems, fetchCartItems } from "../features/cart/cart"; // ✅ FIX 1: single import (was duplicated across two lines)
-import { useNavigate } from "react-router-dom";
+import { removeCartItems, fetchCartItems, updateCartItems } from "../features/cart/cart"; // ✅ FIX 1: single import (was duplicated across two lines)
+import { useNavigate, Link } from "react-router-dom";
 import CartPageSkeleton from "../components/skeleton/CartSkeleton";
+import { slugify } from "../utils/slugify";
 
 // ##################### Price formula ##################### //
 function calcItemPrice(quantity, wastage, service, product) {
@@ -123,8 +124,6 @@ function CartItem({
           <div className="flex-1 sm:flex-none flex items-center sm:block">
             <QtyStepper
               value={item.quantity}
-              // ✅ FIX 3: use item._id ?? item.id consistently (was only item.id here,
-              //    but onRemove used item._id || item.id — MongoDB uses _id)
               onDecrement={() => onChangeQty(item._id ?? item.id, -1)}
               onIncrement={() => onChangeQty(item._id ?? item.id, +1)}
             />
@@ -135,9 +134,12 @@ function CartItem({
         <div className="flex-1 min-w-0 space-y-2 sm:space-y-3">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#2d2926] leading-snug">
+              <Link
+                to={`/${slugify(item.product?.range)}/${slugify(item.product?.productName)}`}
+                className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#2d2926] leading-snug"
+              >
                 {item.product?.productName}
-              </h3>
+              </Link>
               <p className="text-sm sm:text-[16px] text-[#998E8A] font-semibold uppercase my-[3px]">
                 {item.product?.brand} . {item.product?.category}
               </p>
@@ -428,9 +430,12 @@ export default function CartPage() {
                             exit={{ opacity: 0, height: 0 }}
                             className="flex justify-between gap-2 py-1"
                           >
-                            <span className="text-black text-base sm:text-lg truncate">
+                            <Link
+                              to={`/${slugify(item.product?.range)}/${slugify(item.product?.productName)}`}
+                              className="text-black text-base sm:text-lg truncate"
+                            >
                               {item.product?.productName}
-                            </span>
+                            </Link>
                             <motion.span
                               key={linePrice}
                               initial={{ opacity: 0, y: -4 }}

@@ -6,6 +6,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import LazyLoader from "../ui/LazyLoader";
 import { Button } from "../ui/Button";
+import { slugify } from "../../utils/slugify";
 
 // ##################### Animation ##################### //
 const cardVariants = {
@@ -51,8 +52,6 @@ export default function ProductGrid({
     setVisibleCount((prev) => prev + 8);
   };
 
-  // ##################### Modify product name ##################### //
-  const slugify = (text) => text.toLowerCase().replace(/\s+/g, "-");
   return (
     <div>
       {sortedProducts?.length > 0 ? (

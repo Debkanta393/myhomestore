@@ -3,6 +3,7 @@ import sliceReducer from "../features/slice";
 import productReducer from "../features/product/product"
 import userReducer from "../features/user/user"
 import cartReducer from "../features/cart/cart"
+import pageReducer from "../features/page/page"
 
 
 
@@ -11,7 +12,8 @@ const store = configureStore({
     activeTab: sliceReducer,
     product: productReducer,
     auth: userReducer,
-    cart: cartReducer
+    cart: cartReducer,
+    page: pageReducer
   }
 });
 

@@ -13,8 +13,8 @@ import {
   BadgeQuestionMark,
 } from "lucide-react";
 import * as Icons from "lucide-react";
+import { slugify} from "../../utils/slugify";
 
-const slugify = (text) => text.toLowerCase().replace(/\s+/g, "-");
 
 export default function MainNav({ activeNav, setActiveNav }) {
   const popular = [
@@ -44,10 +44,10 @@ export default function MainNav({ activeNav, setActiveNav }) {
     },
   ];
   return (
-    <div className="relative">
+    <div className="sticky top-0 z-40 bg-white">
       {activeNav !== null && (
         <div
-          className="absolute top-full hidden lg:block border-t border-[#D6CEC6]/30 bg-[#f5efed]/30 w-full bg-white shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
+          className="absolute top-full left-0 hidden lg:block border-t border-[#D6CEC6]/30 bg-white w-full shadow-[0_12px_40px_rgba(138,106,90,0.2)] 
          nav-scroll scroll-smooth"
         >
           <div className="bg-[#D7CEC5] w-full py-2">
@@ -67,7 +67,7 @@ export default function MainNav({ activeNav, setActiveNav }) {
                   </div>
                 );
               })}
-              <div className="h-[35px] w-[1px] bg-[#AFA79C]"></div>
+              <div className="h-[35px] w-px bg-[#AFA79C]"></div>
               <div className="flex justify-center items-center 2x:gap-10 lg:gap-1.5">
                 {[
                   {
@@ -438,7 +438,7 @@ function NavbarRightSection({ activeNav }) {
             Harder than most hardwoods, grows back in 5 years. FSC certified and
             independently tested.
           </p>
-          <button className="bg-white text-[#998E8A] text-sm font-medium px-6 xl:px-8 py-3 xl:py-4 w-full sm:w-auto font-semibold">
+          <button className="bg-white text-[#998E8A] text-sm font-semibold px-6 xl:px-8 py-3 xl:py-4 w-full sm:w-auto">
             Shop Bamboo →
           </button>
         </div>
